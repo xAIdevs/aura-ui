@@ -1,0 +1,312 @@
+/* ════════════════════════════════════════════════════════
+   AURA UI — animations.css
+   Keyframes + animation utility classes
+   ════════════════════════════════════════════════════════ */
+
+/* ── KEYFRAMES ───────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.85) translateY(16px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes cardSwipeLeft {
+  0%   { transform: translateX(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateX(-140%) rotate(-24deg); opacity: 0; }
+}
+
+@keyframes cardSwipeRight {
+  0%   { transform: translateX(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateX(140%) rotate(24deg); opacity: 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(var(--accent-rgb), .25),
+                0 0 24px rgba(var(--accent-rgb), .1);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(var(--accent-rgb), .5),
+                0 0 48px rgba(var(--accent-rgb), .2);
+  }
+}
+
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%            { transform: translateY(-6px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes ripple {
+  0%   { transform: scale(0); opacity: .5; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes barGrow {
+  from { width: 0; }
+  to   { width: var(--bar-w, 100%); }
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14%       { transform: scale(1.25); }
+  28%       { transform: scale(1); }
+  42%       { transform: scale(1.2); }
+  56%       { transform: scale(1); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: .5; }
+  50%       { opacity: 1; }
+}
+
+@keyframes stagger {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes panelSlideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes swingIn {
+  0%   { opacity: 0; transform: scale(.9) rotate(-3deg); }
+  70%  { transform: scale(1.02) rotate(.5deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── ANIMATION UTILITY CLASSES ───────────────────────── */
+
+.animate-fade-in {
+  animation: fadeIn .35s ease forwards;
+}
+
+.animate-fade-up {
+  animation: fadeUp .4s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+.animate-fade-down {
+  animation: fadeDown .4s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+.animate-slide-left {
+  animation: slideInLeft .4s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+.animate-slide-right {
+  animation: slideInRight .4s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+.animate-modal {
+  animation: modalIn .28s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn .3s cubic-bezier(.34,1.2,.64,1) forwards;
+}
+
+.animate-swing-in {
+  animation: swingIn .4s cubic-bezier(.34,1.4,.64,1) forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3.5s ease-in-out infinite;
+}
+
+.animate-spin {
+  animation: spin .8s linear infinite;
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 1.8s ease-in-out infinite;
+  background: linear-gradient(
+    90deg,
+    var(--card) 0%,
+    var(--card-b) 50%,
+    var(--card) 100%
+  );
+  background-size: 200% 100%;
+}
+
+.animate-heartbeat {
+  animation: heartbeat 1.4s ease-in-out;
+}
+
+.animate-heartbeat-loop {
+  animation: heartbeat 1.4s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 300% 300%;
+  animation: gradientShift 4s ease infinite;
+}
+
+.animate-swipe-left {
+  animation: cardSwipeLeft .45s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+.animate-swipe-right {
+  animation: cardSwipeRight .45s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+.animate-count-up {
+  animation: countUp .4s ease forwards;
+}
+
+.animate-bar-grow {
+  animation: barGrow .8s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+.animate-panel-in {
+  animation: panelSlideIn .35s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+.animate-bounce-dot {
+  animation: bounce 1.4s ease-in-out infinite;
+}
+
+/* ── DELAY UTILITIES ─────────────────────────────────── */
+.delay-50  { animation-delay: 50ms; }
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
+
+/* ── STAGGER CHILDREN ────────────────────────────────── */
+.stagger-children > * {
+  opacity: 0;
+  animation: stagger .4s cubic-bezier(.4,0,.2,1) forwards;
+  animation-delay: calc(var(--i, 0) * 80ms);
+}
+
+/* Quick stagger without JS --i custom properties */
+.stagger-children > *:nth-child(1)  { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2)  { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3)  { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4)  { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5)  { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6)  { animation-delay: 300ms; }
+.stagger-children > *:nth-child(7)  { animation-delay: 360ms; }
+.stagger-children > *:nth-child(8)  { animation-delay: 420ms; }
+
+/* ── DURATION UTILITIES ──────────────────────────────── */
+.duration-100 { animation-duration: 100ms; }
+.duration-200 { animation-duration: 200ms; }
+.duration-300 { animation-duration: 300ms; }
+.duration-500 { animation-duration: 500ms; }
+.duration-700 { animation-duration: 700ms; }
+.duration-1000 { animation-duration: 1000ms; }
+
+/* ── FILL UTILITIES ──────────────────────────────────── */
+.fill-forwards { animation-fill-mode: forwards; }
+.fill-both     { animation-fill-mode: both; }
+
+/* ── TRANSITION UTILITIES ────────────────────────────── */
+.transition-all   { transition: all .2s cubic-bezier(.4,0,.2,1); }
+.transition-fast  { transition: all .12s cubic-bezier(.4,0,.2,1); }
+.transition-slow  { transition: all .4s cubic-bezier(.4,0,.2,1); }
+.transition-spring { transition: all .35s cubic-bezier(.34,1.4,.64,1); }
+
+/* ── HOVER EFFECT UTILITIES ──────────────────────────── */
+.hover-lift { transition: transform .2s; }
+.hover-lift:hover { transform: translateY(-3px); }
+
+.hover-scale { transition: transform .2s; }
+.hover-scale:hover { transform: scale(1.04); }
+
+.hover-glow { transition: box-shadow .2s; }
+.hover-glow:hover { box-shadow: var(--glow3); }
+
+/* ── REDUCED MOTION ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
