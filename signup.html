@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURA – Create Account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0A0A0F;
+      --bg2:         #10101A;
+      --bg3:         #16162A;
+      --card:        rgba(255,255,255,.04);
+      --card-b:      rgba(255,255,255,.08);
+      --accent:      #7C3AED;
+      --accent2:     #A855F7;
+      --accent3:     #C084FC;
+      --pink:        #EC4899;
+      --cyan:        #06B6D4;
+      --green:       #10B981;
+      --gold:        #F59E0B;
+      --white:       #FFFFFF;
+      --text:        #F1F0FF;
+      --muted:       #6B6B8A;
+      --muted2:      #9896B0;
+      --border:      rgba(255,255,255,.07);
+      --border2:     rgba(124,58,237,.35);
+      --glow:        0 0 40px rgba(124,58,237,.25);
+      --radius:      16px;
+      --radius2:     24px;
+      --input-bg:    rgba(255,255,255,.06);
+      --input-border:rgba(255,255,255,.12);
+      --accent-rgb:  124,58,237;
+      --progress:    0%;
+    }
+    [data-theme="light"] {
+      --bg:          #F8F7FF;
+      --bg2:         #FFFFFF;
+      --bg3:         #F0EEFF;
+      --card:        rgba(0,0,0,.03);
+      --card-b:      rgba(0,0,0,.06);
+      --text:        #1A1030;
+      --muted:       #8B89A8;
+      --muted2:      #6B69A0;
+      --border:      rgba(0,0,0,.08);
+      --border2:     rgba(124,58,237,.25);
+      --input-bg:    rgba(0,0,0,.04);
+      --input-border:rgba(0,0,0,.12);
+    }
+    [data-theme="neon"] {
+      --accent:  #00F0FF;
+      --accent2: #B000FF;
+      --pink:    #FF006A;
+      --accent3: #80F8FF;
+      --border2: rgba(0,240,255,.35);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content:'';
+      position:fixed; top:-200px; left:-200px;
+      width:700px; height:700px;
+      background:radial-gradient(circle,rgba(124,58,237,.12) 0%,transparent 70%);
+      pointer-events:none; z-index:0;
+    }
+    body::after {
+      content:'';
+      position:fixed; bottom:-200px; right:-200px;
+      width:600px; height:600px;
+      background:radial-gradient(circle,rgba(236,72,153,.08) 0%,transparent 70%);
+      pointer-events:none; z-index:0;
+    }
+
+    /* ── SIGNUP WRAPPER ────────────────────────── */
+    .signup-wrapper {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 20px 80px;
+    }
+
+    /* ── TOP BAR ───────────────────────────────── */
+    .signup-topbar {
+      width: 100%; max-width: 560px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .brand-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px; font-weight: 700; letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; text-decoration: none;
+    }
+    .step-counter {
+      font-size: 13px; color: var(--muted2); font-weight: 600;
+    }
+    .step-counter span { color: var(--accent3); }
+
+    /* ── PROGRESS BAR ──────────────────────────── */
+    .progress-wrap {
+      width: 100%; max-width: 560px;
+      margin-bottom: 10px;
+    }
+    .progress-segments {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 5px;
+    }
+    .prog-seg {
+      height: 4px;
+      border-radius: 4px;
+      background: var(--card-b);
+      transition: background .4s;
+    }
+    .prog-seg.done { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .prog-seg.active { background: var(--accent2); animation: pulse-seg 1.2s ease-in-out infinite alternate; }
+    @keyframes pulse-seg {
+      from { opacity: .6; } to { opacity: 1; }
+    }
+
+    /* ── STEP DOTS ─────────────────────────────── */
+    .step-dots {
+      display: flex; gap: 8px; justify-content: center;
+      margin-bottom: 32px;
+    }
+    .step-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--card-b); border: 1px solid var(--border2);
+      transition: all .3s;
+    }
+    .step-dot.active {
+      background: var(--accent2);
+      box-shadow: 0 0 8px rgba(168,85,247,.6);
+      transform: scale(1.3);
+    }
+    .step-dot.done {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-color: transparent;
+    }
+
+    /* ── CARD ──────────────────────────────────── */
+    .signup-card {
+      width: 100%; max-width: 520px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 44px 48px;
+      position: relative;
+      backdrop-filter: blur(10px);
+    }
+    @media (max-width: 600px) {
+      .signup-card { padding: 32px 24px; }
+    }
+
+    /* ── STEP TRANSITIONS ──────────────────────── */
+    .step-pane {
+      animation: stepIn .35s cubic-bezier(.22,.68,0,1.2);
+    }
+    .step-pane.exit {
+      animation: stepOut .25s ease forwards;
+    }
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateX(24px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes stepOut {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(-24px); }
+    }
+    .hidden { display: none !important; }
+
+    /* ── TYPOGRAPHY ────────────────────────────── */
+    .step-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px; font-weight: 700;
+      letter-spacing: -0.8px; line-height: 1.2;
+      margin-bottom: 6px; color: var(--text);
+    }
+    .step-sub {
+      font-size: 14px; color: var(--muted2);
+      margin-bottom: 28px;
+    }
+
+    /* ── INPUTS ────────────────────────────────── */
+    .input-label {
+      display: block;
+      font-size: 12px; font-weight: 600;
+      color: var(--muted2);
+      margin-bottom: 6px;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+    .form-input {
+      width: 100%; padding: 14px 16px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      color: var(--text); font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      margin-bottom: 14px;
+    }
+    .form-input::placeholder { color: var(--muted); }
+    .form-input:focus {
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.18);
+    }
+
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .input-row .form-input { margin-bottom: 0; }
+    .input-row + .form-input, .input-row + div { margin-top: 14px; }
+
+    .form-select {
+      width: 100%; padding: 14px 16px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      color: var(--text); font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      outline: none; cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239896B0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+    .form-select:focus {
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.18);
+    }
+
+    /* ── PHONE GROUP ───────────────────────────── */
+    .phone-group { display: flex; gap: 0; margin-bottom: 14px; }
+    .country-code {
+      display: flex; align-items: center; gap: 6px;
+      padding: 0 14px;
+      background: var(--input-bg); border: 1px solid var(--input-border);
+      border-right: none; border-radius: 12px 0 0 12px;
+      cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text);
+      white-space: nowrap; min-width: 90px; height: 52px;
+      transition: border-color .2s;
+    }
+    .country-code .chevron { color: var(--muted); font-size: 10px; margin-left: auto; }
+    .phone-number {
+      flex: 1; padding: 0 16px; height: 52px;
+      background: var(--input-bg); border: 1px solid var(--input-border);
+      border-left: none; border-radius: 0 12px 12px 0;
+      color: var(--text); font-size: 16px; font-family: 'Inter', sans-serif;
+      outline: none; transition: border-color .2s;
+    }
+    .phone-number::placeholder { color: var(--muted); }
+    .phone-number:focus { border-color: var(--accent2); }
+
+    /* ── OTP ───────────────────────────────────── */
+    .otp-group { display: flex; gap: 10px; justify-content: center; margin: 24px 0; }
+    .otp-box {
+      width: 52px; height: 60px;
+      text-align: center; font-size: 22px; font-weight: 700;
+      background: var(--input-bg); border: 1px solid var(--input-border);
+      border-radius: 12px; color: var(--text);
+      font-family: 'Inter', sans-serif;
+      transition: .15s; outline: none;
+    }
+    .otp-box:focus { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.2); }
+    .otp-box.filled { border-color: var(--accent); background: rgba(124,58,237,.12); }
+    .otp-actions { display: flex; justify-content: space-between; margin-top: 12px; }
+    .link-btn {
+      background: none; border: none; color: var(--accent3);
+      font-size: 13px; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer; padding: 0; transition: opacity .2s;
+    }
+    .link-btn:hover { opacity: .75; }
+    .link-btn:disabled { color: var(--muted); cursor: default; }
+
+    /* ── GENDER / INTEREST GRIDS ───────────────── */
+    .option-grid {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .option-grid.cols-2 { grid-template-columns: repeat(2,1fr); }
+    .option-grid.cols-4 { grid-template-columns: repeat(4,1fr); }
+
+    .option-card {
+      padding: 14px 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 14px; font-weight: 600; color: var(--muted2);
+      user-select: none;
+    }
+    .option-card:hover { border-color: var(--border2); color: var(--text); background: var(--card-b); }
+    .option-card.selected {
+      background: rgba(124,58,237,.18);
+      border-color: var(--accent2);
+      color: var(--accent3);
+      box-shadow: 0 0 0 1px var(--accent2);
+    }
+    .option-card .opt-icon { font-size: 22px; margin-bottom: 5px; display: block; }
+
+    /* ── INTEREST TAGS ─────────────────────────── */
+    .interest-grid {
+      display: flex; flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .interest-tag {
+      display: flex; align-items: center; gap: 7px;
+      padding: 10px 16px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 50px;
+      font-size: 13px; font-weight: 600; color: var(--muted2);
+      cursor: pointer; transition: all .2s;
+      user-select: none;
+    }
+    .interest-tag:hover { border-color: var(--border2); color: var(--text); }
+    .interest-tag.selected {
+      background: rgba(124,58,237,.2);
+      border-color: var(--accent2);
+      color: var(--accent3);
+    }
+    .interest-tag .tag-emoji { font-size: 16px; }
+
+    .interest-count {
+      font-size: 13px; font-weight: 600;
+      color: var(--muted2); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .interest-count .count-badge {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; border-radius: 20px;
+      padding: 2px 10px; font-size: 12px;
+    }
+
+    /* ── BIO / TEXTAREA ────────────────────────── */
+    .form-textarea {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      color: var(--text); font-size: 15px; line-height: 1.6;
+      font-family: 'Inter', sans-serif;
+      resize: vertical; min-height: 120px;
+      outline: none; margin-bottom: 6px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .form-textarea::placeholder { color: var(--muted); }
+    .form-textarea:focus {
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.18);
+    }
+    .char-count { font-size: 12px; color: var(--muted); text-align: right; margin-bottom: 24px; }
+    .char-count.warn { color: var(--gold); }
+    .char-count.over { color: var(--pink); }
+
+    /* ── PHOTO GRID ────────────────────────────── */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .photo-slot {
+      aspect-ratio: 3/4;
+      background: var(--input-bg);
+      border: 2px dashed var(--input-border);
+      border-radius: 16px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      cursor: pointer; transition: all .25s;
+      font-size: 12px; color: var(--muted);
+      text-align: center; padding: 12px;
+      position: relative; overflow: hidden;
+    }
+    .photo-slot:hover { border-color: var(--accent2); background: rgba(124,58,237,.08); }
+    .photo-slot.primary {
+      border-color: var(--accent2);
+      background: rgba(124,58,237,.1);
+    }
+    .photo-slot.primary::after {
+      content: 'Main photo';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(0deg, rgba(124,58,237,.8), transparent);
+      color: #fff; font-size: 10px; font-weight: 700;
+      padding: 8px 0 6px;
+      text-align: center;
+    }
+    .photo-plus {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--card-b);
+      border: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: var(--accent3);
+      margin-bottom: 8px;
+      transition: transform .2s;
+    }
+    .photo-slot:hover .photo-plus { transform: scale(1.15); }
+    .photo-slot.filled { border-style: solid; border-color: var(--border2); }
+    .photo-slot.filled .photo-filled-img {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px;
+    }
+    input[type="file"] { display: none; }
+
+    /* ── SLIDERS ───────────────────────────────── */
+    .slider-section { margin-bottom: 24px; }
+    .slider-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+    }
+    .slider-label { font-size: 14px; font-weight: 600; color: var(--text); }
+    .slider-value {
+      font-size: 13px; font-weight: 700;
+      color: var(--accent3);
+      background: rgba(124,58,237,.15);
+      border: 1px solid var(--border2);
+      border-radius: 8px; padding: 3px 10px;
+    }
+    .range-input {
+      width: 100%; height: 6px;
+      -webkit-appearance: none;
+      background: var(--card-b);
+      border-radius: 6px;
+      outline: none;
+      cursor: pointer;
+    }
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(124,58,237,.5);
+      transition: transform .15s;
+    }
+    .range-input::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+    /* Age dual range hack */
+    .dual-range-wrap { position: relative; height: 28px; margin-top: 4px; }
+    .dual-range-wrap input { position: absolute; top: 50%; transform: translateY(-50%); }
+    .range-track {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      height: 6px; border-radius: 6px;
+      background: var(--card-b); width: 100%;
+    }
+    .range-fill {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      height: 6px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 6px; pointer-events: none;
+    }
+
+    /* ── PREF CARDS ────────────────────────────── */
+    .pref-grid {
+      display: grid; grid-template-columns: repeat(2,1fr);
+      gap: 10px; margin-bottom: 20px;
+    }
+    .pref-card {
+      padding: 18px 16px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 16px;
+      cursor: pointer; transition: all .2s;
+      text-align: center; user-select: none;
+    }
+    .pref-card:hover { border-color: var(--border2); background: var(--card-b); }
+    .pref-card.selected {
+      background: rgba(124,58,237,.18);
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 1px var(--accent2);
+    }
+    .pref-card .pref-icon { font-size: 26px; margin-bottom: 6px; }
+    .pref-card .pref-label { font-size: 14px; font-weight: 700; color: var(--text); }
+    .pref-card .pref-desc { font-size: 12px; color: var(--muted2); margin-top: 2px; }
+    .pref-card.selected .pref-desc { color: var(--accent3); }
+
+    /* ── BUTTONS ───────────────────────────────── */
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 14px;
+      color: #fff; font-size: 16px; font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: all .25s;
+      box-shadow: 0 8px 30px rgba(124,58,237,.35);
+      position: relative; overflow: hidden;
+      margin-top: 8px;
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, transparent, rgba(255,255,255,.1));
+      opacity: 0; transition: opacity .2s;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 40px rgba(124,58,237,.5); }
+    .btn-primary:hover::after { opacity: 1; }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ── TERMS ─────────────────────────────────── */
+    .terms-text {
+      text-align: center;
+      font-size: 12px; color: var(--muted);
+      margin-top: 14px;
+    }
+    .terms-text a { color: var(--accent3); text-decoration: none; font-weight: 600; }
+
+    /* ── SECTION LABELS ────────────────────────── */
+    .section-label {
+      font-size: 12px; font-weight: 700;
+      color: var(--muted); text-transform: uppercase;
+      letter-spacing: .8px; margin-bottom: 12px; margin-top: 4px;
+    }
+
+    /* ── DOB ROW ───────────────────────────────── */
+    .dob-row { display: grid; grid-template-columns: 1.4fr 0.9fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .dob-row .form-select { margin-bottom: 0; }
+
+    /* ── SUCCESS MODAL ─────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.8);
+      backdrop-filter: blur(16px);
+      z-index: 9000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      animation: fadeIn .4s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 28px;
+      padding: 52px 44px;
+      max-width: 440px; width: 100%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: scaleIn .45s cubic-bezier(.22,.68,0,1.2);
+    }
+    @keyframes scaleIn {
+      from { transform: scale(.85); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .modal-card::before {
+      content: '';
+      position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(124,58,237,.2), transparent 65%);
+      pointer-events: none;
+    }
+    .modal-sparkles {
+      font-size: 52px; margin-bottom: 20px;
+      display: block; position: relative; z-index: 1;
+      animation: sparkle-pop .8s cubic-bezier(.22,.68,0,1.4);
+    }
+    @keyframes sparkle-pop {
+      0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+      60%  { transform: scale(1.2) rotate(5deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    .modal-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 30px; font-weight: 700; letter-spacing: -1px;
+      color: var(--text); margin-bottom: 10px;
+      position: relative; z-index: 1;
+    }
+    .modal-sub {
+      font-size: 15px; color: var(--muted2); margin-bottom: 28px;
+      line-height: 1.6; position: relative; z-index: 1;
+    }
+    .modal-sub strong { color: var(--accent3); }
+    .modal-progress-wrap {
+      height: 6px; background: var(--card-b); border-radius: 6px;
+      margin-bottom: 28px; overflow: hidden;
+      position: relative; z-index: 1;
+    }
+    .modal-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--pink));
+      border-radius: 6px;
+      width: 0%; animation: loadBar 2.5s ease forwards 0.3s;
+    }
+    @keyframes loadBar { to { width: 100%; } }
+    .modal-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 14px;
+      color: #fff; font-size: 16px; font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: all .25s;
+      box-shadow: 0 8px 30px rgba(124,58,237,.4);
+      text-decoration: none; position: relative; z-index: 1;
+    }
+    .modal-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(124,58,237,.55); }
+
+    /* floating sparkle particles */
+    .particle {
+      position: absolute;
+      pointer-events: none;
+      animation: particle-fly 3s ease-in-out infinite;
+      font-size: 14px;
+    }
+    @keyframes particle-fly {
+      0%   { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-80px) scale(0); opacity: 0; }
+    }
+
+    /* ── THEME BTN ─────────────────────────────── */
+    .theme-btn {
+      position: fixed; top: 20px; right: 20px;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--card-b); border: 1px solid var(--border2);
+      color: var(--accent3); font-size: 18px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      z-index: 999; transition: all .2s; backdrop-filter: blur(10px);
+    }
+    .theme-btn:hover { background: rgba(124,58,237,.2); transform: rotate(20deg); }
+
+    /* ── SIGN-IN FOOTER ────────────────────────── */
+    .signin-footer {
+      text-align: center; font-size: 14px; color: var(--muted2);
+      margin-top: 20px;
+    }
+    .signin-footer a { color: var(--accent3); text-decoration: none; font-weight: 600; }
+    .signin-footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <button class="theme-btn" onclick="cycleTheme()" title="Switch theme">◐</button>
+
+  <div class="signup-wrapper">
+
+    <!-- Top bar -->
+    <div class="signup-topbar">
+      <a href="index.html" class="brand-logo">AURA</a>
+      <div class="step-counter">Step <span id="step-num">1</span> of 6</div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-wrap">
+      <div class="progress-segments" id="progress-segs">
+        <div class="prog-seg active"  id="seg-1"></div>
+        <div class="prog-seg"         id="seg-2"></div>
+        <div class="prog-seg"         id="seg-3"></div>
+        <div class="prog-seg"         id="seg-4"></div>
+        <div class="prog-seg"         id="seg-5"></div>
+        <div class="prog-seg"         id="seg-6"></div>
+      </div>
+    </div>
+
+    <!-- Step dots -->
+    <div class="step-dots" id="step-dots">
+      <div class="step-dot active" id="dot-1"></div>
+      <div class="step-dot"        id="dot-2"></div>
+      <div class="step-dot"        id="dot-3"></div>
+      <div class="step-dot"        id="dot-4"></div>
+      <div class="step-dot"        id="dot-5"></div>
+      <div class="step-dot"        id="dot-6"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         CARD
+    ═══════════════════════════════════════════ -->
+    <div class="signup-card">
+
+      <!-- ── STEP 1: PHONE ──────────────────────── -->
+      <div class="step-pane" data-step="1" id="pane-1">
+        <h2 class="step-heading">Create your account</h2>
+        <p class="step-sub">Join 2.8 million people finding real connections</p>
+
+        <label class="input-label">Phone number</label>
+        <div class="phone-group">
+          <div class="country-code">
+            <span>🇺🇸</span>
+            <span>+1</span>
+            <span class="chevron">▾</span>
+          </div>
+          <input
+            type="tel"
+            class="phone-number"
+            id="s1-phone"
+            placeholder="(555) 000-0000"
+            oninput="formatPhone(this)"
+          />
+        </div>
+
+        <button class="btn-primary" onclick="nextStep(1)">Continue →</button>
+
+        <p class="terms-text" style="margin-top:16px;">
+          By continuing, you agree to our
+          <a href="#">Terms of Service</a> &amp; <a href="#">Privacy Policy</a>
+        </p>
+
+        <p class="signin-footer">Already have an account? <a href="login.html">Sign in</a></p>
+      </div>
+
+      <!-- ── STEP 2: OTP ─────────────────────────── -->
+      <div class="step-pane hidden" data-step="2" id="pane-2">
+        <h2 class="step-heading">Verify your number</h2>
+        <p class="step-sub">We sent a 6-digit code to <strong id="s2-phone-display" style="color:var(--text);">+1 (555) 000-0000</strong></p>
+
+        <div class="otp-group" id="s2-otp-group">
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric" oninput="otpInput(this,0,'s2')" onkeydown="otpKeydown(this,0,'s2',event)" />
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric" oninput="otpInput(this,1,'s2')" onkeydown="otpKeydown(this,1,'s2',event)" />
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric" oninput="otpInput(this,2,'s2')" onkeydown="otpKeydown(this,2,'s2',event)" />
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric" oninput="otpInput(this,3,'s2')" onkeydown="otpKeydown(this,3,'s2',event)" />
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric" oninput="otpInput(this,4,'s2')" onkeydown="otpKeydown(this,4,'s2',event)" />
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric" oninput="otpInput(this,5,'s2')" onkeydown="otpKeydown(this,5,'s2',event)" />
+        </div>
+
+        <button class="btn-primary" onclick="nextStep(2)">Verify →</button>
+
+        <div class="otp-actions" style="margin-top:14px;">
+          <button class="link-btn" id="s2-resend" disabled onclick="resendCode('s2-resend','s2-timer')">
+            Resend (<span id="s2-timer">30</span>s)
+          </button>
+          <button class="link-btn" onclick="prevStep(2)">← Change number</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: BASIC PROFILE ──────────────── -->
+      <div class="step-pane hidden" data-step="3" id="pane-3">
+        <h2 class="step-heading">Tell us about yourself</h2>
+        <p class="step-sub">This helps AURA find your most compatible matches</p>
+
+        <div class="input-row">
+          <div>
+            <label class="input-label">First name</label>
+            <input type="text" class="form-input" placeholder="e.g. Alex" id="s3-fname" />
+          </div>
+          <div>
+            <label class="input-label">Last name</label>
+            <input type="text" class="form-input" placeholder="e.g. Morgan" id="s3-lname" />
+          </div>
+        </div>
+
+        <label class="input-label" style="margin-top:6px;">Date of birth</label>
+        <div class="dob-row">
+          <select class="form-select" id="s3-month">
+            <option value="">Month</option>
+            <option>January</option><option>February</option><option>March</option>
+            <option>April</option><option>May</option><option>June</option>
+            <option>July</option><option>August</option><option>September</option>
+            <option>October</option><option>November</option><option>December</option>
+          </select>
+          <select class="form-select" id="s3-day">
+            <option value="">Day</option>
+            <script>for(let d=1;d<=31;d++)document.write(`<option>${d}</option>`);</script>
+          </select>
+          <select class="form-select" id="s3-year">
+            <option value="">Year</option>
+            <script>for(let y=new Date().getFullYear()-18;y>=1950;y--)document.write(`<option>${y}</option>`);</script>
+          </select>
+        </div>
+
+        <div class="section-label" style="margin-top:8px;">I am a…</div>
+        <div class="option-grid cols-2" id="gender-grid">
+          <div class="option-card" onclick="selectOpt(this,'gender')">
+            <span class="opt-icon">👨</span> Man
+          </div>
+          <div class="option-card" onclick="selectOpt(this,'gender')">
+            <span class="opt-icon">👩</span> Woman
+          </div>
+          <div class="option-card" onclick="selectOpt(this,'gender')">
+            <span class="opt-icon">🏳️‍🌈</span> Non-binary
+          </div>
+          <div class="option-card" onclick="selectOpt(this,'gender')">
+            <span class="opt-icon">✨</span> Other
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top:8px;">Interested in…</div>
+        <div class="option-grid cols-2" id="interest-gender-grid">
+          <div class="option-card" onclick="selectOpt(this,'intgender')">
+            <span class="opt-icon">👩</span> Women
+          </div>
+          <div class="option-card" onclick="selectOpt(this,'intgender')">
+            <span class="opt-icon">👨</span> Men
+          </div>
+          <div class="option-card" onclick="selectOpt(this,'intgender')" style="grid-column:span 2;">
+            <span class="opt-icon">💞</span> Everyone
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="nextStep(3)">Continue →</button>
+      </div>
+
+      <!-- ── STEP 4: INTERESTS ──────────────────── -->
+      <div class="step-pane hidden" data-step="4" id="pane-4">
+        <h2 class="step-heading">What are you into?</h2>
+        <p class="step-sub" style="margin-bottom:16px;">Select 3 or more interests</p>
+
+        <div class="interest-count">
+          <span>Selected:</span>
+          <span class="count-badge" id="interest-count-badge">0</span>
+          <span style="color:var(--muted);font-size:12px;">(minimum 3)</span>
+        </div>
+
+        <div class="interest-grid" id="interest-grid">
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🎨</span> Design</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🥾</span> Hiking</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">✈️</span> Travel</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">☕</span> Coffee</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">📸</span> Photography</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🍜</span> Food</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🎵</span> Music</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">📚</span> Books</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🐶</span> Dogs</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🧘</span> Yoga</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🎬</span> Movies</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🌊</span> Beach</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🌱</span> Eco</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🏋️</span> Fitness</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🎮</span> Gaming</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🍷</span> Wine</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🎭</span> Theatre</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🚴</span> Cycling</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🏄</span> Surfing</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🧗</span> Climbing</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🎸</span> Guitar</div>
+          <div class="interest-tag" onclick="toggleInterest(this)"><span class="tag-emoji">🌍</span> Languages</div>
+        </div>
+
+        <button class="btn-primary" id="btn-interests" onclick="nextStep(4)" disabled>
+          Continue →
+        </button>
+      </div>
+
+      <!-- ── STEP 5: ABOUT YOU ──────────────────── -->
+      <div class="step-pane hidden" data-step="5" id="pane-5">
+        <h2 class="step-heading">Share your story</h2>
+        <p class="step-sub">A genuine bio increases matches by 3×</p>
+
+        <label class="input-label">About you</label>
+        <textarea
+          class="form-textarea"
+          id="bio-input"
+          maxlength="300"
+          placeholder="What makes you, you? Be genuine — your personality is your superpower..."
+          oninput="updateCharCount(this)"
+          rows="5"
+        ></textarea>
+        <div class="char-count" id="char-count">0 / 300</div>
+
+        <div class="section-label">Photos — Show your best self</div>
+        <div class="photo-grid" id="photo-grid">
+          <div class="photo-slot primary" onclick="triggerUpload(0)">
+            <div class="photo-plus">+</div>
+            <div style="font-size:11px;font-weight:600;color:var(--accent3);">Add photo</div>
+          </div>
+          <div class="photo-slot" onclick="triggerUpload(1)">
+            <div class="photo-plus">+</div>
+            <div style="font-size:11px;color:var(--muted);">Add photo</div>
+          </div>
+          <div class="photo-slot" onclick="triggerUpload(2)">
+            <div class="photo-plus">+</div>
+            <div style="font-size:11px;color:var(--muted);">Add photo</div>
+          </div>
+          <div class="photo-slot" onclick="triggerUpload(3)">
+            <div class="photo-plus">+</div>
+            <div style="font-size:11px;color:var(--muted);">Add photo</div>
+          </div>
+          <div class="photo-slot" onclick="triggerUpload(4)">
+            <div class="photo-plus">+</div>
+            <div style="font-size:11px;color:var(--muted);">Add photo</div>
+          </div>
+          <div class="photo-slot" onclick="triggerUpload(5)">
+            <div class="photo-plus">+</div>
+            <div style="font-size:11px;color:var(--muted);">Add photo</div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-bottom:4px;">
+          📷 Upload at least 1 photo • JPG, PNG • Max 10MB each
+        </p>
+        <input type="file" id="photo-upload" accept="image/*" onchange="handlePhotoUpload(event)" />
+
+        <button class="btn-primary" style="margin-top:16px;" onclick="nextStep(5)">Continue →</button>
+      </div>
+
+      <!-- ── STEP 6: PREFERENCES ────────────────── -->
+      <div class="step-pane hidden" data-step="6" id="pane-6">
+        <h2 class="step-heading">Your preferences</h2>
+        <p class="step-sub">Customize your experience — you can change this anytime</p>
+
+        <div class="section-label">Looking for</div>
+        <div class="pref-grid" id="looking-for-grid">
+          <div class="pref-card" onclick="selectPref(this,'looking')">
+            <div class="pref-icon">💍</div>
+            <div class="pref-label">Long-term</div>
+            <div class="pref-desc">Serious relationship</div>
+          </div>
+          <div class="pref-card" onclick="selectPref(this,'looking')">
+            <div class="pref-icon">✨</div>
+            <div class="pref-label">Casual</div>
+            <div class="pref-desc">Something fun</div>
+          </div>
+          <div class="pref-card" onclick="selectPref(this,'looking')">
+            <div class="pref-icon">🤝</div>
+            <div class="pref-label">Friendship</div>
+            <div class="pref-desc">New connections</div>
+          </div>
+          <div class="pref-card selected" onclick="selectPref(this,'looking')">
+            <div class="pref-icon">🌈</div>
+            <div class="pref-label">Open to all</div>
+            <div class="pref-desc">Let's see where it goes</div>
+          </div>
+        </div>
+
+        <!-- Age range -->
+        <div class="slider-section">
+          <div class="slider-header">
+            <span class="slider-label">Age range</span>
+            <span class="slider-value" id="age-display">21 – 35</span>
+          </div>
+          <div class="dual-range-wrap" id="age-range-wrap">
+            <div class="range-track"></div>
+            <div class="range-fill" id="age-fill"></div>
+            <input
+              type="range" class="range-input" id="age-min"
+              min="18" max="60" value="21"
+              oninput="updateAgeRange()"
+              style="z-index:2;"
+            />
+            <input
+              type="range" class="range-input" id="age-max"
+              min="18" max="60" value="35"
+              oninput="updateAgeRange()"
+              style="z-index:3;"
+            />
+          </div>
+        </div>
+
+        <!-- Distance -->
+        <div class="slider-section">
+          <div class="slider-header">
+            <span class="slider-label">Maximum distance</span>
+            <span class="slider-value" id="dist-display">25 mi</span>
+          </div>
+          <input
+            type="range" class="range-input" id="dist-range"
+            min="1" max="100" value="25"
+            oninput="updateDist()"
+            style="display:block;"
+          />
+        </div>
+
+        <button class="btn-primary" style="background:linear-gradient(135deg,var(--accent),var(--pink));" onclick="finishSignup()">
+          🚀 Finish &amp; Find Matches
+        </button>
+      </div>
+
+    </div><!-- /signup-card -->
+
+    <p class="signin-footer" style="margin-top:24px;" id="bottom-login-link">
+      Already have an account? <a href="login.html">Sign in →</a>
+    </p>
+
+  </div><!-- /signup-wrapper -->
+
+  <!-- ══════════════════════════════════════════
+       SUCCESS MODAL
+  ═══════════════════════════════════════════ -->
+  <div class="modal-overlay hidden" id="success-modal">
+    <div class="modal-card" id="modal-inner">
+      <!-- Floating particles -->
+      <div class="particle" style="left:15%;animation-delay:.2s;animation-duration:2.8s;">⭐</div>
+      <div class="particle" style="right:20%;animation-delay:.6s;animation-duration:3.2s;">✨</div>
+      <div class="particle" style="left:60%;animation-delay:1.1s;animation-duration:2.5s;">💫</div>
+      <div class="particle" style="left:30%;animation-delay:1.5s;animation-duration:3.5s;">🌟</div>
+      <div class="particle" style="right:10%;animation-delay:.9s;animation-duration:2.2s;">⚡</div>
+
+      <span class="modal-sparkles">🎉</span>
+      <h2 class="modal-title">Your profile is live!</h2>
+      <p class="modal-sub">
+        AURA is analyzing your compatibility with
+        <strong>2,847 profiles</strong> nearby using 47 AI data points.
+      </p>
+      <div class="modal-progress-wrap">
+        <div class="modal-progress-bar"></div>
+      </div>
+      <p style="font-size:13px;color:var(--muted2);margin-bottom:24px;position:relative;z-index:1;">
+        Setting up your personalized feed…
+      </p>
+      <a href="discover.html" class="modal-btn">
+        Start Discovering ✦
+      </a>
+    </div>
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let currentStep = 1;
+    const TOTAL = 6;
+
+    /* ── Navigation ── */
+    function nextStep(from) {
+      if (from === 1) {
+        const ph = document.getElementById('s1-phone').value.trim();
+        if (!ph) { document.getElementById('s1-phone').focus(); return; }
+        document.getElementById('s2-phone-display').textContent = '+1 ' + ph;
+        startResendTimer('s2-resend', 's2-timer');
+      }
+      if (from === 2) {
+        const boxes = document.querySelectorAll('#pane-2 .otp-box');
+        const code  = [...boxes].map(b => b.value).join('');
+        if (code.length < 6) { boxes[code.length]?.focus(); return; }
+      }
+      goToStep(from + 1);
+    }
+
+    function prevStep(from) { goToStep(from - 1); }
+
+    function goToStep(n) {
+      if (n < 1 || n > TOTAL) return;
+      document.getElementById(`pane-${currentStep}`).classList.add('hidden');
+      document.getElementById(`pane-${n}`).classList.remove('hidden');
+
+      // Trigger re-animation
+      const pane = document.getElementById(`pane-${n}`);
+      pane.classList.remove('step-pane');
+      void pane.offsetWidth;
+      pane.classList.add('step-pane');
+
+      currentStep = n;
+      updateProgress();
+
+      if (n === 2) {
+        setTimeout(() => document.querySelector('#pane-2 .otp-box').focus(), 100);
+      }
+    }
+
+    function updateProgress() {
+      document.getElementById('step-num').textContent = currentStep;
+
+      for (let i = 1; i <= TOTAL; i++) {
+        const seg = document.getElementById(`seg-${i}`);
+        const dot = document.getElementById(`dot-${i}`);
+        seg.className = 'prog-seg';
+        dot.className = 'step-dot';
+        if (i < currentStep)       { seg.classList.add('done'); dot.classList.add('done'); }
+        else if (i === currentStep) { seg.classList.add('active'); dot.classList.add('active'); }
+      }
+
+      // Hide sign-in link on last step
+      const lnk = document.getElementById('bottom-login-link');
+      if (lnk) lnk.style.display = currentStep === 6 ? 'none' : '';
+    }
+
+    /* ── Phone format ── */
+    function formatPhone(input) {
+      let v = input.value.replace(/\D/g,'');
+      if (v.length > 10) v = v.slice(0,10);
+      if (v.length >= 7)      input.value = '('+v.slice(0,3)+') '+v.slice(3,6)+'-'+v.slice(6);
+      else if (v.length >= 4) input.value = '('+v.slice(0,3)+') '+v.slice(3);
+      else                    input.value = v;
+    }
+
+    /* ── OTP ── */
+    function otpInput(el, idx, prefix) {
+      const boxes = document.querySelectorAll(`#pane-${prefix==='s2'?2:''} .otp-box`);
+      const v = el.value.replace(/\D/g,'');
+      el.value = v;
+      el.classList.toggle('filled', !!v);
+      if (v && idx < 5) boxes[idx+1].focus();
+    }
+    function otpKeydown(el, idx, prefix, e) {
+      const boxes = document.querySelectorAll(`#pane-${prefix==='s2'?2:''} .otp-box`);
+      if (e.key === 'Backspace' && !el.value && idx > 0) boxes[idx-1].focus();
+      if (e.key === 'ArrowLeft'  && idx > 0) boxes[idx-1].focus();
+      if (e.key === 'ArrowRight' && idx < 5) boxes[idx+1].focus();
+    }
+
+    /* ── Resend timer ── */
+    function startResendTimer(btnId, timerId) {
+      const btn  = document.getElementById(btnId);
+      const span = document.getElementById(timerId);
+      if (!btn || !span) return;
+      btn.disabled = true;
+      let sec = 30;
+      clearInterval(window[`_t_${btnId}`]);
+      window[`_t_${btnId}`] = setInterval(() => {
+        sec--;
+        span.textContent = sec;
+        if (sec <= 0) {
+          clearInterval(window[`_t_${btnId}`]);
+          btn.disabled = false;
+          btn.innerHTML = 'Resend code';
+        }
+      }, 1000);
+    }
+    function resendCode(btnId, timerId) {
+      const btn = document.getElementById(btnId);
+      btn.innerHTML = `Resend (<span id="${timerId}">30</span>s)`;
+      startResendTimer(btnId, timerId);
+    }
+
+    /* ── Gender / option select (single) ── */
+    function selectOpt(el, group) {
+      el.closest('.option-grid').querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    /* ── Interests ── */
+    let selectedInterests = 0;
+    function toggleInterest(el) {
+      const was = el.classList.contains('selected');
+      el.classList.toggle('selected', !was);
+      selectedInterests += was ? -1 : 1;
+      document.getElementById('interest-count-badge').textContent = selectedInterests;
+      document.getElementById('btn-interests').disabled = selectedInterests < 3;
+    }
+
+    /* ── Bio char count ── */
+    function updateCharCount(el) {
+      const n   = el.value.length;
+      const div = document.getElementById('char-count');
+      div.textContent = `${n} / 300`;
+      div.className   = 'char-count' + (n > 280 ? ' warn' : '') + (n >= 300 ? ' over' : '');
+    }
+
+    /* ── Photo upload ── */
+    let pendingSlotIdx = 0;
+    function triggerUpload(idx) {
+      pendingSlotIdx = idx;
+      document.getElementById('photo-upload').click();
+    }
+    function handlePhotoUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const slots = document.querySelectorAll('.photo-slot');
+        const slot  = slots[pendingSlotIdx];
+        slot.classList.add('filled');
+        slot.innerHTML = `<div class="photo-filled-img">
+          <img src="${ev.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:14px;" />
+        </div>`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    /* ── Preferences ── */
+    function selectPref(el, group) {
+      el.closest('.pref-grid').querySelectorAll('.pref-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    /* ── Sliders ── */
+    function updateAgeRange() {
+      let minV = parseInt(document.getElementById('age-min').value);
+      let maxV = parseInt(document.getElementById('age-max').value);
+      if (minV > maxV - 2) {
+        if (event.target.id === 'age-min') minV = maxV - 2;
+        else maxV = minV + 2;
+        document.getElementById('age-min').value = minV;
+        document.getElementById('age-max').value = maxV;
+      }
+      document.getElementById('age-display').textContent = `${minV} – ${maxV}`;
+      const pct1 = ((minV - 18) / 42) * 100;
+      const pct2 = ((maxV - 18) / 42) * 100;
+      document.getElementById('age-fill').style.left  = pct1 + '%';
+      document.getElementById('age-fill').style.width = (pct2 - pct1) + '%';
+    }
+
+    function updateDist() {
+      const v = document.getElementById('dist-range').value;
+      document.getElementById('dist-display').textContent = v + ' mi';
+    }
+
+    /* ── Finish ── */
+    function finishSignup() {
+      document.getElementById('success-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    /* ── Theme fallback ── */
+    if (typeof cycleTheme === 'undefined') {
+      const themes = ['dark','light','neon'];
+      let ti = 0;
+      window.cycleTheme = () => {
+        ti = (ti+1) % themes.length;
+        document.documentElement.setAttribute('data-theme', themes[ti]);
+      };
+    }
+
+    /* ── Init ── */
+    updateAgeRange();
+    updateDist();
+  </script>
+</body>
+</html>

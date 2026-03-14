@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURA — AI-Powered Dating</title>
+  <meta name="description" content="AURA analyzes 47 compatibility signals to surface your most meaningful matches. Not just good-looking profiles — your perfect person.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+
+  <style>
+    /* Fallback vars */
+    :root {
+      --bg:#0A0A0F; --bg2:#10101A; --bg3:#16162A; --bg4:#1E1E30;
+      --card:rgba(255,255,255,.04); --card-b:rgba(255,255,255,.08); --card-c:rgba(255,255,255,.12);
+      --accent:#7C3AED; --accent2:#A855F7; --accent3:#C084FC; --accent-rgb:124,58,237;
+      --pink:#EC4899; --pink-rgb:236,72,153; --cyan:#06B6D4;
+      --green:#10B981; --red:#EF4444; --gold:#F59E0B;
+      --text:#F1F0FF; --text2:#C4C2D8;
+      --muted:#6B6B8A; --muted2:#9896B0;
+      --border:rgba(255,255,255,.07); --border2:rgba(124,58,237,.35); --border3:rgba(124,58,237,.6);
+      --glow:0 0 40px rgba(124,58,237,.25); --glow2:0 0 80px rgba(168,85,247,.15); --glow3:0 0 20px rgba(124,58,237,.4);
+      --shadow:0 8px 32px rgba(0,0,0,.4); --shadow2:0 16px 48px rgba(0,0,0,.5);
+      --radius:16px; --radius2:24px; --radius3:12px;
+    }
+
+    /* ── RESET & BASE ──────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    /* ── NAVBAR ────────────────────────────────────── */
+    .landing-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 68px;
+      background: rgba(10,10,15,.75);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      text-decoration: none; letter-spacing: -1px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-link { font-size: 14px; color: var(--muted2); text-decoration: none; transition: color .2s; }
+    .nav-link:hover { color: var(--text); }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-nav-ghost {
+      padding: 8px 18px; border: 1px solid var(--border2); border-radius: 10px;
+      background: none; color: var(--text); font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: all .2s; text-decoration: none; display: inline-flex; align-items: center;
+    }
+    .btn-nav-ghost:hover { background: rgba(var(--accent-rgb),.1); border-color: var(--accent2); }
+    .btn-nav-cta {
+      padding: 8px 18px; background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all .2s; text-decoration: none; display: inline-flex; align-items: center;
+      box-shadow: 0 4px 16px rgba(var(--accent-rgb),.3);
+    }
+    .btn-nav-cta:hover { opacity: .9; transform: translateY(-1px); }
+
+    /* ── HERO SECTION ──────────────────────────────── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden; padding: 120px 48px 80px;
+    }
+    .hero-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px);
+      pointer-events: none; animation: float 6s ease-in-out infinite;
+    }
+    .hero-orb-1 {
+      width: 500px; height: 500px; top: -100px; left: -100px;
+      background: radial-gradient(circle, rgba(124,58,237,.25), transparent 70%);
+    }
+    .hero-orb-2 {
+      width: 400px; height: 400px; bottom: -100px; right: -100px;
+      background: radial-gradient(circle, rgba(236,72,153,.2), transparent 70%);
+      animation-delay: -3s;
+    }
+    .hero-orb-3 {
+      width: 300px; height: 300px; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      background: radial-gradient(circle, rgba(6,182,212,.1), transparent 70%);
+      animation-delay: -1.5s;
+    }
+    .hero-content {
+      position: relative; z-index: 2; text-align: center; max-width: 780px;
+      animation: fadeUp .8s ease both;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 18px; background: rgba(var(--accent-rgb),.12);
+      border: 1px solid rgba(var(--accent-rgb),.3); border-radius: 20px;
+      font-size: 13px; font-weight: 500; color: var(--accent3); margin-bottom: 28px;
+    }
+    .hero-badge-dot {
+      width: 7px; height: 7px; background: var(--accent2); border-radius: 50%;
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    .hero-headline {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(52px, 7.5vw, 80px);
+      font-weight: 700; line-height: 1.08; letter-spacing: -2.5px; margin-bottom: 24px;
+    }
+    .hero-headline .grad-text {
+      background: linear-gradient(135deg, var(--accent2) 0%, var(--pink) 50%, var(--cyan) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: 18px; color: var(--muted2); line-height: 1.75;
+      max-width: 580px; margin: 0 auto 40px;
+    }
+    .hero-cta-group {
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px; flex-wrap: wrap; margin-bottom: 52px;
+    }
+    .btn-hero {
+      padding: 16px 32px; background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 14px; color: #fff; font-size: 16px; font-weight: 600;
+      cursor: pointer; transition: all .25s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      box-shadow: 0 4px 32px rgba(var(--accent-rgb),.45);
+    }
+    .btn-hero:hover { opacity: .92; transform: translateY(-3px); box-shadow: 0 8px 44px rgba(var(--accent-rgb),.55); }
+    .btn-hero-ghost {
+      padding: 16px 32px; border: 1px solid var(--border2);
+      border-radius: 14px; background: none; color: var(--text); font-size: 16px; font-weight: 500;
+      cursor: pointer; transition: all .2s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-hero-ghost:hover { background: rgba(var(--accent-rgb),.1); border-color: var(--accent2); }
+
+    /* Floating match cards */
+    .hero-cards { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+    .mini-card {
+      position: absolute; width: 148px;
+      background: rgba(16,16,26,.85); border: 1px solid var(--border);
+      border-radius: 16px; padding: 16px 14px;
+      backdrop-filter: blur(12px); display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .mini-card-1 { top: 22%; left: 6%; transform: rotate(-7deg); animation: float 5s ease-in-out infinite; }
+    .mini-card-2 { top: 32%; right: 5%; transform: rotate(6deg); animation: float 7s ease-in-out infinite; animation-delay: -2s; }
+    .mini-card-3 { bottom: 18%; left: 8%; transform: rotate(4deg); animation: float 6s ease-in-out infinite; animation-delay: -4s; }
+    .mini-card-avatar {
+      width: 54px; height: 54px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 28px;
+      border: 2px solid rgba(var(--accent-rgb),.4);
+    }
+    .mini-card-name { font-size: 12px; font-weight: 600; color: var(--text); }
+    .mini-card-match {
+      font-size: 11px; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent3), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .mini-card-line { width: 100%; height: 1px; background: var(--border); }
+
+    /* Social proof */
+    .social-proof {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .proof-stars { color: var(--gold); font-size: 13px; font-weight: 500; }
+    .proof-divider { width: 1px; height: 16px; background: var(--border); }
+    .avatar-pile { display: flex; }
+    .ap-item {
+      width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--bg);
+      display: flex; align-items: center; justify-content: center; font-size: 17px; margin-left: -9px;
+    }
+    .ap-item:first-child { margin-left: 0; }
+    .ap-item:nth-child(1) { background: linear-gradient(135deg, var(--accent), var(--pink)); }
+    .ap-item:nth-child(2) { background: linear-gradient(135deg, var(--cyan), var(--accent2)); }
+    .ap-item:nth-child(3) { background: linear-gradient(135deg, var(--pink), var(--gold)); }
+    .ap-item:nth-child(4) { background: linear-gradient(135deg, var(--green), var(--cyan)); }
+    .ap-item:nth-child(5) { background: linear-gradient(135deg, var(--accent2), var(--accent3)); }
+    .proof-text { font-size: 14px; color: var(--muted2); }
+
+    /* ── SECTIONS BASE ─────────────────────────────── */
+    section { padding: 100px 48px; }
+    .sec-wrap { max-width: 1100px; margin: 0 auto; }
+    .sec-eyebrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 14px; background: rgba(var(--accent-rgb),.1);
+      border: 1px solid rgba(var(--accent-rgb),.25); border-radius: 20px;
+      font-size: 11px; font-weight: 700; color: var(--accent3);
+      letter-spacing: .8px; text-transform: uppercase; margin-bottom: 16px;
+    }
+    .sec-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(32px, 4vw, 50px); font-weight: 700;
+      letter-spacing: -1px; margin-bottom: 14px; line-height: 1.15;
+    }
+    .sec-sub { font-size: 17px; color: var(--muted2); line-height: 1.7; max-width: 560px; }
+
+    /* ── HOW IT WORKS ──────────────────────────────── */
+    .how-section { background: var(--bg); position: relative; }
+    .how-section::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,.04) 1px, transparent 0);
+      background-size: 32px 32px; pointer-events: none;
+    }
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 20px; margin-top: 52px; position: relative; z-index: 1;
+    }
+    .step-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 28px 22px;
+      position: relative; transition: all .3s;
+    }
+    .step-card:hover { border-color: var(--border2); transform: translateY(-5px); box-shadow: var(--shadow2), var(--glow); }
+    .step-num {
+      position: absolute; top: 18px; right: 18px;
+      font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 700;
+      color: rgba(var(--accent-rgb),.1); line-height: 1;
+    }
+    .step-icon { font-size: 38px; margin-bottom: 18px; display: block; }
+    .step-title { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+    .step-desc { font-size: 14px; color: var(--muted2); line-height: 1.65; }
+    .step-connector {
+      position: absolute; top: 50%; right: -12px;
+      width: 24px; height: 24px; background: var(--bg3);
+      border: 1px solid var(--border2); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: var(--accent3); z-index: 2;
+    }
+
+    /* ── FEATURES ──────────────────────────────────── */
+    .features-section { background: var(--bg2); }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px; margin-top: 52px;
+    }
+    .feature-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius2); padding: 28px 24px; transition: all .3s;
+    }
+    .feature-card:hover {
+      border-color: var(--border2); transform: translateY(-4px);
+      box-shadow: var(--shadow2), var(--glow);
+    }
+    .feature-icon { font-size: 34px; margin-bottom: 16px; display: block; }
+    .feature-title { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+    .feature-desc { font-size: 14px; color: var(--muted2); line-height: 1.65; }
+
+    /* ── STATS / SOCIAL PROOF ──────────────────────── */
+    .stats-section {
+      background: linear-gradient(160deg, var(--bg2) 0%, var(--bg3) 100%);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 32px; margin-bottom: 72px; text-align: center;
+    }
+    .stat-large {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(36px, 5vw, 56px); font-weight: 700;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1.1;
+    }
+    .stat-lbl { font-size: 14px; color: var(--muted2); margin-top: 6px; }
+    .testimonials-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .testimonial-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 18px; padding: 24px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .t-stars { color: var(--gold); font-size: 14px; letter-spacing: 2px; }
+    .t-quote { font-size: 15px; line-height: 1.7; color: var(--muted2); font-style: italic; }
+    .t-quote::before { content: '\201C'; color: var(--accent3); font-size: 20px; font-style: normal; }
+    .t-author { display: flex; align-items: center; gap: 10px; }
+    .t-av {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 20px;
+    }
+    .t-name { font-size: 14px; font-weight: 600; }
+    .t-detail { font-size: 12px; color: var(--muted); }
+
+    /* ── AI SHOWCASE ───────────────────────────────── */
+    .showcase-section { background: var(--bg); }
+    .showcase-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px;
+      align-items: center; margin-top: 56px;
+    }
+    .showcase-bullets { display: flex; flex-direction: column; gap: 18px; margin-top: 28px; }
+    .showcase-bullet { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: var(--muted2); line-height: 1.65; }
+    .bullet-dot { color: var(--accent3); font-weight: 700; flex-shrink: 0; margin-top: 1px; font-size: 16px; }
+    .showcase-cta { margin-top: 32px; }
+
+    /* Mock AI card */
+    .mock-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 22px; padding: 24px; display: flex; flex-direction: column; gap: 20px;
+      box-shadow: var(--shadow2);
+      position: relative;
+    }
+    .mock-card::before {
+      content: ''; position: absolute; inset: -1px; border-radius: 23px;
+      background: linear-gradient(135deg, rgba(var(--accent-rgb),.4), rgba(var(--pink-rgb),.2), transparent 60%);
+      z-index: -1;
+    }
+    .mock-header { display: flex; align-items: center; gap: 12px; }
+    .mock-av {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      display: flex; align-items: center; justify-content: center; font-size: 28px;
+      border: 2px solid var(--border2);
+    }
+    .mock-av-info { flex: 1; }
+    .mock-name { font-weight: 600; font-size: 16px; }
+    .mock-match-score {
+      font-size: 13px; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent3), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .mock-section-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted);
+    }
+    .compat-bars { display: flex; flex-direction: column; gap: 10px; }
+    .compat-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+    .compat-lbl { width: 100px; color: var(--muted2); flex-shrink: 0; font-size: 12px; }
+    .compat-track { flex: 1; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+    .compat-fill { height: 100%; border-radius: 4px; }
+    .compat-pct { width: 32px; text-align: right; font-weight: 600; font-size: 12px; color: var(--text2); }
+    .mock-insight {
+      padding: 12px 14px; background: rgba(var(--accent-rgb),.08);
+      border: 1px solid rgba(var(--accent-rgb),.2); border-radius: 12px;
+      font-size: 13px; color: var(--accent3); line-height: 1.55;
+    }
+    .mock-insight::before { content: '🧠 '; }
+
+    /* ── THEMES SECTION ────────────────────────────── */
+    .themes-section { background: var(--bg2); border-top: 1px solid var(--border); }
+    .theme-cards {
+      display: flex; gap: 16px; margin-top: 40px; flex-wrap: wrap;
+    }
+    .theme-card {
+      flex: 1; min-width: 150px; padding: 22px 16px;
+      border-radius: 18px; border: 2px solid transparent;
+      cursor: pointer; transition: all .3s; text-align: center;
+    }
+    .theme-card:hover { transform: translateY(-5px); }
+    .theme-card.active-t { border-color: rgba(255,255,255,.35) !important; }
+    .theme-dot {
+      width: 52px; height: 52px; border-radius: 50%;
+      margin: 0 auto 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.4);
+    }
+    .theme-card-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+    .theme-card-desc { font-size: 11px; opacity: .65; }
+    #theme-switcher { /* JS builds into this */ }
+
+    /* ── CTA SECTION ───────────────────────────────── */
+    .cta-section { text-align: center; background: var(--bg); position: relative; overflow: hidden; }
+    .cta-section::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(var(--accent-rgb),.12), transparent 70%);
+      pointer-events: none;
+    }
+    .cta-wrap { position: relative; z-index: 1; }
+    .cta-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(40px, 6vw, 72px); font-weight: 700;
+      letter-spacing: -2px; margin-bottom: 16px; line-height: 1.1;
+    }
+    .cta-sub { font-size: 18px; color: var(--muted2); margin-bottom: 40px; }
+    .cta-btns { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .btn-cta-main {
+      padding: 18px 40px; background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 14px; color: #fff; font-size: 18px; font-weight: 700;
+      cursor: pointer; transition: all .25s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      box-shadow: 0 4px 40px rgba(var(--accent-rgb),.45);
+    }
+    .btn-cta-main:hover { opacity: .9; transform: translateY(-3px); box-shadow: 0 8px 52px rgba(var(--accent-rgb),.55); }
+    .cta-note { font-size: 13px; color: var(--muted); margin-top: 16px; }
+
+    /* ── FOOTER ────────────────────────────────────── */
+    footer {
+      padding: 48px; border-top: 1px solid var(--border); background: var(--bg2);
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .footer-logo {
+      font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      letter-spacing: -1px;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 20px; }
+    .footer-links a { font-size: 13px; color: var(--muted2); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 13px; color: var(--muted); }
+
+    /* ── THEME TOGGLE FLOAT ────────────────────────── */
+    .theme-toggle-float {
+      position: fixed; bottom: 28px; right: 28px; z-index: 200;
+      width: 46px; height: 46px;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; cursor: pointer; transition: all .2s;
+      box-shadow: var(--shadow);
+    }
+    .theme-toggle-float:hover { border-color: var(--border2); transform: scale(1.1); box-shadow: var(--glow); }
+
+    /* ── LANDING-SPECIFIC ANIMATIONS ──────────────── */
+    .hero-orb { animation: float 6s ease-in-out infinite; }
+
+    .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius2); padding: 28px 24px; transition: all .3s; }
+    .feature-card:hover { border-color: var(--border2); transform: translateY(-4px); box-shadow: var(--shadow2), var(--glow); }
+
+    .stat-large {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 56px; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes pulse-glow {
+      0%,100%{box-shadow:0 0 0 0 rgba(168,85,247,.4)}
+      50%{box-shadow:0 0 0 6px rgba(168,85,247,0)}
+    }
+
+    /* ── RESPONSIVE ────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .steps-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .showcase-grid { grid-template-columns: 1fr; gap: 40px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .testimonials-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .landing-nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      section { padding: 64px 20px; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .testimonials-row { grid-template-columns: 1fr; }
+      .plan-cards { grid-template-columns: 1fr; }
+      .hero { padding: 100px 20px 60px; }
+      .mini-card-1, .mini-card-2, .mini-card-3 { display: none; }
+      footer { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body data-page="landing">
+
+  <!-- ─────────────── NAVBAR ─────────────── -->
+  <nav class="landing-nav">
+    <a href="index.html" class="nav-logo">AURA</a>
+    <div class="nav-links">
+      <a href="#how-it-works" class="nav-link">How It Works</a>
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#testimonials" class="nav-link">Stories</a>
+      <a href="my-account.html#premium" class="nav-link">Pricing</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="btn-nav-ghost">Sign In</a>
+      <a href="signup.html" class="btn-nav-cta">Get Started →</a>
+    </div>
+  </nav>
+
+  <!-- ─────────────── HERO ─────────────── -->
+  <section class="hero" id="hero">
+    <!-- Background orbs -->
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+
+    <!-- Floating match cards -->
+    <div class="hero-cards">
+      <div class="mini-card mini-card-1">
+        <div class="mini-card-avatar" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">🌸</div>
+        <div class="mini-card-name">Sofia, 26</div>
+        <div class="mini-card-line"></div>
+        <div class="mini-card-match">✦ 94% Match</div>
+      </div>
+      <div class="mini-card mini-card-2">
+        <div class="mini-card-avatar" style="background:linear-gradient(135deg,#06B6D4,#7C3AED);">⚡</div>
+        <div class="mini-card-name">Marcus, 29</div>
+        <div class="mini-card-line"></div>
+        <div class="mini-card-match">✦ 91% Match</div>
+      </div>
+      <div class="mini-card mini-card-3">
+        <div class="mini-card-avatar" style="background:linear-gradient(135deg,#EC4899,#F59E0B);">🌙</div>
+        <div class="mini-card-name">Priya, 28</div>
+        <div class="mini-card-line"></div>
+        <div class="mini-card-match">✦ 97% Match</div>
+      </div>
+    </div>
+
+    <!-- Hero content -->
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        ✦ AI-Powered Dating · 2M+ Matches Made
+      </div>
+      <h1 class="hero-headline">
+        Find Your Person<br>
+        <span class="grad-text">Powered by AI</span>
+      </h1>
+      <p class="hero-subtitle">
+        AURA analyzes 47 compatibility signals to surface your most meaningful matches.
+        Not just good-looking profiles — your perfect person.
+      </p>
+      <div class="hero-cta-group">
+        <a href="signup.html" class="btn-hero">Create Free Account →</a>
+        <a href="#how-it-works" class="btn-hero-ghost">See How It Works ↓</a>
+      </div>
+      <div class="social-proof">
+        <div class="proof-stars">★★★★★ 4.9 · App Store</div>
+        <div class="proof-divider"></div>
+        <div class="avatar-pile">
+          <div class="ap-item">😊</div>
+          <div class="ap-item">🌟</div>
+          <div class="ap-item">💫</div>
+          <div class="ap-item">✨</div>
+          <div class="ap-item">🎉</div>
+        </div>
+        <div class="proof-text">Join 2M+ people finding love</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── HOW IT WORKS ─────────────── -->
+  <section class="how-section" id="how-it-works">
+    <div class="sec-wrap">
+      <div class="sec-eyebrow">The Process</div>
+      <h2 class="sec-heading">The AURA Method</h2>
+      <p class="sec-sub">Four thoughtful steps designed to bring you to the person you've been looking for.</p>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <span class="step-icon">📱</span>
+          <div class="step-title">Create Your Profile</div>
+          <div class="step-desc">Answer our 60-second questionnaire. Share what you love, what you value, and what makes you laugh.</div>
+          <div class="step-connector">→</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <span class="step-icon">🧠</span>
+          <div class="step-title">AI Gets to Know You</div>
+          <div class="step-desc">AURA's AI analyzes your personality, communication style, and 47 unique compatibility signals.</div>
+          <div class="step-connector">→</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <span class="step-icon">✦</span>
+          <div class="step-title">Meet Your Matches</div>
+          <div class="step-desc">Curated daily matches with deep compatibility explanations. No swiping noise — just signal.</div>
+          <div class="step-connector">→</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <span class="step-icon">💬</span>
+          <div class="step-title">Connect Authentically</div>
+          <div class="step-desc">AI-powered conversation starters, icebreakers, and insights to help you connect on a deeper level.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── FEATURES ─────────────── -->
+  <section class="features-section" id="features">
+    <div class="sec-wrap">
+      <div style="text-align:center;margin-bottom:56px;">
+        <div class="sec-eyebrow">Features</div>
+        <h2 class="sec-heading">Everything Built for Real Connection</h2>
+        <p class="sec-sub" style="margin:0 auto;">Every feature is designed to help you find and build something meaningful, not just swipe.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="feature-icon">🎯</span>
+          <div class="feature-title">Smart Discovery</div>
+          <div class="feature-desc">Personalized card stacks based on your behavioral patterns, past interactions, and evolving preferences.</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🧬</span>
+          <div class="feature-title">Deep Compatibility</div>
+          <div class="feature-desc">47 signals including values alignment, attachment styles, love languages, and long-term life goals.</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🤝</span>
+          <div class="feature-title">Conversation AI</div>
+          <div class="feature-desc">Real-time coaching and icebreakers to help you put your best self forward — naturally and authentically.</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🔒</span>
+          <div class="feature-title">Privacy First</div>
+          <div class="feature-desc">You control who sees you, what they see, and when. Incognito mode, block lists, and granular visibility controls.</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">⚡</span>
+          <div class="feature-title">Real-time Insights</div>
+          <div class="feature-desc">See exactly why someone is a great match before you swipe — compatibility breakdowns, not just photos.</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🌍</span>
+          <div class="feature-title">Global &amp; Local</div>
+          <div class="feature-desc">Find your person nearby or anywhere in the world. Global mode expands your reach without losing depth.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── STATS / SOCIAL PROOF ─────────────── -->
+  <section class="stats-section" id="testimonials">
+    <div class="sec-wrap">
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div>
+          <div class="stat-large">2M+</div>
+          <div class="stat-lbl">Active users worldwide</div>
+        </div>
+        <div>
+          <div class="stat-large">8.7M+</div>
+          <div class="stat-lbl">Meaningful matches made</div>
+        </div>
+        <div>
+          <div class="stat-large">94%</div>
+          <div class="stat-lbl">User satisfaction rate</div>
+        </div>
+        <div>
+          <div class="stat-large">4.9★</div>
+          <div class="stat-lbl">Average App Store rating</div>
+        </div>
+      </div>
+
+      <!-- Testimonials -->
+      <div style="text-align:center;margin-bottom:40px;">
+        <div class="sec-eyebrow">Real Stories</div>
+        <h2 class="sec-heading">Love, Actually Found</h2>
+      </div>
+
+      <div class="testimonials-row">
+        <div class="testimonial-card">
+          <div class="t-stars">★★★★★</div>
+          <div class="t-quote">I found my partner in 3 weeks. The AI insights were eerily spot on — it understood what I actually needed before I did.</div>
+          <div class="t-author">
+            <div class="t-av" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">🌸</div>
+            <div>
+              <div class="t-name">Jamie, 29</div>
+              <div class="t-detail">Matched October 2024</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="t-stars">★★★★★</div>
+          <div class="t-quote">Finally a dating app that feels grown up. The compatibility analysis is wild — it shows you exactly why someone would work for you.</div>
+          <div class="t-author">
+            <div class="t-av" style="background:linear-gradient(135deg,#06B6D4,#A855F7);">💫</div>
+            <div>
+              <div class="t-name">Priya, 31</div>
+              <div class="t-detail">Matched August 2024</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="t-stars">★★★★★</div>
+          <div class="t-quote">Matched with my now-fiancé on AURA. The 94% compatibility score was right. AURA knew before we did — and I'm so glad it did.</div>
+          <div class="t-author">
+            <div class="t-av" style="background:linear-gradient(135deg,#10B981,#06B6D4);">✨</div>
+            <div>
+              <div class="t-name">Marcus, 34</div>
+              <div class="t-detail">Matched June 2024 · Engaged!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─────────────── AI SHOWCASE ─────────────── -->
+  <section class="showcase-section" id="ai">
+    <div class="sec-wrap">
+      <div class="showcase-grid">
+
+        <!-- Left: copy -->
+        <div>
+          <div class="sec-eyebrow">Under the Hood</div>
+          <h2 class="sec-heading">The AI That Actually Gets You</h2>
+          <p class="sec-sub">AURA doesn't just match faces. It matches futures.</p>
+          <div class="showcase-bullets">
+            <div class="showcase-bullet"><span class="bullet-dot">✦</span> Personality analysis derived from your interests, behavior, and communication patterns</div>
+            <div class="showcase-bullet"><span class="bullet-dot">✦</span> 47-point compatibility engine covering values, attachment, goals, and lifestyle</div>
+            <div class="showcase-bullet"><span class="bullet-dot">✦</span> Real-time conversation guidance that helps you connect, not perform</div>
+            <div class="showcase-bullet"><span class="bullet-dot">✦</span> Continuously learns and improves with every interaction you have</div>
+          </div>
+          <div class="showcase-cta">
+            <a href="signup.html" class="btn-hero">Try AURA Free →</a>
+          </div>
+        </div>
+
+        <!-- Right: mock AI card -->
+        <div>
+          <div class="mock-card">
+            <div class="mock-header">
+              <div class="mock-av">🌙</div>
+              <div class="mock-av-info">
+                <div class="mock-name">Jordan &amp; Alex</div>
+                <div class="mock-match-score">✦ 94% Compatibility</div>
+              </div>
+              <div style="padding:4px 10px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);border-radius:8px;font-size:12px;color:var(--green);font-weight:600;">Great Match</div>
+            </div>
+
+            <div>
+              <div class="mock-section-title" style="margin-bottom:12px;">Compatibility Breakdown</div>
+              <div class="compat-bars">
+                <div class="compat-row">
+                  <div class="compat-lbl">Core Values</div>
+                  <div class="compat-track"><div class="compat-fill" style="width:96%;background:linear-gradient(90deg,var(--green),#34d399);"></div></div>
+                  <div class="compat-pct">96%</div>
+                </div>
+                <div class="compat-row">
+                  <div class="compat-lbl">Life Goals</div>
+                  <div class="compat-track"><div class="compat-fill" style="width:91%;background:linear-gradient(90deg,var(--accent2),var(--accent3));"></div></div>
+                  <div class="compat-pct">91%</div>
+                </div>
+                <div class="compat-row">
+                  <div class="compat-lbl">Communication</div>
+                  <div class="compat-track"><div class="compat-fill" style="width:88%;background:linear-gradient(90deg,var(--cyan),var(--accent2));"></div></div>
+                  <div class="compat-pct">88%</div>
+                </div>
+                <div class="compat-row">
+                  <div class="compat-lbl">Attachment Style</div>
+                  <div class="compat-track"><div class="compat-fill" style="width:94%;background:linear-gradient(90deg,var(--pink),var(--accent2));"></div></div>
+                  <div class="compat-pct">94%</div>
+                </div>
+                <div class="compat-row">
+                  <div class="compat-lbl">Lifestyle</div>
+                  <div class="compat-track"><div class="compat-fill" style="width:82%;background:linear-gradient(90deg,var(--gold),#fb923c);"></div></div>
+                  <div class="compat-pct">82%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mock-insight">
+              Both value intellectual growth and adventure. Jordan's grounded warmth balances Alex's driven curiosity — a pairing that tends to last.
+            </div>
+
+            <div style="display:flex;gap:10px;">
+              <button style="flex:1;padding:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">💜 Like Jordan</button>
+              <button style="padding:11px 16px;background:var(--card-b);border:1px solid var(--border);border-radius:10px;color:var(--text2);font-size:14px;cursor:pointer;">Pass</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── THEMES SECTION ─────────────── -->
+  <section class="themes-section" id="themes">
+    <div class="sec-wrap">
+      <div style="text-align:center;margin-bottom:0;">
+        <div class="sec-eyebrow">Personalization</div>
+        <h2 class="sec-heading">AURA, Your Way</h2>
+        <p class="sec-sub" style="margin:0 auto 12px;">Choose from 5 beautiful themes designed for every mood.</p>
+      </div>
+
+      <div id="theme-switcher">
+        <div class="theme-cards">
+          <div class="theme-card active-t" style="background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(236,72,153,.08));border-color:rgba(124,58,237,.4);" onclick="setTheme(this,'dark')">
+            <div class="theme-dot" style="background:linear-gradient(135deg,#7C3AED,#EC4899);"></div>
+            <div class="theme-card-name" style="color:#F1F0FF;">Cosmic</div>
+            <div class="theme-card-desc" style="color:#9896B0;">Deep space purple</div>
+          </div>
+          <div class="theme-card" style="background:linear-gradient(135deg,rgba(0,0,0,.3),rgba(20,20,20,.2));border-color:rgba(255,255,255,.1);" onclick="setTheme(this,'black')">
+            <div class="theme-dot" style="background:linear-gradient(135deg,#111,#333);border:1px solid #444;"></div>
+            <div class="theme-card-name" style="color:#F1F0FF;">Black</div>
+            <div class="theme-card-desc" style="color:#9896B0;">AMOLED dark</div>
+          </div>
+          <div class="theme-card" style="background:linear-gradient(135deg,rgba(248,247,255,.15),rgba(232,228,255,.1));border-color:rgba(124,58,237,.2);" onclick="setTheme(this,'white')">
+            <div class="theme-dot" style="background:linear-gradient(135deg,#F8F7FF,#E8E4FF);border:1px solid #ccc;"></div>
+            <div class="theme-card-name" style="color:#F1F0FF;">White</div>
+            <div class="theme-card-desc" style="color:#9896B0;">Clean light mode</div>
+          </div>
+          <div class="theme-card" style="background:linear-gradient(135deg,rgba(249,115,22,.15),rgba(244,63,94,.08));border-color:rgba(249,115,22,.3);" onclick="setTheme(this,'sunset')">
+            <div class="theme-dot" style="background:linear-gradient(135deg,#F97316,#F43F5E);"></div>
+            <div class="theme-card-name" style="color:#FFF7ED;">Sunset</div>
+            <div class="theme-card-desc" style="color:#A87045;">Warm amber glow</div>
+          </div>
+          <div class="theme-card" style="background:linear-gradient(135deg,rgba(14,165,233,.15),rgba(129,140,248,.08));border-color:rgba(14,165,233,.3);" onclick="setTheme(this,'ocean')">
+            <div class="theme-dot" style="background:linear-gradient(135deg,#0EA5E9,#818CF8);"></div>
+            <div class="theme-card-name" style="color:#E0F2FE;">Ocean</div>
+            <div class="theme-card-desc" style="color:#3A7A9C;">Deep ocean blue</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── CTA SECTION ─────────────── -->
+  <section class="cta-section" id="cta">
+    <div class="sec-wrap cta-wrap" style="text-align:center;">
+      <div class="sec-eyebrow" style="display:inline-flex;margin-bottom:24px;">✦ Start Today</div>
+      <h2 class="cta-heading">Your person<br><span class="grad-text">is waiting.</span></h2>
+      <p class="cta-sub">Join 2 million people already using AURA to find real, lasting connection.</p>
+      <div class="cta-btns">
+        <a href="signup.html" class="btn-cta-main">Start Free → </a>
+      </div>
+      <p class="cta-note">No credit card required · Free forever plan available · Cancel anytime</p>
+    </div>
+  </section>
+
+  <!-- ─────────────── FOOTER ─────────────── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">AURA</div>
+      <div class="footer-links">
+        <a href="#">About</a>
+        <a href="#features">Features</a>
+        <a href="my-account.html#premium">Premium</a>
+        <a href="#">Blog</a>
+        <a href="#">Safety</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+      <div class="footer-copy">© 2025 AURA. Made with ✦ and AI.</div>
+    </div>
+  </footer>
+
+  <!-- Theme toggle float button -->
+  <button class="theme-toggle-float" title="Change theme" onclick="document.getElementById('themes').scrollIntoView({behavior:'smooth'})">🎨</button>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Theme card selection helper
+    function setTheme(el, theme) {
+      document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active-t'));
+      el.classList.add('active-t');
+      // If theme.js exports setTheme or similar, call it
+      if (typeof window.applyTheme === 'function') window.applyTheme(theme);
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+
+    // Subtle scroll-in animation for sections
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.animation = 'fadeUp .6s ease both';
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.step-card, .feature-card, .testimonial-card').forEach(el => {
+      el.style.opacity = '0';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

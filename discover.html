@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discover – AURA AI Dating</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+
+  <style>
+    /* ── DISCOVER-SPECIFIC ───────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0A0A0F;
+      --bg2:       #10101A;
+      --bg3:       #16162A;
+      --card:      rgba(255,255,255,.04);
+      --card-b:    rgba(255,255,255,.08);
+      --accent:    #7C3AED;
+      --accent2:   #A855F7;
+      --accent3:   #C084FC;
+      --pink:      #EC4899;
+      --cyan:      #06B6D4;
+      --green:     #10B981;
+      --gold:      #F59E0B;
+      --text:      #F1F0FF;
+      --muted:     #6B6B8A;
+      --muted2:    #9896B0;
+      --border:    rgba(255,255,255,.07);
+      --border2:   rgba(124,58,237,.35);
+      --shadow:    0 4px 20px rgba(0,0,0,.4);
+      --shadow2:   0 8px 32px rgba(0,0,0,.5);
+      --radius:    16px;
+      --radius2:   24px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px; left: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(124,58,237,.12) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(236,72,153,.08) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── SIDEBAR ─────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0;
+      width: 72px; height: 100vh;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      align-items: center;
+      padding: 24px 0 20px;
+      gap: 4px;
+      z-index: 200;
+    }
+    .sidebar .brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+      width: 46px; height: 46px;
+      border-radius: 14px;
+      background-color: rgba(124,58,237,.15);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-item {
+      width: 46px; height: 46px;
+      border-radius: 14px;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+      text-decoration: none;
+      position: relative;
+    }
+    .nav-item:hover { background: var(--card-b); color: var(--text); }
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(124,58,237,.3), rgba(168,85,247,.2));
+      color: var(--accent3);
+      box-shadow: 0 0 20px rgba(124,58,237,.2);
+    }
+    .nav-item .badge {
+      position: absolute; top: 6px; right: 6px;
+      width: 8px; height: 8px;
+      background: var(--pink); border-radius: 50%;
+      border: 2px solid var(--bg2);
+      display: block;
+    }
+    .nav-divider {
+      width: 32px; height: 1px;
+      background: var(--border);
+      margin: 8px 0;
+    }
+    .sidebar-avatar {
+      margin-top: auto;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; cursor: pointer;
+      border: 2px solid var(--border2);
+      text-decoration: none;
+      transition: all .2s;
+    }
+    .sidebar-avatar:hover { box-shadow: 0 0 16px rgba(124,58,237,.4); transform: scale(1.05); }
+
+    /* Tooltip */
+    .nav-item[data-tip], .sidebar-avatar[data-tip] {
+      overflow: visible;
+    }
+    .nav-item[data-tip]::after, .sidebar-avatar[data-tip]::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: calc(100% + 12px);
+      top: 50%; transform: translateY(-50%);
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12px; font-weight: 600;
+      white-space: nowrap;
+      padding: 5px 10px;
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .15s;
+      z-index: 300;
+    }
+    .nav-item[data-tip]:hover::after, .sidebar-avatar[data-tip]:hover::after { opacity: 1; }
+
+    /* ── MAIN LAYOUT ─────────────────────────────── */
+    .main-layout {
+      margin-left: 72px;
+      display: grid;
+      grid-template-columns: 300px 1fr 280px;
+      height: 100vh;
+      position: relative; z-index: 1;
+    }
+
+    /* ── LEFT PANEL ──────────────────────────────── */
+    .left-panel {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      display: flex; flex-direction: column; gap: 0;
+      overflow-y: auto; height: 100vh;
+    }
+    .left-panel::-webkit-scrollbar { width: 4px; }
+    .left-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .left-header {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .left-header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px; font-weight: 700;
+      color: var(--text);
+    }
+    .btn-icon-sm {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      background: var(--card-b);
+      border: 1px solid var(--border);
+      color: var(--muted2); font-size: 14px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .btn-icon-sm:hover { border-color: var(--border2); color: var(--accent3); }
+
+    .search-bar {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 9px 12px;
+      margin-bottom: 20px;
+      transition: border-color .2s;
+    }
+    .search-bar:focus-within { border-color: var(--border2); }
+    .search-bar span { color: var(--muted); font-size: 14px; }
+    .search-bar input {
+      background: none; border: none; outline: none;
+      color: var(--text); font-size: 13px; font-family: 'Inter', sans-serif;
+      flex: 1;
+    }
+    .search-bar input::placeholder { color: var(--muted); }
+
+    /* Section label */
+    .section-label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.2px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .section-label::before {
+      content: '';
+      width: 3px; height: 12px;
+      border-radius: 2px;
+      background: linear-gradient(var(--accent2), var(--pink));
+      flex-shrink: 0;
+    }
+
+    /* AI Picks horizontal scroll */
+    .ai-picks-scroll {
+      display: flex; gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+      scrollbar-width: none;
+    }
+    .ai-picks-scroll::-webkit-scrollbar { display: none; }
+
+    .pick-card {
+      flex-shrink: 0;
+      width: 80px;
+      cursor: pointer;
+      position: relative;
+    }
+    .pick-avatar {
+      width: 80px; height: 96px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .pick-card:hover .pick-avatar { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.4); }
+    .pick-match-badge {
+      position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; font-size: 9px; font-weight: 800;
+      padding: 2px 6px; border-radius: 6px;
+      white-space: nowrap;
+    }
+    .pick-name {
+      font-size: 11px; font-weight: 600; color: var(--muted2);
+      text-align: center; margin-top: 5px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    /* Section divider */
+    .section-divider {
+      height: 1px; background: var(--border);
+      margin: 4px 0 16px;
+    }
+
+    /* Nearby list */
+    .nearby-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 8px;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all .2s;
+      margin-bottom: 4px;
+      position: relative;
+    }
+    .nearby-item:hover { background: rgba(255,255,255,.04); border-color: var(--border); }
+    .nearby-avatar {
+      width: 48px; height: 48px;
+      border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      position: relative;
+    }
+    .nearby-avatar .online-dot {
+      position: absolute; bottom: 1px; right: 1px;
+      width: 9px; height: 9px;
+      background: var(--green); border-radius: 50%;
+      border: 2px solid var(--bg2);
+    }
+    .nearby-info { flex: 1; min-width: 0; }
+    .nearby-name {
+      font-size: 13px; font-weight: 700; color: var(--text);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nearby-dist {
+      font-size: 11px; color: var(--muted);
+      margin-top: 2px;
+    }
+    .nearby-tags {
+      display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap;
+    }
+    .tag-pill {
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 10px; font-weight: 600; color: var(--muted2);
+    }
+    .nearby-right {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 6px;
+      flex-shrink: 0;
+    }
+    .nearby-match {
+      font-size: 10px; font-weight: 700; color: var(--accent3);
+      background: rgba(124,58,237,.12);
+      border: 1px solid rgba(124,58,237,.2);
+      padding: 2px 6px; border-radius: 6px;
+    }
+    .quick-like-btn {
+      width: 30px; height: 30px;
+      border-radius: 50%; border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--muted); font-size: 14px;
+      cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .quick-like-btn:hover {
+      background: rgba(236,72,153,.15);
+      border-color: rgba(236,72,153,.3);
+      color: var(--pink);
+      transform: scale(1.1);
+    }
+    .quick-like-btn.liked {
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      border-color: transparent; color: #fff;
+    }
+
+    /* ── CENTER PANEL ────────────────────────────── */
+    .center-panel {
+      padding: 24px 28px;
+      display: flex; flex-direction: column;
+      overflow-y: auto; height: 100vh;
+      align-items: center;
+    }
+    .center-panel::-webkit-scrollbar { width: 4px; }
+    .center-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .center-topbar {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      width: 100%; max-width: 440px;
+      margin-bottom: 16px;
+    }
+    .center-topbar .page-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px; font-weight: 700;
+    }
+    .center-topbar .topbar-icons {
+      display: flex; gap: 8px;
+    }
+    .btn-icon-md {
+      width: 38px; height: 38px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      color: var(--muted2); font-size: 16px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .btn-icon-md:hover { border-color: var(--border2); color: var(--accent3); }
+
+    /* AI Daily Insight banner */
+    .ai-insight-banner {
+      width: 100%; max-width: 440px;
+      background: linear-gradient(135deg, rgba(124,58,237,.14), rgba(236,72,153,.09));
+      border: 1px solid rgba(124,58,237,.28);
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex; align-items: flex-start; gap: 12px;
+      margin-bottom: 18px;
+      position: relative; overflow: hidden;
+    }
+    .ai-insight-banner::before {
+      content: '';
+      position: absolute; top: -40%; right: -5%;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(168,85,247,.12), transparent 70%);
+    }
+    .ai-banner-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 4px 14px rgba(124,58,237,.35);
+    }
+    .ai-banner-text { flex: 1; min-width: 0; }
+    .ai-banner-label {
+      font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--accent3);
+      margin-bottom: 3px;
+    }
+    .ai-banner-msg {
+      font-size: 12px; color: var(--muted2); line-height: 1.5;
+    }
+    .ai-banner-msg strong { color: var(--text); }
+    .ai-banner-dismiss {
+      background: none; border: none;
+      color: var(--muted); font-size: 14px;
+      cursor: pointer; padding: 0; line-height: 1;
+      flex-shrink: 0; transition: color .15s;
+      align-self: flex-start;
+    }
+    .ai-banner-dismiss:hover { color: var(--text); }
+
+    /* ── CARD STACK ──────────────────────────────── */
+    .card-stack { position:relative; width:340px; height:480px; margin:0 auto; }
+
+    .profile-card {
+      position:absolute; inset:0;
+      border-radius:24px; overflow:hidden;
+      cursor:grab;
+      transition: transform .3s ease, box-shadow .3s;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow2);
+      user-select:none;
+    }
+    .profile-card:nth-child(1) { z-index:3; transform:rotate(0deg); }
+    .profile-card:nth-child(2) { z-index:2; transform:scale(.96) translateY(12px); opacity:.85; pointer-events:none; }
+    .profile-card:nth-child(3) { z-index:1; transform:scale(.92) translateY(24px); opacity:.65; pointer-events:none; }
+    .profile-card:active { cursor:grabbing; }
+
+    .profile-card.swiping-right {
+      transform: rotate(8deg) translateX(120px) !important;
+      transition: transform .35s ease !important;
+      box-shadow: 0 0 40px rgba(16,185,129,.3) !important;
+    }
+    .profile-card.swiping-left {
+      transform: rotate(-8deg) translateX(-120px) !important;
+      transition: transform .35s ease !important;
+      box-shadow: 0 0 40px rgba(239,68,68,.3) !important;
+    }
+    .profile-card.swiping-up {
+      transform: translateY(-160px) !important;
+      transition: transform .35s ease !important;
+      box-shadow: 0 0 40px rgba(6,182,212,.3) !important;
+    }
+
+    /* Card photo area */
+    .card-photo {
+      width: 100%; aspect-ratio: 4/5;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card-photo-bg {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 120px;
+      transition: transform .4s ease;
+    }
+    .profile-card:hover .card-photo-bg { transform: scale(1.03); }
+    .card-photo::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(0,0,0,.05) 0%, transparent 28%,
+        transparent 45%, rgba(0,0,0,.85) 100%);
+      pointer-events: none;
+    }
+
+    /* Photo pill indicators */
+    .card-pills {
+      position: absolute; top: 12px;
+      left: 50%; transform: translateX(-50%);
+      display: flex; gap: 4px; z-index: 10;
+    }
+    .card-pills span {
+      height: 3px; width: 42px;
+      border-radius: 2px;
+      background: rgba(255,255,255,.3);
+      transition: background .3s;
+    }
+    .card-pills span.active { background: #fff; }
+
+    /* AI match badge top-right */
+    .card-match-badge {
+      position: absolute; top: 14px; right: 14px;
+      background: linear-gradient(135deg, rgba(124,58,237,.85), rgba(168,85,247,.8));
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(168,85,247,.4);
+      color: #fff; font-size: 12px; font-weight: 800;
+      padding: 5px 10px; border-radius: 10px;
+      display: flex; align-items: center; gap: 4px;
+      z-index: 10;
+      box-shadow: 0 4px 16px rgba(124,58,237,.4);
+      letter-spacing: .3px;
+    }
+
+    /* Card overlay info at bottom */
+    .card-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 18px 18px 16px;
+      z-index: 10;
+    }
+    .card-name-row {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px; font-weight: 700; color: #fff;
+      display: flex; align-items: baseline; gap: 8px;
+      text-shadow: 0 2px 10px rgba(0,0,0,.5);
+      margin-bottom: 4px;
+    }
+    .card-name-row .card-age {
+      font-size: 18px; font-weight: 500; opacity: .85;
+    }
+    .card-dist {
+      font-size: 12px; color: rgba(255,255,255,.7);
+      margin-bottom: 9px;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .card-tags {
+      display: flex; gap: 6px; flex-wrap: wrap;
+    }
+    .card-tag {
+      background: rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 20px; padding: 4px 11px;
+      font-size: 11px; font-weight: 600; color: #fff;
+    }
+
+    /* Like / Pass indicators */
+    .like-indicator {
+      position:absolute; top:24px; left:20px;
+      font-size:14px; font-weight:900; letter-spacing:2px;
+      color:#10B981; border:3px solid #10B981;
+      border-radius:8px; padding:6px 16px;
+      opacity:0; transition:opacity .15s;
+      text-shadow: 0 0 20px rgba(16,185,129,.5);
+      transform: rotate(-15deg);
+      z-index: 20;
+    }
+    .pass-indicator {
+      position:absolute; top:24px; right:20px;
+      font-size:14px; font-weight:900; letter-spacing:2px;
+      color:#EF4444; border:3px solid #EF4444;
+      border-radius:8px; padding:6px 16px;
+      opacity:0; transition:opacity .15s;
+      text-shadow: 0 0 20px rgba(239,68,68,.5);
+      transform: rotate(15deg);
+      z-index: 20;
+    }
+    .super-indicator {
+      position:absolute; bottom:80px; left:50%; transform:translateX(-50%);
+      font-size:14px; font-weight:900; letter-spacing:2px;
+      color: var(--cyan); border:3px solid var(--cyan);
+      border-radius:8px; padding:6px 16px;
+      opacity:0; transition:opacity .15s;
+      text-shadow: 0 0 20px rgba(6,182,212,.5);
+      z-index: 20;
+      white-space: nowrap;
+    }
+
+    /* ── ACTION BUTTONS ──────────────────────────── */
+    .action-btn-circle {
+      width:54px; height:54px; border-radius:50%;
+      border:none; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      font-size:22px; transition:all .2s;
+      position: relative;
+    }
+    .action-btn-circle:hover { transform:scale(1.12); }
+    .action-btn-circle:active { transform: scale(0.96); }
+    .action-btn-circle.like-btn {
+      width:66px; height:66px; font-size:28px;
+      background:linear-gradient(135deg,#7C3AED,#EC4899);
+      box-shadow:0 8px 24px rgba(124,58,237,.4);
+    }
+    .action-btn-circle.like-btn:hover { box-shadow: 0 12px 32px rgba(124,58,237,.6); }
+    .action-btn-circle.pass-btn { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); }
+    .action-btn-circle.super-btn { background:linear-gradient(135deg,rgba(6,182,212,.2),rgba(6,182,212,.1)); border:1px solid rgba(6,182,212,.3); color: var(--cyan); }
+    .action-btn-circle.boost-btn { background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(245,158,11,.1)); border:1px solid rgba(245,158,11,.3); color: var(--gold); }
+    .action-btn-circle.msg-btn { background:linear-gradient(135deg,rgba(236,72,153,.2),rgba(236,72,153,.1)); border:1px solid rgba(236,72,153,.3); color: var(--pink); }
+
+    .action-row {
+      display: flex; align-items: center;
+      justify-content: center; gap: 14px;
+      margin-top: 22px;
+    }
+    .action-item {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 5px;
+    }
+    .action-label {
+      font-size: 10px; font-weight: 600;
+      color: var(--muted); letter-spacing: .3px;
+    }
+
+    /* Profiles left indicator */
+    .profiles-left {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      margin-top: 18px;
+    }
+    .profiles-left-text {
+      font-size: 12px; color: var(--muted);
+      font-weight: 600;
+    }
+    .profiles-dots {
+      display: flex; gap: 5px;
+    }
+    .profiles-dots span {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .profiles-dots span.filled {
+      background: var(--accent2);
+    }
+
+    .kbd-hint {
+      font-size: 11px; color: var(--muted);
+      margin-top: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .kbd { 
+      background: rgba(255,255,255,.08);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 2px 7px;
+      font-size: 10px; font-weight: 700;
+      color: var(--muted2);
+    }
+
+    /* ── RIGHT PANEL ─────────────────────────────── */
+    .right-panel {
+      border-left: 1px solid var(--border);
+      padding: 24px 16px;
+      overflow-y: auto; height: 100vh;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .right-panel::-webkit-scrollbar { width: 4px; }
+    .right-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* Insight card */
+    .insight-card {
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      transition: border-color .2s;
+    }
+    .insight-card:hover { border-color: var(--border2); }
+    .insight-title {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 1.2px;
+      color: var(--muted);
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .insight-title::before {
+      content: '';
+      width: 3px; height: 12px;
+      border-radius: 2px;
+      background: linear-gradient(var(--accent2), var(--pink));
+    }
+
+    /* Bar chart */
+    .bar-chart {
+      display: flex; align-items: flex-end;
+      gap: 6px; height: 64px;
+      margin-bottom: 12px;
+    }
+    .bar-wrap {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 4px;
+    }
+    .bar {
+      width: 100%; border-radius: 4px 4px 2px 2px;
+      background: linear-gradient(to top, var(--accent), var(--accent2));
+      min-height: 4px;
+      transition: height .3s ease;
+      opacity: .7;
+    }
+    .bar.today { opacity: 1; box-shadow: 0 0 10px rgba(168,85,247,.4); }
+    .bar-day {
+      font-size: 9px; font-weight: 700;
+      color: var(--muted); text-transform: uppercase;
+    }
+
+    .vibe-label {
+      font-size: 12px; font-weight: 700;
+      color: var(--text); margin-bottom: 8px;
+    }
+    .vibe-tags {
+      display: flex; flex-wrap: wrap; gap: 5px;
+    }
+    .vibe-tag {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px; border-radius: 20px;
+      border: 1px solid;
+    }
+    .vibe-tag.purple { color: var(--accent3); border-color: rgba(192,132,252,.25); background: rgba(192,132,252,.08); }
+    .vibe-tag.pink { color: var(--pink); border-color: rgba(236,72,153,.25); background: rgba(236,72,153,.08); }
+    .vibe-tag.cyan { color: var(--cyan); border-color: rgba(6,182,212,.25); background: rgba(6,182,212,.08); }
+    .vibe-tag.gold { color: var(--gold); border-color: rgba(245,158,11,.25); background: rgba(245,158,11,.08); }
+
+    /* Who liked you */
+    .liked-blur-row {
+      display: flex; gap: 6px; margin-bottom: 12px;
+    }
+    .blur-avatar {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      filter: blur(8px);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .premium-teaser {
+      font-size: 12px; color: var(--muted2);
+      margin-bottom: 10px; line-height: 1.5;
+    }
+    .premium-teaser strong { color: var(--text); }
+    .btn-upgrade {
+      width: 100%; padding: 10px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; font-size: 13px; font-weight: 700;
+      border: none; cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 6px 20px rgba(124,58,237,.3);
+    }
+    .btn-upgrade:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(124,58,237,.45);
+    }
+
+    /* Daily boost ring */
+    .boost-ring-wrap {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .boost-ring {
+      width: 56px; height: 56px; flex-shrink: 0;
+      position: relative;
+    }
+    .boost-ring svg { transform: rotate(-90deg); }
+    .boost-ring-label {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800;
+      color: var(--gold);
+    }
+    .boost-ring-label span { font-size: 9px; color: var(--muted); font-weight: 600; }
+    .boost-info h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .boost-info p { font-size: 11px; color: var(--muted2); }
+    .btn-get-boosts {
+      display: block; width: 100%;
+      margin-top: 10px; padding: 8px;
+      border-radius: 10px; text-align: center;
+      background: linear-gradient(135deg, rgba(245,158,11,.2), rgba(245,158,11,.1));
+      border: 1px solid rgba(245,158,11,.3);
+      color: var(--gold); font-size: 12px; font-weight: 700;
+      cursor: pointer; transition: all .2s;
+    }
+    .btn-get-boosts:hover { background: rgba(245,158,11,.25); transform: translateY(-1px); }
+
+    /* Compatibility tips */
+    .tip-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .tip-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .tip-icon {
+      width: 32px; height: 32px; flex-shrink: 0;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+    }
+    .tip-icon.purple { background: rgba(124,58,237,.15); }
+    .tip-icon.pink { background: rgba(236,72,153,.15); }
+    .tip-icon.cyan { background: rgba(6,182,212,.15); }
+    .tip-body h5 { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .tip-body p { font-size: 11px; color: var(--muted2); line-height: 1.5; }
+
+    /* Theme switcher placeholder */
+    #theme-switcher {
+      margin-top: auto; padding-top: 8px;
+    }
+
+    /* ── MATCH MODAL ─────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.7);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal-box {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius2);
+      padding: 40px 36px;
+      max-width: 420px; width: 90%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,.6), 0 0 60px rgba(124,58,237,.2);
+      animation: modalPop .35s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes modalPop {
+      from { transform: scale(.8) translateY(20px); opacity: 0; }
+      to   { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    /* Confetti sparkles */
+    .confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .spark {
+      position: absolute;
+      width: 8px; height: 8px;
+      border-radius: 2px;
+      animation: sparkFall 2.5s ease-in infinite;
+    }
+    @keyframes sparkFall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(420px) rotate(720deg); opacity: 0; }
+    }
+
+    .match-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+    .match-subtitle {
+      font-size: 14px; color: var(--muted2);
+      margin-bottom: 28px;
+    }
+    .match-avatars {
+      display: flex; align-items: center;
+      justify-content: center; gap: 0;
+      margin-bottom: 24px;
+    }
+    .match-av {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+      border: 3px solid var(--bg2);
+      box-shadow: 0 0 0 2px var(--border2);
+    }
+    .match-av:first-child { transform: translateX(12px); z-index: 1; }
+    .match-av:last-child  { transform: translateX(-12px); z-index: 1; }
+    .match-heart {
+      font-size: 28px; z-index: 2; position: relative;
+      animation: heartBeat .8s ease infinite alternate;
+      filter: drop-shadow(0 0 8px rgba(236,72,153,.6));
+    }
+    @keyframes heartBeat {
+      from { transform: scale(1); }
+      to   { transform: scale(1.2); }
+    }
+    .match-names {
+      font-size: 14px; font-weight: 700; color: var(--text);
+      margin-bottom: 24px;
+    }
+    .match-names span { color: var(--accent3); }
+    .modal-btn {
+      display: block; width: 100%;
+      padding: 14px; border-radius: 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer; border: none;
+      transition: all .2s;
+      margin-bottom: 10px;
+    }
+    .modal-btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(124,58,237,.35);
+    }
+    .modal-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(124,58,237,.5); }
+    .modal-btn.secondary {
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      color: var(--muted2);
+    }
+    .modal-btn.secondary:hover { background: rgba(255,255,255,.1); color: var(--text); }
+
+    /* ── BOOST MODAL ─────────────────────────────── */
+    .boost-modal-box {
+      background: var(--bg2);
+      border: 1px solid rgba(245,158,11,.25);
+      border-radius: var(--radius2);
+      padding: 36px 32px;
+      max-width: 380px; width: 90%;
+      text-align: center;
+      position: relative; overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,.6), 0 0 40px rgba(245,158,11,.1);
+      animation: modalPop .35s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .boost-modal-icon {
+      width: 64px; height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(245,158,11,.3), rgba(245,158,11,.15));
+      border: 1px solid rgba(245,158,11,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin: 0 auto 16px;
+      box-shadow: 0 0 30px rgba(245,158,11,.2);
+    }
+    .boost-modal-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px; font-weight: 700; color: var(--text);
+      margin-bottom: 6px;
+    }
+    .boost-modal-desc {
+      font-size: 13px; color: var(--muted2);
+      margin-bottom: 24px; line-height: 1.5;
+    }
+    .boost-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .boost-option {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; border-radius: 14px;
+      background: rgba(255,255,255,.04);
+      border: 2px solid var(--border);
+      cursor: pointer; transition: all .2s;
+    }
+    .boost-option:hover, .boost-option.selected {
+      border-color: rgba(245,158,11,.5);
+      background: rgba(245,158,11,.08);
+    }
+    .boost-option .opt-left { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+    .boost-option .opt-count { font-size: 15px; font-weight: 800; color: var(--text); }
+    .boost-option .opt-note { font-size: 11px; color: var(--muted); }
+    .boost-option .opt-price {
+      font-size: 16px; font-weight: 800;
+      color: var(--gold);
+    }
+    .boost-option .opt-price.free { color: var(--green); }
+    .btn-boost-confirm {
+      width: 100%; padding: 14px;
+      border-radius: 14px; border: none;
+      background: linear-gradient(135deg, var(--gold), #D97706);
+      color: #000; font-size: 14px; font-weight: 800;
+      cursor: pointer; transition: all .2s;
+      margin-bottom: 10px;
+      box-shadow: 0 6px 20px rgba(245,158,11,.3);
+    }
+    .btn-boost-confirm:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(245,158,11,.45); }
+    .btn-cancel-modal {
+      background: none; border: none;
+      color: var(--muted); font-size: 13px; font-weight: 600;
+      cursor: pointer; padding: 8px;
+      transition: color .15s;
+    }
+    .btn-cancel-modal:hover { color: var(--text); }
+
+    /* ── FILTER POPOVER ──────────────────────────── */
+    .filter-popover {
+      position: absolute; top: 70px; right: 28px;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
+      padding: 16px;
+      width: 240px; z-index: 50;
+      box-shadow: 0 16px 48px rgba(0,0,0,.5);
+      display: none;
+    }
+    .filter-popover.open { display: block; }
+    .filter-popover h4 {
+      font-size: 13px; font-weight: 700;
+      color: var(--text); margin-bottom: 12px;
+    }
+    .filter-row {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .filter-row label { font-size: 12px; color: var(--muted2); }
+    .filter-row input[type=range] {
+      width: 120px; accent-color: var(--accent2);
+    }
+    .filter-tag-group {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-bottom: 10px;
+    }
+    .filter-tag {
+      font-size: 11px; font-weight: 600;
+      padding: 4px 10px; border-radius: 20px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      color: var(--muted2); cursor: pointer;
+      transition: all .15s;
+    }
+    .filter-tag.active {
+      background: rgba(124,58,237,.2);
+      border-color: var(--border2);
+      color: var(--accent3);
+    }
+    .btn-apply-filter {
+      width: 100%; padding: 9px;
+      border-radius: 10px; border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; font-size: 12px; font-weight: 700;
+      cursor: pointer; margin-top: 4px;
+      transition: all .2s;
+    }
+    .btn-apply-filter:hover { opacity: .9; }
+
+    /* Scrollbar */
+    .right-panel::-webkit-scrollbar, .left-panel::-webkit-scrollbar { width: 4px; }
+    .right-panel::-webkit-scrollbar-thumb, .left-panel::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,.07); border-radius: 2px;
+    }
+  </style>
+</head>
+
+<body data-page="discover">
+
+  <!-- ── SIDEBAR ──────────────────────────────────── -->
+  <nav class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html" class="nav-item active" data-tip="Discover">🔮</a>
+    <a href="matches.html" class="nav-item" data-tip="Matches">💜<span class="badge"></span></a>
+    <a href="chat.html" class="nav-item" data-tip="Messages">💬<span class="badge"></span></a>
+    <a href="search.html" class="nav-item" data-tip="Search">🔍</a>
+    <div class="nav-divider"></div>
+    <a href="#" class="nav-item" data-tip="AI Insights">🧠</a>
+    <a href="my-account.html#premium" class="nav-item" data-tip="Premium">⚡</a>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">🌟</a>
+  </nav>
+
+  <!-- ── MAIN LAYOUT ───────────────────────────────── -->
+  <div class="main-layout">
+
+    <!-- ── LEFT PANEL ─────────────────────────────── -->
+    <aside class="left-panel">
+      <div class="left-header">
+        <h2>Discover</h2>
+        <button class="btn-icon-sm" id="btn-filter-open" title="Filters">⚙️</button>
+      </div>
+
+      <!-- Search bar -->
+      <div class="search-bar">
+        <span>🔍</span>
+        <input type="text" placeholder="Search profiles…" aria-label="Search profiles" />
+      </div>
+
+      <!-- AI Picks -->
+      <div class="section-label">AI Picks for You</div>
+      <div class="ai-picks-scroll">
+        <!-- Card 1 -->
+        <div class="pick-card" tabindex="0" aria-label="Sofia, 26 – 94% match">
+          <div class="pick-avatar" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">
+            🌸
+            <div class="pick-match-badge">✦ 94%</div>
+          </div>
+          <div class="pick-name">Sofia, 26</div>
+        </div>
+        <!-- Card 2 -->
+        <div class="pick-card" tabindex="0" aria-label="Mia, 24 – 91% match">
+          <div class="pick-avatar" style="background:linear-gradient(135deg,#06B6D4,#7C3AED);">
+            🦋
+            <div class="pick-match-badge">✦ 91%</div>
+          </div>
+          <div class="pick-name">Mia, 24</div>
+        </div>
+        <!-- Card 3 -->
+        <div class="pick-card" tabindex="0" aria-label="Luna, 27 – 89% match">
+          <div class="pick-avatar" style="background:linear-gradient(135deg,#F59E0B,#EC4899);">
+            🌙
+            <div class="pick-match-badge">✦ 89%</div>
+          </div>
+          <div class="pick-name">Luna, 27</div>
+        </div>
+        <!-- Card 4 -->
+        <div class="pick-card" tabindex="0" aria-label="Zoe, 25 – 87% match">
+          <div class="pick-avatar" style="background:linear-gradient(135deg,#10B981,#06B6D4);">
+            🌿
+            <div class="pick-match-badge">✦ 87%</div>
+          </div>
+          <div class="pick-name">Zoe, 25</div>
+        </div>
+      </div>
+
+      <!-- Nearby divider -->
+      <div class="section-label" style="margin-bottom:8px;">Nearby</div>
+      <div class="section-divider"></div>
+
+      <!-- Nearby list -->
+      <div class="nearby-item" tabindex="0">
+        <div class="nearby-avatar" style="background:linear-gradient(135deg,#A855F7,#EC4899);">
+          🌺
+          <div class="online-dot"></div>
+        </div>
+        <div class="nearby-info">
+          <div class="nearby-name">Ava&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">28</span></div>
+          <div class="nearby-dist">📍 0.8 mi away</div>
+          <div class="nearby-tags">
+            <span class="tag-pill">🎨 Artist</span>
+            <span class="tag-pill">🧘 Yoga</span>
+            <span class="tag-pill">✈️ Travel</span>
+          </div>
+        </div>
+        <div class="nearby-right">
+          <div class="nearby-match">✦ 88%</div>
+          <button class="quick-like-btn" aria-label="Like Ava">♥</button>
+        </div>
+      </div>
+
+      <div class="nearby-item" tabindex="0">
+        <div class="nearby-avatar" style="background:linear-gradient(135deg,#06B6D4,#10B981);">
+          🌊
+        </div>
+        <div class="nearby-info">
+          <div class="nearby-name">Chloe&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">23</span></div>
+          <div class="nearby-dist">📍 1.2 mi away</div>
+          <div class="nearby-tags">
+            <span class="tag-pill">🎵 Music</span>
+            <span class="tag-pill">📸 Photography</span>
+          </div>
+        </div>
+        <div class="nearby-right">
+          <div class="nearby-match">✦ 85%</div>
+          <button class="quick-like-btn" aria-label="Like Chloe">♥</button>
+        </div>
+      </div>
+
+      <div class="nearby-item" tabindex="0">
+        <div class="nearby-avatar" style="background:linear-gradient(135deg,#F59E0B,#EF4444);">
+          🔥
+          <div class="online-dot"></div>
+        </div>
+        <div class="nearby-info">
+          <div class="nearby-name">Riley&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">26</span></div>
+          <div class="nearby-dist">📍 1.5 mi away</div>
+          <div class="nearby-tags">
+            <span class="tag-pill">🏄 Surf</span>
+            <span class="tag-pill">🍕 Foodie</span>
+            <span class="tag-pill">🎭 Theatre</span>
+          </div>
+        </div>
+        <div class="nearby-right">
+          <div class="nearby-match">✦ 82%</div>
+          <button class="quick-like-btn" aria-label="Like Riley">♥</button>
+        </div>
+      </div>
+
+      <div class="nearby-item" tabindex="0">
+        <div class="nearby-avatar" style="background:linear-gradient(135deg,#7C3AED,#06B6D4);">
+          💎
+        </div>
+        <div class="nearby-info">
+          <div class="nearby-name">Emma&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">29</span></div>
+          <div class="nearby-dist">📍 2.1 mi away</div>
+          <div class="nearby-tags">
+            <span class="tag-pill">💼 UX Design</span>
+            <span class="tag-pill">📚 Books</span>
+          </div>
+        </div>
+        <div class="nearby-right">
+          <div class="nearby-match">✦ 79%</div>
+          <button class="quick-like-btn" aria-label="Like Emma">♥</button>
+        </div>
+      </div>
+
+      <div class="nearby-item" tabindex="0">
+        <div class="nearby-avatar" style="background:linear-gradient(135deg,#EC4899,#F59E0B);">
+          🌻
+          <div class="online-dot"></div>
+        </div>
+        <div class="nearby-info">
+          <div class="nearby-name">Nora&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">25</span></div>
+          <div class="nearby-dist">📍 2.8 mi away</div>
+          <div class="nearby-tags">
+            <span class="tag-pill">🎬 Film</span>
+            <span class="tag-pill">🌱 Vegan</span>
+            <span class="tag-pill">🎸 Guitar</span>
+          </div>
+        </div>
+        <div class="nearby-right">
+          <div class="nearby-match">✦ 76%</div>
+          <button class="quick-like-btn" aria-label="Like Nora">♥</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── CENTER PANEL ──────────────────────────── -->
+    <main class="center-panel">
+      <!-- Topbar -->
+      <div class="center-topbar" style="position:relative;">
+        <div class="page-title">Today's Picks</div>
+        <div class="topbar-icons">
+          <button class="btn-icon-md" id="btn-center-filter" title="Filters" aria-label="Filters">⚙️</button>
+          <button class="btn-icon-md" title="Settings" aria-label="Settings">🎚️</button>
+        </div>
+        <!-- Filter popover -->
+        <div class="filter-popover" id="filter-popover">
+          <h4>Filter Profiles</h4>
+          <div class="filter-row">
+            <label>Age range</label>
+            <input type="range" min="18" max="50" value="30" />
+          </div>
+          <div class="filter-row">
+            <label>Distance</label>
+            <input type="range" min="1" max="100" value="25" />
+          </div>
+          <div class="section-label" style="margin-bottom:6px;">Interests</div>
+          <div class="filter-tag-group">
+            <span class="filter-tag active">🎨 Creative</span>
+            <span class="filter-tag active">🎵 Music</span>
+            <span class="filter-tag">✈️ Travel</span>
+            <span class="filter-tag">🏄 Sports</span>
+            <span class="filter-tag">📚 Books</span>
+            <span class="filter-tag">🍕 Food</span>
+          </div>
+          <button class="btn-apply-filter" onclick="document.getElementById('filter-popover').classList.remove('open')">Apply Filters</button>
+        </div>
+      </div>
+
+      <!-- AI Daily Insight banner -->
+      <div class="ai-insight-banner" id="ai-banner">
+        <div class="ai-banner-icon">🧠</div>
+        <div class="ai-banner-text">
+          <div class="ai-banner-label">🧠 AURA AI</div>
+          <div class="ai-banner-msg">Based on your activity, profiles from <strong>creative industries</strong> match you <strong>3× better</strong> this week.</div>
+        </div>
+        <button class="ai-banner-dismiss" id="dismiss-banner" aria-label="Dismiss insight">✕</button>
+      </div>
+
+      <!-- Card Stack -->
+      <div class="card-stack" id="card-stack">
+
+        <!-- Card 3 (bottom) -->
+        <div class="profile-card" aria-hidden="true">
+          <div class="card-photo">
+            <div class="card-photo-bg" style="background:linear-gradient(135deg,#10B981 0%,#06B6D4 100%);">
+              🌿
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 (middle) -->
+        <div class="profile-card" aria-hidden="true">
+          <div class="card-photo">
+            <div class="card-photo-bg" style="background:linear-gradient(135deg,#F59E0B 0%,#EC4899 100%);">
+              🌙
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 1 (top – fully interactive) -->
+        <div class="profile-card" id="top-card" role="article" aria-label="Sophia's profile card">
+          <div class="card-photo">
+            <!-- Photo bg -->
+            <div class="card-photo-bg" style="background:linear-gradient(135deg,#7C3AED 0%,#EC4899 50%,#F59E0B 100%);">
+              🌸
+            </div>
+            <!-- Photo pills -->
+            <div class="card-pills">
+              <span class="active"></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <!-- AI Match badge -->
+            <div class="card-match-badge">✦ 91%</div>
+            <!-- Like / Pass indicators -->
+            <div class="like-indicator" id="like-ind">LIKE</div>
+            <div class="pass-indicator" id="pass-ind">NOPE</div>
+            <div class="super-indicator" id="super-ind">SUPER LIKE ⭐</div>
+            <!-- Card overlay -->
+            <div class="card-overlay">
+              <div class="card-name-row">Sophia <span class="card-age">26</span></div>
+              <div class="card-dist">📍 0.4 mi away</div>
+              <div class="card-tags">
+                <span class="card-tag">🎨 Graphic Designer</span>
+                <span class="card-tag">🌍 Traveler</span>
+                <span class="card-tag">🎸 Music</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="action-row">
+        <div class="action-item">
+          <button class="action-btn-circle pass-btn" id="btn-pass" aria-label="Pass" title="Pass">✕</button>
+          <span class="action-label">Pass</span>
+        </div>
+        <div class="action-item">
+          <button class="action-btn-circle super-btn" id="btn-super" aria-label="Super Like" title="Super Like">★</button>
+          <span class="action-label">Super</span>
+        </div>
+        <div class="action-item">
+          <button class="action-btn-circle like-btn" id="btn-like" aria-label="Like" title="Like">✦</button>
+          <span class="action-label">Like</span>
+        </div>
+        <div class="action-item">
+          <button class="action-btn-circle boost-btn" id="btn-boost" aria-label="Boost" title="Boost">⚡</button>
+          <span class="action-label">Boost</span>
+        </div>
+        <div class="action-item">
+          <button class="action-btn-circle msg-btn" aria-label="Message" title="Message">💬</button>
+          <span class="action-label">Message</span>
+        </div>
+      </div>
+
+      <!-- Profiles left + progress dots -->
+      <div class="profiles-left">
+        <div class="profiles-left-text">8 profiles left today</div>
+        <div class="profiles-dots">
+          <span class="filled"></span>
+          <span class="filled"></span>
+          <span class="filled"></span>
+          <span class="filled"></span>
+          <span class="filled"></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="kbd-hint">
+          <span class="kbd">←</span> Pass &nbsp;
+          <span class="kbd">↑</span> Super &nbsp;
+          <span class="kbd">→</span> Like
+        </div>
+      </div>
+    </main>
+
+    <!-- ── RIGHT PANEL ──────────────────────────── -->
+    <aside class="right-panel">
+
+      <!-- AI Insights — Match score trend -->
+      <div class="insight-card">
+        <div class="insight-title">AI Insights</div>
+        <!-- Bar chart (CSS-only) -->
+        <div class="bar-chart" aria-label="Weekly match score trend">
+          <div class="bar-wrap"><div class="bar" style="height:35%"></div><div class="bar-day">M</div></div>
+          <div class="bar-wrap"><div class="bar" style="height:55%"></div><div class="bar-day">T</div></div>
+          <div class="bar-wrap"><div class="bar" style="height:42%"></div><div class="bar-day">W</div></div>
+          <div class="bar-wrap"><div class="bar" style="height:70%"></div><div class="bar-day">T</div></div>
+          <div class="bar-wrap"><div class="bar" style="height:60%"></div><div class="bar-day">F</div></div>
+          <div class="bar-wrap"><div class="bar" style="height:88%"></div><div class="bar-day">S</div></div>
+          <div class="bar-wrap"><div class="bar today" style="height:100%"></div><div class="bar-day" style="color:var(--accent3);">S</div></div>
+        </div>
+        <div class="vibe-label">Your vibe this week: Creative &amp; Adventurous ✨</div>
+        <div class="vibe-tags">
+          <span class="vibe-tag purple">Creative</span>
+          <span class="vibe-tag pink">Adventurous</span>
+          <span class="vibe-tag cyan">Open-minded</span>
+          <span class="vibe-tag gold">Ambitious</span>
+        </div>
+      </div>
+
+      <!-- Who Liked You (premium blur) -->
+      <div class="insight-card">
+        <div class="insight-title">Who Liked You</div>
+        <div class="liked-blur-row">
+          <div class="blur-avatar">🌸</div>
+          <div class="blur-avatar" style="background:linear-gradient(135deg,#06B6D4,#7C3AED)">🦋</div>
+          <div class="blur-avatar" style="background:linear-gradient(135deg,#F59E0B,#EC4899)">🌙</div>
+          <div class="blur-avatar" style="background:linear-gradient(135deg,#10B981,#06B6D4)">🌿</div>
+        </div>
+        <div class="premium-teaser"><strong>12 people</strong> liked your profile this week. Upgrade to see who!</div>
+        <button class="btn-upgrade" onclick="window.location='my-account.html#premium'">⚡ Upgrade to Premium</button>
+      </div>
+
+      <!-- Daily Boost -->
+      <div class="insight-card">
+        <div class="insight-title">Daily Boost</div>
+        <div class="boost-ring-wrap">
+          <div class="boost-ring">
+            <svg width="56" height="56" viewBox="0 0 56 56">
+              <circle cx="28" cy="28" r="22" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="5"/>
+              <!-- 2/5 used = 40% → circumference = 2π×22 ≈ 138.2 → 40% = 55.3 filled, rest dashed -->
+              <circle cx="28" cy="28" r="22" fill="none"
+                stroke="url(#boostGrad)" stroke-width="5"
+                stroke-linecap="round"
+                stroke-dasharray="55.3 82.9"/>
+              <defs>
+                <linearGradient id="boostGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#F59E0B"/>
+                  <stop offset="100%" stop-color="#EF4444"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="boost-ring-label">2/5 <span>used</span></div>
+          </div>
+          <div class="boost-info">
+            <h4>3 Boosts Left</h4>
+            <p>Activate to get 10× more profile views for 30 min.</p>
+          </div>
+        </div>
+        <button class="btn-get-boosts" id="btn-get-boosts-right">⚡ Get 3 Free Boosts</button>
+      </div>
+
+      <!-- Compatibility Tips -->
+      <div class="insight-card">
+        <div class="insight-title">Compatibility Tips</div>
+        <div class="tip-item">
+          <div class="tip-icon purple">💡</div>
+          <div class="tip-body">
+            <h5>Mention your passions early</h5>
+            <p>Profiles who share hobbies in first messages see 2× reply rates.</p>
+          </div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon pink">🎯</div>
+          <div class="tip-body">
+            <h5>Use a specific opener</h5>
+            <p>Reference a detail from their profile — it gets 3× more responses.</p>
+          </div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon cyan">✨</div>
+          <div class="tip-body">
+            <h5>Best time to send messages</h5>
+            <p>8–10pm on weekdays has the highest engagement for your matches.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Theme switcher (managed by theme.js) -->
+      <div id="theme-switcher"></div>
+
+    </aside>
+  </div><!-- /.main-layout -->
+
+  <!-- ── MATCH MODAL ──────────────────────────────── -->
+  <div class="modal-overlay" id="modal-match" role="dialog" aria-modal="true" aria-label="It's a Match!">
+    <div class="modal-box">
+      <!-- Confetti sparkles -->
+      <div class="confetti" aria-hidden="true">
+        <div class="spark" style="left:10%;background:#A855F7;animation-delay:0s;animation-duration:2.2s;"></div>
+        <div class="spark" style="left:20%;background:#EC4899;animation-delay:.3s;width:6px;height:6px;"></div>
+        <div class="spark" style="left:35%;background:#06B6D4;animation-delay:.7s;animation-duration:1.9s;border-radius:50%;"></div>
+        <div class="spark" style="left:50%;background:#F59E0B;animation-delay:.1s;animation-duration:2.5s;"></div>
+        <div class="spark" style="left:65%;background:#7C3AED;animation-delay:.5s;width:6px;height:10px;"></div>
+        <div class="spark" style="left:78%;background:#EC4899;animation-delay:.9s;animation-duration:2s;border-radius:50%;"></div>
+        <div class="spark" style="left:90%;background:#10B981;animation-delay:.2s;animation-duration:2.3s;"></div>
+        <div class="spark" style="left:5%;background:#C084FC;animation-delay:1s;width:10px;height:6px;"></div>
+        <div class="spark" style="left:42%;background:#F59E0B;animation-delay:.6s;animation-duration:1.8s;border-radius:50%;width:10px;height:10px;"></div>
+        <div class="spark" style="left:88%;background:#06B6D4;animation-delay:.4s;width:5px;height:12px;"></div>
+      </div>
+
+      <div class="match-title">It's a Match! 🎉</div>
+      <div class="match-subtitle">You both liked each other — now make the first move!</div>
+
+      <div class="match-avatars">
+        <div class="match-av" style="background:linear-gradient(135deg,#7C3AED,#A855F7);">🌟</div>
+        <div class="match-heart">💜</div>
+        <div class="match-av" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">🌸</div>
+      </div>
+
+      <div class="match-names">You and <span>Sophia</span> both liked each other!</div>
+
+      <a href="chat.html">
+        <button class="modal-btn primary">💬 Send a Message</button>
+      </a>
+      <button class="modal-btn secondary" id="close-match-modal">Keep Discovering ✨</button>
+    </div>
+  </div>
+
+  <!-- ── BOOST MODAL ───────────────────────────────── -->
+  <div class="modal-overlay" id="modal-boost" role="dialog" aria-modal="true" aria-label="Profile Boost">
+    <div class="boost-modal-box">
+      <div class="boost-modal-icon">⚡</div>
+      <div class="boost-modal-title">Profile Boost</div>
+      <div class="boost-modal-desc">Get 10× more visibility for 30 minutes. Stand out to everyone nearby!</div>
+
+      <div class="boost-options">
+        <div class="boost-option selected" tabindex="0" role="radio" aria-checked="true">
+          <div class="opt-left">
+            <div class="opt-count">1 Boost</div>
+            <div class="opt-note">30 minutes of 10× visibility</div>
+          </div>
+          <div class="opt-price free">Free</div>
+        </div>
+        <div class="boost-option" tabindex="0" role="radio" aria-checked="false">
+          <div class="opt-left">
+            <div class="opt-count">3 Boosts</div>
+            <div class="opt-note">Save 15% · Best value</div>
+          </div>
+          <div class="opt-price">$2.99</div>
+        </div>
+        <div class="boost-option" tabindex="0" role="radio" aria-checked="false">
+          <div class="opt-left">
+            <div class="opt-count">10 Boosts</div>
+            <div class="opt-note">Save 30% · Power user</div>
+          </div>
+          <div class="opt-price">$6.99</div>
+        </div>
+      </div>
+
+      <button class="btn-boost-confirm" id="confirm-boost">⚡ Activate Boost</button>
+      <button class="btn-cancel-modal" id="close-boost-modal">Maybe later</button>
+    </div>
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    /* ── Discover page interactions ────────────────── */
+    (function () {
+
+      /* Dismiss AI banner */
+      const banner = document.getElementById('ai-banner');
+      document.getElementById('dismiss-banner').addEventListener('click', function () {
+        banner.style.transition = 'opacity .3s, max-height .35s, margin .35s';
+        banner.style.opacity = '0';
+        banner.style.maxHeight = '0';
+        banner.style.padding = '0';
+        banner.style.marginBottom = '0';
+        banner.style.overflow = 'hidden';
+      });
+
+      /* Filter popover toggle */
+      const filterPopover = document.getElementById('filter-popover');
+      document.getElementById('btn-center-filter').addEventListener('click', function (e) {
+        e.stopPropagation();
+        filterPopover.classList.toggle('open');
+      });
+      document.getElementById('btn-filter-open').addEventListener('click', function () {
+        filterPopover.classList.toggle('open');
+      });
+      document.addEventListener('click', function () {
+        filterPopover.classList.remove('open');
+      });
+      filterPopover.addEventListener('click', function (e) { e.stopPropagation(); });
+
+      /* Filter tag toggle */
+      document.querySelectorAll('.filter-tag').forEach(function (tag) {
+        tag.addEventListener('click', function () { this.classList.toggle('active'); });
+      });
+
+      /* Quick like buttons */
+      document.querySelectorAll('.quick-like-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          this.classList.toggle('liked');
+          this.textContent = this.classList.contains('liked') ? '♥' : '♥';
+        });
+      });
+
+      /* Boost option selection */
+      document.querySelectorAll('.boost-option').forEach(function (opt) {
+        opt.addEventListener('click', function () {
+          document.querySelectorAll('.boost-option').forEach(function (o) {
+            o.classList.remove('selected');
+            o.setAttribute('aria-checked', 'false');
+          });
+          this.classList.add('selected');
+          this.setAttribute('aria-checked', 'true');
+        });
+      });
+
+      /* Open/close modals */
+      const matchModal = document.getElementById('modal-match');
+      const boostModal = document.getElementById('modal-boost');
+
+      function openModal(el) {
+        el.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeModal(el) {
+        el.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      document.getElementById('close-match-modal').addEventListener('click', function () { closeModal(matchModal); });
+      document.getElementById('close-boost-modal').addEventListener('click', function () { closeModal(boostModal); });
+      document.getElementById('confirm-boost').addEventListener('click', function () { closeModal(boostModal); });
+      document.getElementById('btn-boost').addEventListener('click', function () { openModal(boostModal); });
+      document.getElementById('btn-get-boosts-right').addEventListener('click', function () { openModal(boostModal); });
+
+      /* Close modals on overlay click */
+      matchModal.addEventListener('click', function (e) { if (e.target === matchModal) closeModal(matchModal); });
+      boostModal.addEventListener('click', function (e) { if (e.target === boostModal) closeModal(boostModal); });
+
+      /* ── Card Swipe ──────────────────────────────── */
+      var card = document.getElementById('top-card');
+      var likeInd = document.getElementById('like-ind');
+      var passInd = document.getElementById('pass-ind');
+      var superInd = document.getElementById('super-ind');
+      var isDragging = false;
+      var startX = 0, startY = 0, currentX = 0, currentY = 0;
+
+      function getThreshold() { return 80; }
+
+      function onPointerDown(e) {
+        isDragging = true;
+        startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+        startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+        card.style.transition = 'none';
+      }
+
+      function onPointerMove(e) {
+        if (!isDragging) return;
+        var x = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+        var y = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+        currentX = x - startX;
+        currentY = y - startY;
+        var rot = currentX * 0.07;
+        card.style.transform = 'rotate(' + rot + 'deg) translate(' + currentX + 'px,' + currentY + 'px)';
+        var ratio = Math.abs(currentX) / getThreshold();
+        if (currentX > 20) {
+          likeInd.style.opacity = Math.min(ratio, 1);
+          passInd.style.opacity = 0;
+          superInd.style.opacity = 0;
+          card.style.boxShadow = '0 0 40px rgba(16,185,129,' + Math.min(ratio * 0.5, 0.4) + ')';
+        } else if (currentX < -20) {
+          passInd.style.opacity = Math.min(ratio, 1);
+          likeInd.style.opacity = 0;
+          superInd.style.opacity = 0;
+          card.style.boxShadow = '0 0 40px rgba(239,68,68,' + Math.min(ratio * 0.5, 0.4) + ')';
+        } else if (currentY < -40) {
+          superInd.style.opacity = Math.min(Math.abs(currentY) / getThreshold(), 1);
+          likeInd.style.opacity = 0;
+          passInd.style.opacity = 0;
+          card.style.boxShadow = '0 0 40px rgba(6,182,212,' + Math.min(Math.abs(currentY) / getThreshold() * 0.5, 0.4) + ')';
+        } else {
+          likeInd.style.opacity = 0;
+          passInd.style.opacity = 0;
+          superInd.style.opacity = 0;
+          card.style.boxShadow = '';
+        }
+      }
+
+      function onPointerUp() {
+        if (!isDragging) return;
+        isDragging = false;
+        likeInd.style.opacity = 0;
+        passInd.style.opacity = 0;
+        superInd.style.opacity = 0;
+        card.style.boxShadow = '';
+
+        var thresh = getThreshold();
+        if (currentX > thresh) {
+          swipeCard('right');
+        } else if (currentX < -thresh) {
+          swipeCard('left');
+        } else if (currentY < -thresh) {
+          swipeCard('up');
+        } else {
+          card.style.transition = 'transform .4s cubic-bezier(.34,1.56,.64,1), box-shadow .3s';
+          card.style.transform = 'rotate(0deg) translate(0,0)';
+        }
+        currentX = 0; currentY = 0;
+      }
+
+      function swipeCard(dir) {
+        card.style.transition = 'transform .4s ease, opacity .4s';
+        if (dir === 'right') {
+          card.style.transform = 'rotate(20deg) translate(200%, 0)';
+          card.style.opacity = '0';
+          if (Math.random() > 0.55) setTimeout(function () { openModal(matchModal); }, 500);
+        } else if (dir === 'left') {
+          card.style.transform = 'rotate(-20deg) translate(-200%, 0)';
+          card.style.opacity = '0';
+        } else if (dir === 'up') {
+          card.style.transform = 'translateY(-150%)';
+          card.style.opacity = '0';
+        }
+        setTimeout(function () {
+          card.style.transition = 'none';
+          card.style.transform = 'rotate(0deg)';
+          card.style.opacity = '1';
+        }, 600);
+      }
+
+      /* Mouse events */
+      card.addEventListener('mousedown', onPointerDown);
+      window.addEventListener('mousemove', onPointerMove);
+      window.addEventListener('mouseup', onPointerUp);
+      /* Touch events */
+      card.addEventListener('touchstart', onPointerDown, { passive: true });
+      window.addEventListener('touchmove', onPointerMove, { passive: true });
+      window.addEventListener('touchend', onPointerUp);
+
+      /* Button actions */
+      document.getElementById('btn-like').addEventListener('click', function () { swipeCard('right'); });
+      document.getElementById('btn-pass').addEventListener('click', function () { swipeCard('left'); });
+      document.getElementById('btn-super').addEventListener('click', function () { swipeCard('up'); });
+
+      /* Keyboard shortcuts */
+      document.addEventListener('keydown', function (e) {
+        if (e.target.tagName === 'INPUT') return;
+        if (e.key === 'ArrowRight') swipeCard('right');
+        if (e.key === 'ArrowLeft')  swipeCard('left');
+        if (e.key === 'ArrowUp')    swipeCard('up');
+        if (e.key === 'Escape') {
+          closeModal(matchModal);
+          closeModal(boostModal);
+          filterPopover.classList.remove('open');
+        }
+      });
+
+      /* Photo pill cycling on card click (non-drag) */
+      var currentPill = 0;
+      var pills = card.querySelectorAll('.card-pills span');
+      card.addEventListener('click', function (e) {
+        if (Math.abs(currentX) > 5) return;
+        var cardRect = card.getBoundingClientRect();
+        var clickX = e.clientX - cardRect.left;
+        if (clickX > cardRect.width / 2) {
+          currentPill = Math.min(currentPill + 1, pills.length - 1);
+        } else {
+          currentPill = Math.max(currentPill - 1, 0);
+        }
+        pills.forEach(function (p, i) { p.classList.toggle('active', i === currentPill); });
+      });
+
+    }());
+  </script>
+</body>
+</html>

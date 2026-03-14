@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURA – Search</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0A0A0F;
+      --bg2:     #10101A;
+      --bg3:     #16162A;
+      --card:    rgba(255,255,255,.04);
+      --card-b:  rgba(255,255,255,.08);
+      --accent:  #7C3AED;
+      --accent2: #A855F7;
+      --accent3: #C084FC;
+      --pink:    #EC4899;
+      --cyan:    #06B6D4;
+      --green:   #10B981;
+      --gold:    #F59E0B;
+      --text:    #F1F0FF;
+      --muted:   #6B6B8A;
+      --muted2:  #9896B0;
+      --border:  rgba(255,255,255,.07);
+      --border2: rgba(124,58,237,.35);
+      --glow:    0 0 40px rgba(124,58,237,.25);
+      --radius:  16px;
+      --radius2: 24px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed; top: -200px; left: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(124,58,237,.1) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed; bottom: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(6,182,212,.07) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── SIDEBAR ─────────────────────────────────── */
+    .sidebar {
+      position: fixed; left: 0; top: 0;
+      width: 72px; height: 100vh;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center;
+      padding: 24px 0; gap: 4px; z-index: 100;
+    }
+    .sidebar .brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 24px; letter-spacing: -1px;
+      text-decoration: none;
+    }
+    .nav-item {
+      width: 46px; height: 46px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: var(--muted); text-decoration: none;
+      cursor: pointer; transition: all .2s; position: relative;
+    }
+    .nav-item:hover { background: var(--card-b); color: var(--text); }
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(124,58,237,.3), rgba(168,85,247,.2));
+      color: var(--accent3);
+      box-shadow: 0 0 20px rgba(124,58,237,.2);
+    }
+    .nav-item .badge {
+      position: absolute; top: 6px; right: 6px;
+      width: 8px; height: 8px;
+      background: var(--pink); border-radius: 50%;
+      border: 2px solid var(--bg2);
+    }
+    .nav-divider { width: 32px; height: 1px; background: var(--border); margin: 6px 0; }
+    .sidebar-avatar {
+      margin-top: auto;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; cursor: pointer;
+      border: 2px solid var(--border2);
+      text-decoration: none; transition: all .2s;
+    }
+    .sidebar-avatar:hover { box-shadow: 0 0 16px rgba(124,58,237,.4); }
+
+    /* ── LAYOUT ──────────────────────────────────── */
+    .app-layout {
+      margin-left: 72px;
+      display: grid;
+      grid-template-columns: 340px 1fr 280px;
+      min-height: 100vh;
+      position: relative; z-index: 1;
+    }
+
+    /* ── LEFT PANEL (FILTERS) ────────────────────── */
+    .left-panel {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 22px 16px;
+      display: flex; flex-direction: column; gap: 0;
+      overflow-y: auto; height: 100vh;
+      position: sticky; top: 0;
+    }
+
+    /* Panel Header */
+    .lp-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .lp-header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px; font-weight: 700; color: var(--text);
+    }
+    .ai-mode-badge {
+      display: flex; align-items: center; gap: 5px;
+      background: linear-gradient(135deg, rgba(124,58,237,.2), rgba(168,85,247,.15));
+      border: 1px solid rgba(124,58,237,.4);
+      border-radius: 20px; padding: 4px 10px;
+      font-size: 11px; font-weight: 700; color: var(--accent3);
+      cursor: pointer; transition: all .2s;
+    }
+    .ai-mode-badge:hover { box-shadow: 0 0 12px rgba(124,58,237,.25); }
+    .ai-toggle-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px rgba(16,185,129,.7);
+    }
+
+    /* Search input */
+    .search-input-wrap {
+      position: relative; margin-bottom: 8px;
+    }
+    .search-icon {
+      position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+      font-size: 15px; pointer-events: none;
+    }
+    .search-input {
+      width: 100%; padding: 11px 14px 11px 40px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text); font-size: 13px; font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      transition: all .2s;
+    }
+    .search-input:focus {
+      outline: none; border-color: var(--border2);
+      background: rgba(124,58,237,.06);
+      box-shadow: 0 0 0 3px rgba(124,58,237,.1);
+    }
+    .search-input::placeholder { color: var(--muted); }
+
+    .ai-hint {
+      font-size: 11px; color: var(--accent3);
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 12px;
+      background: rgba(124,58,237,.08);
+      border-radius: 8px; margin-bottom: 14px;
+      animation: pulse-hint 2s ease-in-out infinite;
+    }
+    @keyframes pulse-hint {
+      0%, 100% { opacity: .6; }
+      50% { opacity: 1; }
+    }
+    .ai-hint-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent3);
+    }
+
+    /* Filter sections */
+    .filter-section { border-bottom: 1px solid var(--border); }
+    .filter-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 4px;
+      cursor: pointer; user-select: none;
+      font-size: 13px; font-weight: 600; color: var(--muted2);
+      transition: color .2s;
+    }
+    .filter-header:hover { color: var(--text); }
+    .filter-header .fh-right {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .filter-header .fh-val {
+      font-size: 11px; color: var(--accent3); font-weight: 600;
+    }
+    .fh-chevron {
+      font-size: 10px; color: var(--muted);
+      transition: transform .2s;
+    }
+    .filter-header.open .fh-chevron { transform: rotate(180deg); }
+    .filter-body {
+      padding: 0 4px 14px;
+    }
+
+    /* Range slider */
+    .range-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .range-label { font-size: 12px; color: var(--muted2); }
+    .range-value { font-size: 13px; font-weight: 700; color: var(--accent3); }
+    .range-track {
+      position: relative; height: 4px;
+      background: rgba(255,255,255,.08);
+      border-radius: 2px; margin: 6px 0;
+    }
+    .range-fill {
+      position: absolute; height: 100%; border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .range-thumb {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--accent2);
+      border: 2px solid var(--bg2);
+      box-shadow: 0 0 8px rgba(168,85,247,.5);
+      cursor: pointer;
+    }
+    input[type=range] {
+      width: 100%; appearance: none;
+      height: 4px; background: rgba(255,255,255,.08);
+      border-radius: 2px; outline: none;
+      accent-color: var(--accent2);
+      cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: 2px solid var(--bg2);
+      box-shadow: 0 0 8px rgba(168,85,247,.5);
+      cursor: pointer;
+    }
+
+    /* Goal cards */
+    .goal-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+    }
+    .goal-card {
+      padding: 8px 10px;
+      background: rgba(255,255,255,.04);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer; transition: all .2s;
+      text-align: center;
+      font-size: 11px; font-weight: 600; color: var(--muted2);
+    }
+    .goal-card:hover { border-color: rgba(124,58,237,.3); color: var(--text); }
+    .goal-card.selected {
+      background: linear-gradient(135deg, rgba(124,58,237,.2), rgba(168,85,247,.15));
+      border-color: var(--border2);
+      color: var(--accent3);
+    }
+    .goal-card .gc-icon { font-size: 16px; display: block; margin-bottom: 4px; }
+
+    /* Checkboxes */
+    .cb-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 5px 0; cursor: pointer;
+    }
+    .cb-box {
+      width: 17px; height: 17px; border-radius: 4px;
+      border: 1.5px solid var(--border);
+      background: rgba(255,255,255,.04);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; flex-shrink: 0; transition: all .2s;
+    }
+    .cb-row.checked .cb-box { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .cb-label { font-size: 12px; color: var(--muted2); }
+    .cb-row.checked .cb-label { color: var(--text); }
+
+    /* Religion dropdown */
+    .filter-select {
+      width: 100%; padding: 9px 12px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text); font-size: 12px; font-weight: 600;
+      appearance: none; font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B6B8A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 30px;
+    }
+    .filter-select:focus { outline: none; border-color: var(--border2); }
+
+    /* Chip grids */
+    .chip-grid { display: flex; flex-wrap: wrap; gap: 5px; }
+    .chip {
+      padding: 5px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+      background: rgba(255,255,255,.04);
+      border: 1.5px solid var(--border);
+      color: var(--muted2); cursor: pointer; transition: all .2s;
+      white-space: nowrap;
+    }
+    .chip:hover { border-color: rgba(124,58,237,.3); color: var(--text); }
+    .chip.selected {
+      background: linear-gradient(135deg, rgba(124,58,237,.2), rgba(168,85,247,.15));
+      border-color: var(--border2); color: var(--accent3);
+    }
+
+    /* Lifestyle segment controls */
+    .ls-group { margin-bottom: 10px; }
+    .ls-label { font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 5px; }
+    .ls-options { display: flex; gap: 4px; flex-wrap: wrap; }
+    .ls-opt {
+      padding: 4px 9px; border-radius: 8px;
+      font-size: 11px; font-weight: 600;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      color: var(--muted); cursor: pointer; transition: all .15s;
+    }
+    .ls-opt:hover { color: var(--muted2); }
+    .ls-opt.sel { background: rgba(124,58,237,.15); border-color: rgba(124,58,237,.3); color: var(--accent3); }
+
+    /* AI dealbreakers */
+    .db-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .db-row:last-child { border-bottom: none; }
+    .db-label { font-size: 12px; color: var(--muted2); font-weight: 500; }
+    .toggle-switch {
+      width: 36px; height: 20px; border-radius: 10px;
+      background: rgba(255,255,255,.1);
+      cursor: pointer; position: relative; transition: all .2s;
+      flex-shrink: 0;
+    }
+    .toggle-switch.on { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .toggle-switch .knob {
+      position: absolute; top: 2px; left: 2px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #fff; transition: transform .2s;
+    }
+    .toggle-switch.on .knob { transform: translateX(16px); }
+
+    /* Action buttons */
+    .filter-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+    .btn-apply {
+      padding: 11px 14px; border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; color: #fff;
+      font-size: 13px; font-weight: 700;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: all .2s;
+      box-shadow: 0 4px 16px rgba(124,58,237,.3);
+    }
+    .btn-apply:hover { box-shadow: 0 8px 24px rgba(124,58,237,.5); transform: translateY(-1px); }
+    .btn-reset {
+      padding: 11px 14px; border-radius: var(--radius);
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted2); font-size: 13px; font-weight: 600;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: all .2s;
+    }
+    .btn-reset:hover { border-color: var(--border2); color: var(--text); }
+
+    /* Saved searches */
+    .saved-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .7px; color: var(--muted);
+      display: flex; align-items: center; gap: 6px;
+      margin: 14px 0 10px;
+    }
+    .saved-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .saved-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 10px; border-radius: var(--radius);
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
+      cursor: pointer; transition: all .2s; margin-bottom: 6px;
+    }
+    .saved-item:hover { border-color: var(--border2); background: rgba(124,58,237,.06); }
+    .saved-item .si-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .saved-item .si-info .si-name { font-size: 12px; font-weight: 700; color: var(--text); }
+    .saved-item .si-info .si-meta { font-size: 10px; color: var(--muted); margin-top: 1px; }
+    .saved-item .si-count {
+      margin-left: auto;
+      background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.25);
+      border-radius: 20px; padding: 1px 7px;
+      font-size: 10px; font-weight: 700; color: var(--accent3);
+    }
+
+    /* ── CENTER PANEL ─────────────────────────────── */
+    .center-panel {
+      padding: 24px 26px;
+      overflow-y: auto; height: 100vh;
+    }
+
+    /* Top bar */
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .top-bar-left h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px; font-weight: 700; color: var(--text);
+    }
+    .top-bar-left p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .sort-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      color: var(--muted2); font-size: 12px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+    }
+    .sort-chip:hover { border-color: var(--border2); color: var(--text); }
+
+    /* AI Banner */
+    .ai-query-banner {
+      background: linear-gradient(135deg, rgba(124,58,237,.12), rgba(6,182,212,.08));
+      border: 1px solid rgba(124,58,237,.25);
+      border-radius: var(--radius2);
+      padding: 14px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+      position: relative; overflow: hidden;
+    }
+    .ai-query-banner::before {
+      content: '';
+      position: absolute; top: -40%; right: -5%;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(168,85,247,.12), transparent 70%);
+    }
+    .aqb-left { display: flex; align-items: flex-start; gap: 12px; }
+    .aqb-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--cyan));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .aqb-text h4 {
+      font-size: 12px; font-weight: 700; color: var(--accent3);
+      margin-bottom: 4px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    .aqb-text p { font-size: 13px; color: var(--text); line-height: 1.5; }
+    .aqb-text p em {
+      font-style: normal; color: var(--accent3);
+      background: rgba(124,58,237,.12);
+      border-radius: 4px; padding: 0 4px; font-weight: 600;
+    }
+    .aqb-edit {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--muted2); border-radius: 8px;
+      padding: 6px 12px; font-size: 11px; font-weight: 600;
+      cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .aqb-edit:hover { border-color: var(--border2); color: var(--accent3); }
+
+    /* Section label */
+    .section-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 16px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* Results grid */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    /* Result card */
+    .result-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      overflow: hidden;
+      cursor: pointer; text-decoration: none;
+      display: flex; flex-direction: column;
+      transition: all .3s cubic-bezier(.4,0,.2,1);
+      position: relative;
+    }
+    .result-card:hover {
+      border-color: var(--border2);
+      transform: translateY(-4px);
+      box-shadow: 0 18px 38px rgba(0,0,0,.35), 0 0 24px rgba(124,58,237,.13);
+    }
+
+    .rc-photo {
+      aspect-ratio: 3/4;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 60px; overflow: hidden;
+    }
+    .rc-photo::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.8) 100%);
+    }
+    .rc-score {
+      position: absolute; top: 8px; right: 8px; z-index: 2;
+      padding: 3px 8px; border-radius: 20px;
+      font-size: 10px; font-weight: 800;
+      backdrop-filter: blur(10px);
+    }
+    .rc-score.hi { background: rgba(16,185,129,.25); border: 1px solid rgba(16,185,129,.4); color: #34D399; }
+    .rc-score.md { background: rgba(168,85,247,.25); border: 1px solid rgba(168,85,247,.4); color: var(--accent3); }
+    .rc-online {
+      position: absolute; top: 8px; left: 8px; z-index: 2;
+      width: 9px; height: 9px; background: var(--green);
+      border-radius: 50%; border: 2px solid rgba(0,0,0,.4);
+    }
+
+    /* Why match badge */
+    .why-badge {
+      position: absolute; bottom: 8px; left: 8px; z-index: 2;
+      background: rgba(6,182,212,.2); border: 1px solid rgba(6,182,212,.35);
+      border-radius: 20px; padding: 3px 8px;
+      font-size: 9px; font-weight: 700; color: #22D3EE;
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; gap: 3px;
+    }
+
+    .rc-body { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .rc-name-row { display: flex; align-items: baseline; gap: 5px; }
+    .rc-name { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); }
+    .rc-age { font-size: 12px; color: var(--muted2); }
+    .rc-loc { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 3px; }
+    .rc-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .rc-tag {
+      padding: 2px 7px; border-radius: 20px;
+      font-size: 9px; font-weight: 700;
+    }
+    .rc-tag.match {
+      background: rgba(16,185,129,.15); border: 1px solid rgba(16,185,129,.3); color: #34D399;
+    }
+    .rc-tag.norm {
+      background: rgba(255,255,255,.05); border: 1px solid var(--border); color: var(--muted2);
+    }
+
+    /* Load more */
+    .load-more-row {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      padding: 4px 0;
+    }
+    .load-more-btn {
+      padding: 12px 28px; border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      color: var(--muted2); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .load-more-btn:hover { border-color: var(--border2); color: var(--accent3); background: rgba(124,58,237,.06); }
+    .load-more-hint { font-size: 12px; color: var(--muted); }
+
+    /* ── RIGHT PANEL ──────────────────────────────── */
+    .right-panel {
+      background: var(--bg2);
+      border-left: 1px solid var(--border);
+      padding: 24px 16px;
+      overflow-y: auto; height: 100vh;
+      position: sticky; top: 0;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+
+    .rp-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 14px;
+    }
+    .rp-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* Search intelligence */
+    .si-card {
+      background: linear-gradient(145deg, rgba(124,58,237,.12), rgba(10,10,15,.5));
+      border: 1px solid rgba(124,58,237,.25);
+      border-radius: var(--radius2);
+      padding: 16px;
+    }
+    .si-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .si-icon {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--cyan));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .si-head h3 { font-size: 13px; font-weight: 700; color: var(--accent3); }
+    .si-head p { font-size: 10px; color: var(--muted); margin-top: 1px; }
+    .si-intro { font-size: 12px; color: var(--muted2); line-height: 1.6; margin-bottom: 12px; }
+    .si-intro strong { color: var(--text); }
+
+    /* Bar chart */
+    .bar-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+    .bar-row:last-child { margin-bottom: 0; }
+    .bar-label { font-size: 11px; color: var(--muted2); font-weight: 600; flex-shrink: 0; min-width: 80px; }
+    .bar-track {
+      flex: 1; height: 5px; background: rgba(255,255,255,.06);
+      border-radius: 3px; overflow: hidden;
+    }
+    .bar-fill { height: 100%; border-radius: 3px; }
+    .bar-val { font-size: 11px; font-weight: 700; color: var(--text); flex-shrink: 0; min-width: 28px; text-align: right; }
+
+    /* Rec profile chips */
+    .rec-chip {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: var(--radius);
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
+      cursor: pointer; transition: all .2s; margin-bottom: 7px;
+      text-decoration: none;
+    }
+    .rec-chip:last-child { margin-bottom: 0; }
+    .rec-chip:hover { border-color: var(--border2); background: rgba(124,58,237,.06); }
+    .rec-av {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .rec-info .rec-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .rec-info .rec-sub { font-size: 10px; color: var(--accent3); margin-top: 1px; }
+
+    /* Trending tags */
+    .trending-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .trend-tag {
+      display: flex; align-items: center; gap: 4px;
+      padding: 4px 9px; border-radius: 20px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      font-size: 11px; color: var(--muted2); font-weight: 600;
+      cursor: pointer; transition: all .15s;
+    }
+    .trend-tag:hover { border-color: rgba(6,182,212,.3); color: var(--text); }
+    .trend-tag .tc { font-size: 10px; color: var(--muted); }
+
+    /* Tips */
+    .stip {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 12px; border-radius: var(--radius);
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2);
+      margin-bottom: 7px; font-size: 12px; color: var(--muted2);
+      line-height: 1.6;
+    }
+    .stip:last-child { margin-bottom: 0; }
+    .stip .stip-icon { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+    .stip strong { color: var(--text); display: block; font-size: 11px; margin-bottom: 2px; }
+
+    /* Theme switcher */
+    .theme-switch { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; padding-top: 6px; }
+    .theme-dot {
+      width: 22px; height: 22px; border-radius: 50%;
+      cursor: pointer; border: 2px solid transparent; transition: all .2s;
+    }
+    .theme-dot:hover { border-color: rgba(255,255,255,.3); transform: scale(1.15); }
+    .theme-dot.active { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,.3); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
+  </style>
+</head>
+<body data-page="search">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html" class="nav-item" data-tip="Discover">🔮</a>
+    <a href="matches.html" class="nav-item" data-tip="Matches">💜<span class="badge"></span></a>
+    <a href="chat.html" class="nav-item" data-tip="Messages">💬<span class="badge"></span></a>
+    <a href="search.html" class="nav-item active" data-tip="Search">🔍</a>
+    <div class="nav-divider"></div>
+    <a href="#" class="nav-item" data-tip="AI Insights">🧠</a>
+    <a href="my-account.html#premium" class="nav-item" data-tip="Premium">⚡</a>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">🌟</a>
+  </nav>
+
+  <!-- MAIN LAYOUT -->
+  <div class="app-layout">
+
+    <!-- ── LEFT PANEL: FILTERS ── -->
+    <aside class="left-panel">
+
+      <!-- Header -->
+      <div class="lp-header">
+        <h2>Search</h2>
+        <div class="ai-mode-badge">
+          <span class="ai-toggle-dot"></span>
+          🧠 AI Mode
+        </div>
+      </div>
+
+      <!-- Global search input -->
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" placeholder="Describe your ideal match…" />
+      </div>
+      <div class="ai-hint">
+        <span class="ai-hint-dot"></span>
+        AI is understanding your intent…
+      </div>
+
+      <!-- 1. Age Range -->
+      <div class="filter-section">
+        <div class="filter-header open" onclick="this.classList.toggle('open');var b=this.nextElementSibling;b.style.display=this.classList.contains('open')?'block':'none'">
+          <span>👤 Age Range</span>
+          <div class="fh-right"><span class="fh-val">22 – 35</span><span class="fh-chevron">▼</span></div>
+        </div>
+        <div class="filter-body">
+          <div class="range-row">
+            <span class="range-label">Min age</span>
+            <span class="range-value">22</span>
+          </div>
+          <input type="range" min="18" max="60" value="22" />
+          <div class="range-row" style="margin-top:10px">
+            <span class="range-label">Max age</span>
+            <span class="range-value">35</span>
+          </div>
+          <input type="range" min="18" max="60" value="35" />
+        </div>
+      </div>
+
+      <!-- 2. Distance -->
+      <div class="filter-section">
+        <div class="filter-header open" onclick="this.classList.toggle('open');var b=this.nextElementSibling;b.style.display=this.classList.contains('open')?'block':'none'">
+          <span>📍 Distance</span>
+          <div class="fh-right"><span class="fh-val">≤ 25 mi</span><span class="fh-chevron">▼</span></div>
+        </div>
+        <div class="filter-body">
+          <div class="range-row">
+            <span class="range-label">Max distance</span>
+            <span class="range-value">25 mi</span>
+          </div>
+          <input type="range" min="1" max="100" value="25" />
+        </div>
+      </div>
+
+      <!-- 3. Height -->
+      <div class="filter-section">
+        <div class="filter-header" onclick="this.classList.toggle('open');var b=this.nextElementSibling;b.style.display=this.classList.contains('open')?'block':'none'">
+          <span>📏 Height</span>
+          <div class="fh-right"><span class="fh-val">5'0" – 6'2"</span><span class="fh-chevron">▼</span></div>
+        </div>
+        <div class="filter-body" style="display:none">
+          <div class="range-row">
+            <span class="range-label">Min height</span>
+            <span class="range-value">5'0"</span>
+          </div>
+          <input type="range" min="58" max="82" value="60" />
+          <div class="range-row" style="margin-top:10px">
+            <span class="range-label">Max height</span>
+            <span class="range-value">6'2"</span>
+          </div>
+          <input type="range" min="58" max="82" value="74" />
+        </div>
+      </div>
+
+      <!-- 4. Relationship Goal -->
+      <div class="filter-section">
+        <div class="filter-header open" onclick="this.classList.toggle('open');var b=this.nextElementSibling;b.style.display=this.classList.contains('open')?'block':'none'">
+          <span>💞 Relationship Goal</span>
+          <div class="fh-right"><span class="fh-val">Long-term</span><span class="fh-chevron">▼</span></div>
+        </div>
+        <div class="filter-body">
+          <div class="goal-grid">
+            <div class="goal-card selected"><span class="gc-icon">💑</span>Long-term</div>
+            <div class="goal-card"><span class="gc-icon">🌸</span>Casual</div>
+            <div class="goal-card"><span class="gc-icon">🤝</span>Friendship</div>
+            <div class="goal-card"><span class="gc-icon">💍</span>Marriage</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Education -->
+      <div class="filter-section">
+        <div class="filter-header" onclick="this.classList.toggle('open');var b=this.nextElementSibling;b.style.display=this.classList.contains('open')?'block':'none'">
+          <span>🎓 Education</span>
+          <div class="fh-right"><span class="fh-chevron">▼</span></div>
+        </div>
+        <div class="filter-body" style="display:none">
+          <label class="cb-row"><input type="checkbox"><span class="cb-box"></span><span class="cb-label">Some College</span></label>
+          <label class="cb-row checked"><input type="checkbox" checked><span class="cb-box">✓</span><span class="cb-label">Bachelor's</span></label>
+          <label class="cb-row checked"><input type="checkbox" checked><span class="cb-box">✓</span><span class="cb-label">Master's</span></label>
+          <label class="cb-row"><input type="checkbox"><span class="cb-box"></span><span class="cb-label">PhD</span></label>
+          <label class="cb-row"><input type="checkbox"><span class="cb-box"></span><span class="cb-label">Vocational</span></label>
+        </div>
+      </div>
+
+      <!-- 6. Religion -->
+      <div class="filter-section">
+        <div class="filter-header" onclick="this.classList.toggle('open');var b=this.nextElementSibling;b.style.display=this.classList.contains('open')?'block':'none'">
+          <span>🕊️ Religion</span>
+          <div class="fh-right"><span class="fh-chevron">▼</span></div>
+        </div>
+        <div class="filter-body" style="display:none">
+          <select class="filter-select">
+            <option value="">Any religion</option>
+            <option>Agnostic</option>
+            <option>Atheist</option>
+            <option>Buddhist</option>
+            <option>Christian</option>
+            <option>Hindu</option>
+            <option>Jewish</option>
+            <option>Muslim</option>
+            <option>Spiritual</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 7. Ethnicity -->
+      <div class="filter-section">
+        <div class="filter-header" onclick="this.classList.toggle('open');var b=this.nextElementSibling;b.style.display=this.classList.contains('open')?'block':'none'">
+          <span>🌍 Ethnicity</span>
+          <div class="fh-right"><span class="fh-chevron">▼</span></div>
+        </div>
+        <div class="filter-body" style="display:none">
+          <div class="chip-grid">
+            <div class="chip">Asian</div>
+            <div class="chip selected">Black / African</div>
+            <div class="chip">Hispanic</div>
+            <div class="chip">Middle Eastern</div>
+            <div class="chip selected">White / Caucasian</div>
+            <div class="chip">Mixed</div>
+            <div class="chip">Pacific Islander</div>
+            <div class="chip">Other</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Lifestyle -->
+      <div class="filter-section">
+        <div class="filter-header" onclick="this.classList.toggle('open');var b=this.nextElementSibling;b.style.display=this.classList.contains('open')?'block':'none'">
+          <span>🌿 Lifestyle</span>
+          <div class="fh-right"><span class="fh-chevron">▼</span></div>
+        </div>
+        <div class="filter-body" style="display:none">
+          <div class="ls-group">
+            <div class="ls-label">🍷 Drinking</div>
+            <div class="ls-options">
+              <div class="ls-opt">Never</div>
+              <div class="ls-opt sel">Sometimes</div>
+              <div class="ls-opt">Socially</div>
+              <div class="ls-opt">Regularly</div>
+            </div>
+          </div>
+          <div class="ls-group">
+            <div class="ls-label">🚬 Smoking</div>
+            <div class="ls-options">
+              <div class="ls-opt sel">Never</div>
+              <div class="ls-opt">Socially</div>
+              <div class="ls-opt">Yes</div>
+            </div>
+          </div>
+          <div class="ls-group">
+            <div class="ls-label">👶 Kids</div>
+            <div class="ls-options">
+              <div class="ls-opt">Don't have</div>
+              <div class="ls-opt sel">Want someday</div>
+              <div class="ls-opt">Have & Love</div>
+              <div class="ls-opt">Don't want</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Star Sign -->
+      <div class="filter-section">
+        <div class="filter-header" onclick="this.classList.toggle('open');var b=this.nextElementSibling;b.style.display=this.classList.contains('open')?'block':'none'">
+          <span>⭐ Star Sign</span>
+          <div class="fh-right"><span class="fh-chevron">▼</span></div>
+        </div>
+        <div class="filter-body" style="display:none">
+          <div class="chip-grid">
+            <div class="chip">♈ Aries</div>
+            <div class="chip selected">♉ Taurus</div>
+            <div class="chip">♊ Gemini</div>
+            <div class="chip">♋ Cancer</div>
+            <div class="chip selected">♌ Leo</div>
+            <div class="chip">♍ Virgo</div>
+            <div class="chip">♎ Libra</div>
+            <div class="chip">♏ Scorpio</div>
+            <div class="chip">♐ Sagittarius</div>
+            <div class="chip">♑ Capricorn</div>
+            <div class="chip selected">♒ Aquarius</div>
+            <div class="chip">♓ Pisces</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. Interests -->
+      <div class="filter-section">
+        <div class="filter-header" onclick="this.classList.toggle('open');var b=this.nextElementSibling;b.style.display=this.classList.contains('open')?'block':'none'">
+          <span>🎯 Interests</span>
+          <div class="fh-right"><span class="fh-chevron">▼</span></div>
+        </div>
+        <div class="filter-body" style="display:none">
+          <div class="chip-grid">
+            <div class="chip selected">🎨 Design</div>
+            <div class="chip selected">✈️ Travel</div>
+            <div class="chip">📸 Photo</div>
+            <div class="chip selected">🍕 Food</div>
+            <div class="chip">🎵 Music</div>
+            <div class="chip">🏃 Fitness</div>
+            <div class="chip selected">📚 Books</div>
+            <div class="chip">🌿 Nature</div>
+            <div class="chip">☕ Coffee</div>
+            <div class="chip">🎭 Theater</div>
+            <div class="chip">🏔️ Hiking</div>
+            <div class="chip">🌊 Ocean</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Deal-breakers -->
+      <div class="filter-section" style="border-bottom:none">
+        <div class="filter-header open" onclick="this.classList.toggle('open');var b=this.nextElementSibling;b.style.display=this.classList.contains('open')?'block':'none'">
+          <span>🚫 AI Deal-breakers</span>
+          <div class="fh-right"><span class="fh-chevron">▼</span></div>
+        </div>
+        <div class="filter-body">
+          <div class="db-row">
+            <span class="db-label">Long-distance</span>
+            <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+          </div>
+          <div class="db-row">
+            <span class="db-label">Smokers</span>
+            <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+          </div>
+          <div class="db-row">
+            <span class="db-label">Incompatible goals</span>
+            <div class="toggle-switch" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+          </div>
+          <div class="db-row">
+            <span class="db-label">Different values</span>
+            <div class="toggle-switch" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="filter-actions">
+        <button class="btn-apply">Apply Filters</button>
+        <button class="btn-reset">Reset All</button>
+      </div>
+
+      <!-- Saved Searches -->
+      <div class="saved-title">Saved Searches</div>
+      <div class="saved-item">
+        <div class="si-icon" style="background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(168,85,247,.15));border:1px solid rgba(124,58,237,.3)">🎨</div>
+        <div class="si-info">
+          <div class="si-name">Creative & Adventurous</div>
+          <div class="si-meta">Age 24–32 · SF Bay Area</div>
+        </div>
+        <span class="si-count">147</span>
+      </div>
+      <div class="saved-item">
+        <div class="si-icon" style="background:linear-gradient(135deg,rgba(6,182,212,.15),rgba(16,185,129,.1));border:1px solid rgba(6,182,212,.25)">🌿</div>
+        <div class="si-info">
+          <div class="si-name">Outdoorsy Intellectual</div>
+          <div class="si-meta">Age 26–34 · ≤ 30 mi</div>
+        </div>
+        <span class="si-count">89</span>
+      </div>
+
+    </aside>
+
+    <!-- ── CENTER PANEL: RESULTS ── -->
+    <main class="center-panel">
+
+      <!-- Top Bar -->
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <h1>Results</h1>
+          <p>147 profiles found</p>
+        </div>
+        <div class="sort-chip">
+          Sorted by: AI Score ▾
+        </div>
+      </div>
+
+      <!-- AI Query Interpretation -->
+      <div class="ai-query-banner">
+        <div class="aqb-left">
+          <div class="aqb-icon">🧠</div>
+          <div class="aqb-text">
+            <h4>AURA interpreted</h4>
+            <p>
+              <em>creative professional</em>, <em>outdoorsy</em>,
+              <em>values-aligned</em>, <em>emotionally available</em>
+            </p>
+          </div>
+        </div>
+        <button class="aqb-edit">Edit interpretation</button>
+      </div>
+
+      <div class="section-label">147 Profiles Found</div>
+
+      <!-- Results Grid -->
+      <div class="results-grid">
+
+        <!-- Card 1 -->
+        <a href="profile.html" class="result-card">
+          <div class="rc-photo" style="background:linear-gradient(160deg,#7C3AED 0%,#EC4899 60%,#F59E0B 100%)">
+            🌸
+            <div class="rc-score hi">⚡ 97%</div>
+            <div class="rc-online"></div>
+            <div class="why-badge">💡 Why this match</div>
+          </div>
+          <div class="rc-body">
+            <div class="rc-name-row"><span class="rc-name">Sofia</span><span class="rc-age">26</span></div>
+            <div class="rc-loc">📍 San Francisco, CA</div>
+            <div class="rc-tags">
+              <span class="rc-tag match">🎨 Design</span>
+              <span class="rc-tag match">✈️ Travel</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 2 -->
+        <a href="profile.html" class="result-card">
+          <div class="rc-photo" style="background:linear-gradient(160deg,#06B6D4 0%,#7C3AED 60%,#A855F7 100%)">
+            🌊
+            <div class="rc-score hi">⚡ 94%</div>
+            <div class="why-badge">💡 Why this match</div>
+          </div>
+          <div class="rc-body">
+            <div class="rc-name-row"><span class="rc-name">Mia</span><span class="rc-age">24</span></div>
+            <div class="rc-loc">📍 Oakland, CA</div>
+            <div class="rc-tags">
+              <span class="rc-tag match">🌊 Surfing</span>
+              <span class="rc-tag norm">🎵 Music</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 3 -->
+        <a href="profile.html" class="result-card">
+          <div class="rc-photo" style="background:linear-gradient(160deg,#10B981 0%,#06B6D4 50%,#7C3AED 100%)">
+            🌿
+            <div class="rc-score md">✨ 91%</div>
+            <div class="rc-online"></div>
+            <div class="why-badge">💡 Why this match</div>
+          </div>
+          <div class="rc-body">
+            <div class="rc-name-row"><span class="rc-name">Aria</span><span class="rc-age">28</span></div>
+            <div class="rc-loc">📍 Berkeley, CA</div>
+            <div class="rc-tags">
+              <span class="rc-tag match">🌿 Nature</span>
+              <span class="rc-tag match">📚 Books</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 4 -->
+        <a href="profile.html" class="result-card">
+          <div class="rc-photo" style="background:linear-gradient(160deg,#F59E0B 0%,#EC4899 60%,#7C3AED 100%)">
+            🌻
+            <div class="rc-score md">✨ 89%</div>
+            <div class="why-badge">💡 Why this match</div>
+          </div>
+          <div class="rc-body">
+            <div class="rc-name-row"><span class="rc-name">Luna</span><span class="rc-age">25</span></div>
+            <div class="rc-loc">📍 Marin, CA</div>
+            <div class="rc-tags">
+              <span class="rc-tag match">☕ Coffee</span>
+              <span class="rc-tag norm">🍕 Food</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 5 -->
+        <a href="profile.html" class="result-card">
+          <div class="rc-photo" style="background:linear-gradient(160deg,#A855F7 0%,#06B6D4 60%,#10B981 100%)">
+            🦋
+            <div class="rc-score md">✨ 87%</div>
+            <div class="rc-online"></div>
+            <div class="why-badge">💡 Why this match</div>
+          </div>
+          <div class="rc-body">
+            <div class="rc-name-row"><span class="rc-name">Zara</span><span class="rc-age">27</span></div>
+            <div class="rc-loc">📍 Palo Alto, CA</div>
+            <div class="rc-tags">
+              <span class="rc-tag match">🎭 Theater</span>
+              <span class="rc-tag match">✈️ Travel</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 6 -->
+        <a href="profile.html" class="result-card">
+          <div class="rc-photo" style="background:linear-gradient(160deg,#EC4899 0%,#F59E0B 60%,#10B981 100%)">
+            🌺
+            <div class="rc-score md">✨ 85%</div>
+            <div class="why-badge">💡 Why this match</div>
+          </div>
+          <div class="rc-body">
+            <div class="rc-name-row"><span class="rc-name">Nadia</span><span class="rc-age">23</span></div>
+            <div class="rc-loc">📍 San Jose, CA</div>
+            <div class="rc-tags">
+              <span class="rc-tag match">🎨 Art</span>
+              <span class="rc-tag norm">🏃 Fitness</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 7 -->
+        <a href="profile.html" class="result-card">
+          <div class="rc-photo" style="background:linear-gradient(160deg,#7C3AED 0%,#06B6D4 60%,#EC4899 100%)">
+            🌙
+            <div class="rc-score md">✨ 83%</div>
+            <div class="why-badge">💡 Why this match</div>
+          </div>
+          <div class="rc-body">
+            <div class="rc-name-row"><span class="rc-name">Cleo</span><span class="rc-age">29</span></div>
+            <div class="rc-loc">📍 Santa Cruz, CA</div>
+            <div class="rc-tags">
+              <span class="rc-tag match">🌙 Astrology</span>
+              <span class="rc-tag norm">🎵 Music</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 8 -->
+        <a href="profile.html" class="result-card">
+          <div class="rc-photo" style="background:linear-gradient(160deg,#10B981 0%,#F59E0B 60%,#EC4899 100%)">
+            🌷
+            <div class="rc-score md">✨ 81%</div>
+            <div class="rc-online"></div>
+            <div class="why-badge">💡 Why this match</div>
+          </div>
+          <div class="rc-body">
+            <div class="rc-name-row"><span class="rc-name">Jade</span><span class="rc-age">26</span></div>
+            <div class="rc-loc">📍 Mill Valley, CA</div>
+            <div class="rc-tags">
+              <span class="rc-tag match">🏔️ Hiking</span>
+              <span class="rc-tag norm">📸 Photo</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 9 -->
+        <a href="profile.html" class="result-card">
+          <div class="rc-photo" style="background:linear-gradient(160deg,#A855F7 0%,#EC4899 50%,#06B6D4 100%)">
+            🔮
+            <div class="rc-score md">✨ 79%</div>
+            <div class="why-badge">💡 Why this match</div>
+          </div>
+          <div class="rc-body">
+            <div class="rc-name-row"><span class="rc-name">Nova</span><span class="rc-age">24</span></div>
+            <div class="rc-loc">📍 Sausalito, CA</div>
+            <div class="rc-tags">
+              <span class="rc-tag match">🌊 Ocean</span>
+              <span class="rc-tag norm">🎭 Arts</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- Load More -->
+      <div class="load-more-row">
+        <button class="load-more-btn">Load more profiles</button>
+        <span class="load-more-hint">138 more results</span>
+      </div>
+
+    </main>
+
+    <!-- ── RIGHT PANEL: AI INSIGHTS ── -->
+    <aside class="right-panel">
+
+      <!-- Search Intelligence -->
+      <div>
+        <div class="rp-title">Search Intelligence</div>
+        <div class="si-card">
+          <div class="si-head">
+            <div class="si-icon">🧠</div>
+            <div>
+              <h3>Your Search Pattern</h3>
+              <p>Based on recent activity</p>
+            </div>
+          </div>
+          <p class="si-intro">
+            Your searches reveal you prefer <strong>Creatives</strong> and <strong>Adventurers</strong> most:
+          </p>
+          <div class="bar-row">
+            <span class="bar-label">Creatives</span>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:78%;background:linear-gradient(90deg,#7C3AED,#A855F7)"></div>
+            </div>
+            <span class="bar-val">78%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Adventurers</span>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:65%;background:linear-gradient(90deg,#06B6D4,#7C3AED)"></div>
+            </div>
+            <span class="bar-val">65%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Intellectuals</span>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:54%;background:linear-gradient(90deg,#10B981,#06B6D4)"></div>
+            </div>
+            <span class="bar-val">54%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Empaths</span>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:41%;background:linear-gradient(90deg,#EC4899,#A855F7)"></div>
+            </div>
+            <span class="bar-val">41%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Recommendations -->
+      <div>
+        <div class="rp-title">AI Recommendations</div>
+        <a href="profile.html" class="rec-chip">
+          <div class="rec-av" style="background:linear-gradient(135deg,#7C3AED,#EC4899)">🌸</div>
+          <div class="rec-info">
+            <div class="rec-name">Sofia M.</div>
+            <div class="rec-sub">✨ Perfect for your search</div>
+          </div>
+        </a>
+        <a href="profile.html" class="rec-chip">
+          <div class="rec-av" style="background:linear-gradient(135deg,#10B981,#06B6D4)">🌿</div>
+          <div class="rec-info">
+            <div class="rec-name">Aria K.</div>
+            <div class="rec-sub">✨ Values-aligned match</div>
+          </div>
+        </a>
+        <a href="profile.html" class="rec-chip">
+          <div class="rec-av" style="background:linear-gradient(135deg,#A855F7,#06B6D4)">🦋</div>
+          <div class="rec-info">
+            <div class="rec-name">Zara L.</div>
+            <div class="rec-sub">✨ Creative professional</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Trending in your area -->
+      <div>
+        <div class="rp-title">Trending in Your Area</div>
+        <div class="trending-tags">
+          <div class="trend-tag">✈️ Travel <span class="tc">234</span></div>
+          <div class="trend-tag">☕ Coffee <span class="tc">189</span></div>
+          <div class="trend-tag">🎨 Art <span class="tc">156</span></div>
+          <div class="trend-tag">🏃 Fitness <span class="tc">143</span></div>
+          <div class="trend-tag">🍕 Food <span class="tc">138</span></div>
+          <div class="trend-tag">🌿 Hiking <span class="tc">112</span></div>
+          <div class="trend-tag">📸 Photo <span class="tc">98</span></div>
+          <div class="trend-tag">🎵 Music <span class="tc">87</span></div>
+        </div>
+      </div>
+
+      <!-- Search Tips -->
+      <div>
+        <div class="rp-title">Search Tips</div>
+        <div class="stip">
+          <span class="stip-icon">🧠</span>
+          <div>
+            <strong>Try AI Mode</strong>
+            Toggle AI mode to search with natural language — describe who you're looking for in plain English.
+          </div>
+        </div>
+        <div class="stip" style="border-left-color:var(--cyan)">
+          <span class="stip-icon">🎯</span>
+          <div>
+            <strong>Boost Compatibility</strong>
+            Use interests to filter — shared interests increase match quality by up to <strong style="color:var(--text)">3×</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- Theme Switcher -->
+      <div>
+        <div class="rp-title">Theme</div>
+        <div class="theme-switch">
+          <div class="theme-dot active" title="Cosmic" style="background:linear-gradient(135deg,#7C3AED,#EC4899)"></div>
+          <div class="theme-dot" title="Ocean" style="background:linear-gradient(135deg,#06B6D4,#3B82F6)"></div>
+          <div class="theme-dot" title="Forest" style="background:linear-gradient(135deg,#10B981,#065F46)"></div>
+          <div class="theme-dot" title="Sunset" style="background:linear-gradient(135deg,#F59E0B,#EF4444)"></div>
+          <div class="theme-dot" title="Rose" style="background:linear-gradient(135deg,#EC4899,#F43F5E)"></div>
+          <div class="theme-dot" title="Mono" style="background:linear-gradient(135deg,#6B7280,#374151)"></div>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

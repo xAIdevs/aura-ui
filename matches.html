@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURA – Matches</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0A0A0F;
+      --bg2:     #10101A;
+      --bg3:     #16162A;
+      --card:    rgba(255,255,255,.04);
+      --card-b:  rgba(255,255,255,.08);
+      --accent:  #7C3AED;
+      --accent2: #A855F7;
+      --accent3: #C084FC;
+      --pink:    #EC4899;
+      --cyan:    #06B6D4;
+      --green:   #10B981;
+      --gold:    #F59E0B;
+      --text:    #F1F0FF;
+      --muted:   #6B6B8A;
+      --muted2:  #9896B0;
+      --border:  rgba(255,255,255,.07);
+      --border2: rgba(124,58,237,.35);
+      --glow:    0 0 40px rgba(124,58,237,.25);
+      --radius:  16px;
+      --radius2: 24px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed; top: -200px; left: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(124,58,237,.1) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed; bottom: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(236,72,153,.07) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── SIDEBAR ─────────────────────────────────── */
+    .sidebar {
+      position: fixed; left: 0; top: 0;
+      width: 72px; height: 100vh;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center;
+      padding: 24px 0; gap: 4px; z-index: 100;
+    }
+    .sidebar .brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 24px; letter-spacing: -1px;
+      text-decoration: none;
+    }
+    .nav-item {
+      width: 46px; height: 46px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: var(--muted); text-decoration: none;
+      cursor: pointer; transition: all .2s; position: relative;
+    }
+    .nav-item:hover { background: var(--card-b); color: var(--text); }
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(124,58,237,.3), rgba(168,85,247,.2));
+      color: var(--accent3);
+      box-shadow: 0 0 20px rgba(124,58,237,.2);
+    }
+    .nav-item .badge {
+      position: absolute; top: 6px; right: 6px;
+      width: 8px; height: 8px;
+      background: var(--pink); border-radius: 50%;
+      border: 2px solid var(--bg2);
+    }
+    .nav-divider {
+      width: 32px; height: 1px;
+      background: var(--border); margin: 6px 0;
+    }
+    .sidebar-avatar {
+      margin-top: auto;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; cursor: pointer;
+      border: 2px solid var(--border2);
+      text-decoration: none; transition: all .2s;
+    }
+    .sidebar-avatar:hover { box-shadow: 0 0 16px rgba(124,58,237,.4); }
+
+    /* ── LAYOUT ──────────────────────────────────── */
+    .app-layout {
+      margin-left: 72px;
+      display: grid;
+      grid-template-columns: 300px 1fr 300px;
+      min-height: 100vh;
+      position: relative; z-index: 1;
+    }
+
+    /* ── LEFT PANEL ──────────────────────────────── */
+    .left-panel {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 24px 18px;
+      display: flex; flex-direction: column; gap: 4px;
+      overflow-y: auto; height: 100vh;
+      position: sticky; top: 0;
+    }
+    .lp-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 18px;
+    }
+    .lp-header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px; font-weight: 700; color: var(--text);
+    }
+    .count-badge {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; border-radius: 20px;
+      padding: 2px 10px; font-size: 12px; font-weight: 700;
+    }
+
+    /* Filter Tabs */
+    .filter-tabs {
+      display: flex; gap: 4px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 4px;
+      margin-bottom: 16px;
+    }
+    .filter-tab {
+      flex: 1; padding: 7px 6px;
+      border-radius: 9px; border: none;
+      background: transparent; color: var(--muted);
+      font-size: 11px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+    }
+    .filter-tab:hover { color: var(--muted2); }
+    .filter-tab.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; box-shadow: 0 4px 12px rgba(124,58,237,.3);
+    }
+
+    /* Sort select */
+    .sort-select {
+      width: 100%; padding: 10px 14px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text); font-size: 13px; font-weight: 600;
+      cursor: pointer; appearance: none;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 18px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6B8A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+    .sort-select:focus { outline: none; border-color: var(--border2); }
+
+    /* Collapsible section */
+    .collapse-section { margin-bottom: 6px; }
+    .collapse-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer; font-size: 13px; font-weight: 600;
+      color: var(--muted2); transition: all .2s; user-select: none;
+    }
+    .collapse-header:hover { border-color: var(--border2); color: var(--text); }
+    .collapse-header .chevron {
+      font-size: 10px; color: var(--muted);
+      transition: transform .2s;
+    }
+    .collapse-header.open .chevron { transform: rotate(180deg); }
+    .collapse-body {
+      padding: 12px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .cb-row {
+      display: flex; align-items: center; gap: 10px;
+      cursor: pointer; padding: 4px 0;
+    }
+    .cb-row input[type=checkbox] { display: none; }
+    .cb-box {
+      width: 18px; height: 18px; border-radius: 5px;
+      border: 1.5px solid var(--border);
+      background: rgba(255,255,255,.04);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; flex-shrink: 0;
+      transition: all .2s;
+    }
+    .cb-row.checked .cb-box {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .cb-label { font-size: 13px; color: var(--muted2); }
+    .cb-row.checked .cb-label { color: var(--text); }
+
+    /* New Matches mini section */
+    .new-matches-section { margin-top: 10px; }
+    .nm-header {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted);
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 14px;
+    }
+    .nm-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .nm-avatars {
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    .nm-av {
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      cursor: pointer; text-decoration: none;
+    }
+    .nm-av-circle {
+      width: 52px; height: 52px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; border: 2px solid var(--border);
+      position: relative; transition: all .2s;
+    }
+    .nm-av:hover .nm-av-circle { border-color: var(--accent2); box-shadow: 0 0 12px rgba(168,85,247,.3); }
+    .nm-av-circle .online-dot {
+      position: absolute; bottom: 1px; right: 1px;
+      width: 10px; height: 10px; background: var(--green);
+      border-radius: 50%; border: 2px solid var(--bg2);
+    }
+    .nm-av-name { font-size: 10px; color: var(--muted2); font-weight: 600; }
+
+    /* ── CENTER PANEL ─────────────────────────────── */
+    .center-panel {
+      padding: 24px 28px;
+      overflow-y: auto; height: 100vh;
+    }
+
+    /* Top bar */
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 22px;
+    }
+    .top-bar-left h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px; font-weight: 700; color: var(--text);
+    }
+    .top-bar-left p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .view-toggle {
+      display: flex; gap: 4px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 4px;
+    }
+    .view-btn {
+      width: 34px; height: 34px; border-radius: 7px;
+      border: none; background: transparent;
+      color: var(--muted); font-size: 14px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .view-btn:hover { color: var(--muted2); }
+    .view-btn.active {
+      background: linear-gradient(135deg, rgba(124,58,237,.3), rgba(168,85,247,.2));
+      color: var(--accent3);
+    }
+
+    /* New Matches Banner */
+    .new-matches-banner {
+      background: linear-gradient(135deg, rgba(124,58,237,.12), rgba(236,72,153,.08));
+      border: 1px solid rgba(124,58,237,.25);
+      border-radius: var(--radius2);
+      padding: 18px 20px;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+    .nmb-header {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 16px;
+    }
+    .nmb-header h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px; font-weight: 700;
+      background: linear-gradient(90deg, var(--accent3), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nmb-header .new-pill {
+      background: rgba(236,72,153,.15); border: 1px solid rgba(236,72,153,.3);
+      color: var(--pink); border-radius: 20px;
+      padding: 2px 8px; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .nmb-scroll {
+      display: flex; gap: 16px;
+      overflow-x: auto; padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .nmb-scroll::-webkit-scrollbar { display: none; }
+    .nmb-item {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      flex-shrink: 0; text-decoration: none; cursor: pointer;
+    }
+    .nmb-circle {
+      width: 64px; height: 64px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px; position: relative;
+      border: 2px solid rgba(168,85,247,.3);
+      transition: all .25s;
+    }
+    .nmb-item:hover .nmb-circle { border-color: var(--accent2); box-shadow: 0 0 18px rgba(168,85,247,.35); transform: translateY(-2px); }
+    .nmb-name { font-size: 11px; font-weight: 600; color: var(--muted2); }
+    .nmb-badge {
+      position: absolute; top: -2px; right: -2px;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      color: #fff; border-radius: 20px;
+      padding: 1px 5px; font-size: 8px; font-weight: 800;
+      letter-spacing: .3px;
+    }
+
+    /* Section label */
+    .section-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 18px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ── MATCH CARDS GRID ────────────────────────── */
+    .matches-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .match-card-grid {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex; flex-direction: column;
+      transition: all .3s cubic-bezier(.4,0,.2,1);
+      position: relative;
+    }
+    .match-card-grid:hover {
+      border-color: var(--border2);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,.4), 0 0 30px rgba(124,58,237,.15);
+    }
+
+    /* Avatar area */
+    .mc-avatar-area {
+      aspect-ratio: 3/4;
+      position: relative;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 72px;
+    }
+    .mc-avatar-area::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.8) 100%);
+    }
+
+    /* AI score badge */
+    .mc-score {
+      position: absolute; top: 10px; right: 10px; z-index: 2;
+      padding: 4px 9px; border-radius: 20px;
+      font-size: 11px; font-weight: 800;
+      backdrop-filter: blur(10px);
+      display: flex; align-items: center; gap: 3px;
+    }
+    .mc-score.high { background: rgba(16,185,129,.25); border: 1px solid rgba(16,185,129,.4); color: #34D399; }
+    .mc-score.mid  { background: rgba(168,85,247,.25); border: 1px solid rgba(168,85,247,.4); color: var(--accent3); }
+
+    /* Online indicator */
+    .mc-online {
+      position: absolute; top: 10px; left: 10px; z-index: 2;
+      width: 10px; height: 10px; background: var(--green);
+      border-radius: 50%; border: 2px solid rgba(0,0,0,.4);
+    }
+
+    /* View profile overlay */
+    .mc-overlay {
+      position: absolute; inset: 0; z-index: 3;
+      background: rgba(124,58,237,.15);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .25s;
+    }
+    .match-card-grid:hover .mc-overlay { opacity: 1; }
+    .mc-overlay-text {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: var(--radius);
+      padding: 10px 20px;
+      font-size: 13px; font-weight: 700; color: #fff;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Card body */
+    .mc-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .mc-name-row {
+      display: flex; align-items: baseline; gap: 6px;
+    }
+    .mc-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px; font-weight: 700; color: var(--text);
+    }
+    .mc-age { font-size: 13px; color: var(--muted2); }
+    .mc-location { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+    .mc-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .mc-tag {
+      padding: 3px 9px; border-radius: 20px;
+      font-size: 10px; font-weight: 600;
+      background: rgba(124,58,237,.15);
+      border: 1px solid rgba(124,58,237,.25);
+      color: var(--accent3);
+    }
+    .mc-actions {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 7px;
+      padding-top: 6px; border-top: 1px solid var(--border);
+    }
+    .mc-btn {
+      padding: 8px 10px; border-radius: 10px;
+      border: none; cursor: pointer;
+      font-size: 11px; font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      transition: all .2s;
+    }
+    .mc-btn-msg {
+      background: linear-gradient(135deg, rgba(124,58,237,.25), rgba(168,85,247,.15));
+      border: 1px solid rgba(124,58,237,.35);
+      color: var(--accent3);
+    }
+    .mc-btn-msg:hover { background: linear-gradient(135deg, rgba(124,58,237,.4), rgba(168,85,247,.3)); }
+    .mc-btn-like {
+      background: rgba(236,72,153,.15);
+      border: 1px solid rgba(236,72,153,.3);
+      color: var(--pink);
+    }
+    .mc-btn-like:hover { background: rgba(236,72,153,.25); }
+
+    /* Load More */
+    .load-more-btn {
+      width: 100%; padding: 14px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--muted2); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .load-more-btn:hover { border-color: var(--border2); color: var(--accent3); background: rgba(124,58,237,.06); }
+
+    /* ── RIGHT PANEL ──────────────────────────────── */
+    .right-panel {
+      background: var(--bg2);
+      border-left: 1px solid var(--border);
+      padding: 24px 18px;
+      overflow-y: auto; height: 100vh;
+      position: sticky; top: 0;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+
+    /* Section title */
+    .rp-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 14px;
+    }
+    .rp-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* AI Insights card */
+    .ai-insights-card {
+      background: linear-gradient(145deg, rgba(124,58,237,.12), rgba(10,10,15,.5));
+      border: 1px solid rgba(124,58,237,.25);
+      border-radius: var(--radius2);
+      padding: 18px;
+    }
+    .ai-ic-head {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .ai-ic-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .ai-ic-head h3 { font-size: 13px; font-weight: 700; color: var(--accent3); }
+    .ai-ic-head p { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .ai-insight-text {
+      font-size: 13px; color: var(--muted2); line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .ai-insight-text strong { color: var(--text); }
+
+    /* Top match highlight */
+    .top-match-card {
+      background: linear-gradient(135deg, rgba(124,58,237,.18), rgba(236,72,153,.12));
+      border: 1px solid rgba(168,85,247,.3);
+      border-radius: var(--radius);
+      padding: 14px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .tm-row {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .tm-avatar {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .tm-info .tm-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .tm-info .tm-score {
+      font-size: 11px; font-weight: 700; color: var(--green);
+      margin-top: 2px;
+    }
+    .tm-msg-btn {
+      width: 100%; padding: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 10px;
+      color: #fff; font-size: 12px; font-weight: 700;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: all .2s;
+    }
+    .tm-msg-btn:hover { box-shadow: 0 8px 20px rgba(124,58,237,.35); transform: translateY(-1px); }
+
+    /* Response Rate */
+    .response-section { }
+    .rr-row {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .rr-circle {
+      position: relative; width: 72px; height: 72px; flex-shrink: 0;
+    }
+    .rr-circle svg { transform: rotate(-90deg); }
+    .rr-circle .rr-val {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px; font-weight: 700; color: var(--text);
+    }
+    .rr-text p:first-child { font-size: 13px; font-weight: 700; color: var(--text); }
+    .rr-text p:last-child { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+
+    /* Common Interests word cloud */
+    .interest-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+    .ic-pill {
+      padding: 4px 10px; border-radius: 20px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      color: var(--muted2); font-weight: 600;
+      cursor: default;
+    }
+    .ic-pill.lg { font-size: 15px; color: var(--accent3); background: rgba(124,58,237,.12); border-color: rgba(124,58,237,.25); }
+    .ic-pill.md { font-size: 13px; color: var(--text); }
+    .ic-pill.sm { font-size: 11px; }
+
+    /* Tips */
+    .tip-card {
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-size: 12px; color: var(--muted2); line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .tip-card:last-child { margin-bottom: 0; }
+    .tip-card strong { color: var(--gold); display: block; margin-bottom: 2px; font-size: 11px; }
+
+    /* Theme switcher */
+    .theme-switch {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; padding-top: 8px;
+    }
+    .theme-dot {
+      width: 22px; height: 22px; border-radius: 50%;
+      cursor: pointer; border: 2px solid transparent;
+      transition: all .2s;
+    }
+    .theme-dot:hover { border-color: rgba(255,255,255,.3); transform: scale(1.15); }
+    .theme-dot.active { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,.3); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
+  </style>
+</head>
+<body data-page="matches">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html" class="nav-item" data-tip="Discover">🔮</a>
+    <a href="matches.html" class="nav-item active" data-tip="Matches">💜<span class="badge"></span></a>
+    <a href="chat.html" class="nav-item" data-tip="Messages">💬<span class="badge"></span></a>
+    <a href="search.html" class="nav-item" data-tip="Search">🔍</a>
+    <div class="nav-divider"></div>
+    <a href="#" class="nav-item" data-tip="AI Insights">🧠</a>
+    <a href="my-account.html#premium" class="nav-item" data-tip="Premium">⚡</a>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">🌟</a>
+  </nav>
+
+  <!-- MAIN LAYOUT -->
+  <div class="app-layout">
+
+    <!-- ── LEFT PANEL ── -->
+    <aside class="left-panel">
+      <div class="lp-header">
+        <h2>Matches</h2>
+        <span class="count-badge">24</span>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="filter-tab active">All</button>
+        <button class="filter-tab">New</button>
+        <button class="filter-tab">Liked You</button>
+        <button class="filter-tab">Mutual</button>
+      </div>
+
+      <!-- Sort -->
+      <select class="sort-select">
+        <option>Sort by AI Score ▾</option>
+        <option>Sort by Recent</option>
+        <option>Sort by Name</option>
+        <option>Sort by Active</option>
+      </select>
+
+      <!-- Filter by Interests -->
+      <div class="collapse-section">
+        <div class="collapse-header open" onclick="this.classList.toggle('open'); this.nextElementSibling.style.display = this.classList.contains('open') ? 'flex' : 'none'">
+          <span>🎯 Filter by Interests</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="collapse-body" style="display:flex">
+          <label class="cb-row checked">
+            <input type="checkbox" checked>
+            <span class="cb-box">✓</span>
+            <span class="cb-label">🎨 Design</span>
+          </label>
+          <label class="cb-row checked">
+            <input type="checkbox" checked>
+            <span class="cb-box">✓</span>
+            <span class="cb-label">✈️ Travel</span>
+          </label>
+          <label class="cb-row">
+            <input type="checkbox">
+            <span class="cb-box"></span>
+            <span class="cb-label">🍕 Food & Dining</span>
+          </label>
+          <label class="cb-row checked">
+            <input type="checkbox" checked>
+            <span class="cb-box">✓</span>
+            <span class="cb-label">📸 Photography</span>
+          </label>
+          <label class="cb-row">
+            <input type="checkbox">
+            <span class="cb-box"></span>
+            <span class="cb-label">🏃 Fitness</span>
+          </label>
+          <label class="cb-row">
+            <input type="checkbox">
+            <span class="cb-box"></span>
+            <span class="cb-label">🎵 Music</span>
+          </label>
+          <label class="cb-row checked">
+            <input type="checkbox" checked>
+            <span class="cb-box">✓</span>
+            <span class="cb-label">📚 Reading</span>
+          </label>
+          <label class="cb-row">
+            <input type="checkbox">
+            <span class="cb-box"></span>
+            <span class="cb-label">🌿 Nature</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- New Matches -->
+      <div class="new-matches-section">
+        <div class="nm-header">✨ 4 new today</div>
+        <div class="nm-avatars">
+          <a href="profile.html" class="nm-av">
+            <div class="nm-av-circle" style="background:linear-gradient(135deg,#7C3AED,#EC4899)">
+              🌸
+              <span class="online-dot"></span>
+            </div>
+            <span class="nm-av-name">Sofia</span>
+          </a>
+          <a href="profile.html" class="nm-av">
+            <div class="nm-av-circle" style="background:linear-gradient(135deg,#06B6D4,#7C3AED)">
+              🌊
+            </div>
+            <span class="nm-av-name">Mia</span>
+          </a>
+          <a href="profile.html" class="nm-av">
+            <div class="nm-av-circle" style="background:linear-gradient(135deg,#10B981,#06B6D4)">
+              🌿
+              <span class="online-dot"></span>
+            </div>
+            <span class="nm-av-name">Aria</span>
+          </a>
+          <a href="profile.html" class="nm-av">
+            <div class="nm-av-circle" style="background:linear-gradient(135deg,#F59E0B,#EC4899)">
+              🌻
+            </div>
+            <span class="nm-av-name">Luna</span>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── CENTER PANEL ── -->
+    <main class="center-panel">
+
+      <!-- Top Bar -->
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <h1>Your Matches</h1>
+          <p>24 total matches</p>
+        </div>
+        <div class="view-toggle">
+          <button class="view-btn active" title="Grid view">⊞</button>
+          <button class="view-btn" title="List view">☰</button>
+        </div>
+      </div>
+
+      <!-- New Matches Banner -->
+      <div class="new-matches-banner">
+        <div class="nmb-header">
+          <h3>New Matches 🎉</h3>
+          <span class="new-pill">4 new</span>
+        </div>
+        <div class="nmb-scroll">
+          <a href="profile.html" class="nmb-item">
+            <div class="nmb-circle" style="background:linear-gradient(135deg,#7C3AED,#EC4899)">
+              🌸
+              <span class="nmb-badge">NEW</span>
+            </div>
+            <span class="nmb-name">Sofia</span>
+          </a>
+          <a href="profile.html" class="nmb-item">
+            <div class="nmb-circle" style="background:linear-gradient(135deg,#06B6D4,#7C3AED)">
+              🌊
+              <span class="nmb-badge">NEW</span>
+            </div>
+            <span class="nmb-name">Mia</span>
+          </a>
+          <a href="profile.html" class="nmb-item">
+            <div class="nmb-circle" style="background:linear-gradient(135deg,#10B981,#06B6D4)">
+              🌿
+              <span class="nmb-badge">NEW</span>
+            </div>
+            <span class="nmb-name">Aria</span>
+          </a>
+          <a href="profile.html" class="nmb-item">
+            <div class="nmb-circle" style="background:linear-gradient(135deg,#F59E0B,#EC4899)">
+              🌻
+              <span class="nmb-badge">NEW</span>
+            </div>
+            <span class="nmb-name">Luna</span>
+          </a>
+          <a href="profile.html" class="nmb-item">
+            <div class="nmb-circle" style="background:linear-gradient(135deg,#A855F7,#06B6D4)">
+              🦋
+            </div>
+            <span class="nmb-name">Zara</span>
+          </a>
+          <a href="profile.html" class="nmb-item">
+            <div class="nmb-circle" style="background:linear-gradient(135deg,#EC4899,#F59E0B)">
+              🌺
+            </div>
+            <span class="nmb-name">Nadia</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- All Matches Section -->
+      <div class="section-label">All Matches</div>
+
+      <!-- Match Grid -->
+      <div class="matches-grid">
+
+        <!-- Card 1 -->
+        <a href="profile.html" class="match-card-grid">
+          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#7C3AED 0%,#EC4899 60%,#F59E0B 100%)">
+            🌸
+            <div class="mc-score high">⚡ 97%</div>
+            <div class="mc-online"></div>
+            <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name-row"><span class="mc-name">Sofia</span><span class="mc-age">26</span></div>
+            <div class="mc-location">📍 San Francisco, CA</div>
+            <div class="mc-tags">
+              <span class="mc-tag">🎨 Design</span>
+              <span class="mc-tag">✈️ Travel</span>
+              <span class="mc-tag">📸 Photos</span>
+            </div>
+            <div class="mc-actions">
+              <button class="mc-btn mc-btn-msg" onclick="event.preventDefault()">💬 Message</button>
+              <button class="mc-btn mc-btn-like" onclick="event.preventDefault()">💜 Like</button>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 2 -->
+        <a href="profile.html" class="match-card-grid">
+          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#06B6D4 0%,#7C3AED 60%,#A855F7 100%)">
+            🌊
+            <div class="mc-score high">⚡ 94%</div>
+            <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name-row"><span class="mc-name">Mia</span><span class="mc-age">24</span></div>
+            <div class="mc-location">📍 Los Angeles, CA</div>
+            <div class="mc-tags">
+              <span class="mc-tag">🌊 Surfing</span>
+              <span class="mc-tag">🎵 Music</span>
+            </div>
+            <div class="mc-actions">
+              <button class="mc-btn mc-btn-msg" onclick="event.preventDefault()">💬 Message</button>
+              <button class="mc-btn mc-btn-like" onclick="event.preventDefault()">💜 Like</button>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 3 -->
+        <a href="profile.html" class="match-card-grid">
+          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#10B981 0%,#06B6D4 50%,#7C3AED 100%)">
+            🌿
+            <div class="mc-score mid">✨ 91%</div>
+            <div class="mc-online"></div>
+            <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name-row"><span class="mc-name">Aria</span><span class="mc-age">28</span></div>
+            <div class="mc-location">📍 New York, NY</div>
+            <div class="mc-tags">
+              <span class="mc-tag">🌿 Nature</span>
+              <span class="mc-tag">📚 Reading</span>
+            </div>
+            <div class="mc-actions">
+              <button class="mc-btn mc-btn-msg" onclick="event.preventDefault()">💬 Message</button>
+              <button class="mc-btn mc-btn-like" onclick="event.preventDefault()">💜 Like</button>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 4 -->
+        <a href="profile.html" class="match-card-grid">
+          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#F59E0B 0%,#EC4899 60%,#7C3AED 100%)">
+            🌻
+            <div class="mc-score mid">✨ 89%</div>
+            <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name-row"><span class="mc-name">Luna</span><span class="mc-age">25</span></div>
+            <div class="mc-location">📍 Austin, TX</div>
+            <div class="mc-tags">
+              <span class="mc-tag">☕ Coffee</span>
+              <span class="mc-tag">🍕 Foodie</span>
+            </div>
+            <div class="mc-actions">
+              <button class="mc-btn mc-btn-msg" onclick="event.preventDefault()">💬 Message</button>
+              <button class="mc-btn mc-btn-like" onclick="event.preventDefault()">💜 Like</button>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 5 -->
+        <a href="profile.html" class="match-card-grid">
+          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#A855F7 0%,#06B6D4 60%,#10B981 100%)">
+            🦋
+            <div class="mc-score mid">✨ 87%</div>
+            <div class="mc-online"></div>
+            <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name-row"><span class="mc-name">Zara</span><span class="mc-age">27</span></div>
+            <div class="mc-location">📍 Chicago, IL</div>
+            <div class="mc-tags">
+              <span class="mc-tag">🎭 Theater</span>
+              <span class="mc-tag">✈️ Travel</span>
+            </div>
+            <div class="mc-actions">
+              <button class="mc-btn mc-btn-msg" onclick="event.preventDefault()">💬 Message</button>
+              <button class="mc-btn mc-btn-like" onclick="event.preventDefault()">💜 Like</button>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 6 -->
+        <a href="profile.html" class="match-card-grid">
+          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#EC4899 0%,#F59E0B 60%,#10B981 100%)">
+            🌺
+            <div class="mc-score mid">✨ 85%</div>
+            <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name-row"><span class="mc-name">Nadia</span><span class="mc-age">23</span></div>
+            <div class="mc-location">📍 Seattle, WA</div>
+            <div class="mc-tags">
+              <span class="mc-tag">🎨 Art</span>
+              <span class="mc-tag">🏃 Fitness</span>
+            </div>
+            <div class="mc-actions">
+              <button class="mc-btn mc-btn-msg" onclick="event.preventDefault()">💬 Message</button>
+              <button class="mc-btn mc-btn-like" onclick="event.preventDefault()">💜 Like</button>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 7 -->
+        <a href="profile.html" class="match-card-grid">
+          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#7C3AED 0%,#06B6D4 60%,#EC4899 100%)">
+            🌙
+            <div class="mc-score mid">✨ 83%</div>
+            <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name-row"><span class="mc-name">Cleo</span><span class="mc-age">29</span></div>
+            <div class="mc-location">📍 Miami, FL</div>
+            <div class="mc-tags">
+              <span class="mc-tag">🎵 Music</span>
+              <span class="mc-tag">🌊 Beach</span>
+            </div>
+            <div class="mc-actions">
+              <button class="mc-btn mc-btn-msg" onclick="event.preventDefault()">💬 Message</button>
+              <button class="mc-btn mc-btn-like" onclick="event.preventDefault()">💜 Like</button>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 8 -->
+        <a href="profile.html" class="match-card-grid">
+          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#10B981 0%,#F59E0B 60%,#EC4899 100%)">
+            🌷
+            <div class="mc-score mid">✨ 81%</div>
+            <div class="mc-online"></div>
+            <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name-row"><span class="mc-name">Jade</span><span class="mc-age">26</span></div>
+            <div class="mc-location">📍 Denver, CO</div>
+            <div class="mc-tags">
+              <span class="mc-tag">🏔️ Hiking</span>
+              <span class="mc-tag">📸 Photos</span>
+            </div>
+            <div class="mc-actions">
+              <button class="mc-btn mc-btn-msg" onclick="event.preventDefault()">💬 Message</button>
+              <button class="mc-btn mc-btn-like" onclick="event.preventDefault()">💜 Like</button>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 9 -->
+        <a href="profile.html" class="match-card-grid">
+          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#A855F7 0%,#EC4899 50%,#06B6D4 100%)">
+            🔮
+            <div class="mc-score mid">✨ 79%</div>
+            <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name-row"><span class="mc-name">Nova</span><span class="mc-age">24</span></div>
+            <div class="mc-location">📍 Portland, OR</div>
+            <div class="mc-tags">
+              <span class="mc-tag">🌙 Astrology</span>
+              <span class="mc-tag">🎭 Arts</span>
+            </div>
+            <div class="mc-actions">
+              <button class="mc-btn mc-btn-msg" onclick="event.preventDefault()">💬 Message</button>
+              <button class="mc-btn mc-btn-like" onclick="event.preventDefault()">💜 Like</button>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <button class="load-more-btn">↓ Load More Matches (15 more)</button>
+    </main>
+
+    <!-- ── RIGHT PANEL ── -->
+    <aside class="right-panel">
+
+      <!-- AI Match Insights -->
+      <div>
+        <div class="rp-title">AI Match Insights</div>
+        <div class="ai-insights-card">
+          <div class="ai-ic-head">
+            <div class="ai-ic-icon">🧠</div>
+            <div>
+              <h3>AI Compatibility</h3>
+              <p>Updated just now</p>
+            </div>
+          </div>
+          <p class="ai-insight-text">
+            You have <strong>3 high-compatibility matches</strong> this week. Sofia is your top potential based on shared interests and values alignment.
+          </p>
+          <div class="top-match-card">
+            <div class="tm-row">
+              <div class="tm-avatar" style="background:linear-gradient(135deg,#7C3AED,#EC4899)">🌸</div>
+              <div class="tm-info">
+                <div class="tm-name">Sofia M., 26</div>
+                <div class="tm-score">⚡ 97% Compatibility</div>
+              </div>
+            </div>
+            <button class="tm-msg-btn">Send first message →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Response Rate -->
+      <div>
+        <div class="rp-title">Response Rate</div>
+        <div class="rr-row">
+          <div class="rr-circle">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="6"/>
+              <circle cx="36" cy="36" r="30" fill="none"
+                stroke="url(#rg1)" stroke-width="6"
+                stroke-linecap="round"
+                stroke-dasharray="188.5"
+                stroke-dashoffset="41.5"/>
+              <defs>
+                <linearGradient id="rg1" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#7C3AED"/>
+                  <stop offset="100%" stop-color="#A855F7"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="rr-val">78%</div>
+          </div>
+          <div class="rr-text">
+            <p>Response Rate</p>
+            <p>You reply within <strong style="color:var(--accent3)">2h</strong> on average</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Interests word cloud -->
+      <div>
+        <div class="rp-title">Common Interests</div>
+        <div class="interest-cloud">
+          <span class="ic-pill lg">🎨 Design</span>
+          <span class="ic-pill lg">✈️ Travel</span>
+          <span class="ic-pill md">📸 Photography</span>
+          <span class="ic-pill lg">🍕 Food</span>
+          <span class="ic-pill sm">🎵 Music</span>
+          <span class="ic-pill md">🏃 Fitness</span>
+          <span class="ic-pill sm">📚 Books</span>
+          <span class="ic-pill md">🌿 Nature</span>
+          <span class="ic-pill sm">☕ Coffee</span>
+          <span class="ic-pill lg">🌙 Astrology</span>
+          <span class="ic-pill sm">🎭 Theater</span>
+          <span class="ic-pill md">🌊 Ocean</span>
+        </div>
+      </div>
+
+      <!-- Tips from AURA -->
+      <div>
+        <div class="rp-title">Tips from AURA</div>
+        <div class="tip-card">
+          <strong>💡 Boost Your Matches</strong>
+          Profiles with 5+ photos get <strong style="color:var(--text)">3× more matches</strong>. Add more photos to stand out.
+        </div>
+        <div class="tip-card" style="border-left-color: var(--cyan)">
+          <strong style="color:var(--cyan)">💡 Best Time to Message</strong>
+          Evening messages have <strong style="color:var(--text)">40% higher</strong> response rates. Try 7–9 PM.
+        </div>
+        <div class="tip-card" style="border-left-color: var(--accent3)">
+          <strong style="color:var(--accent3)">💡 Interest Alignment</strong>
+          Your top interest matches: <strong style="color:var(--text)">Design + Travel + Food</strong>.
+        </div>
+      </div>
+
+      <!-- Theme Switcher -->
+      <div>
+        <div class="rp-title">Theme</div>
+        <div class="theme-switch">
+          <div class="theme-dot active" title="Cosmic" style="background:linear-gradient(135deg,#7C3AED,#EC4899)"></div>
+          <div class="theme-dot" title="Ocean" style="background:linear-gradient(135deg,#06B6D4,#3B82F6)"></div>
+          <div class="theme-dot" title="Forest" style="background:linear-gradient(135deg,#10B981,#065F46)"></div>
+          <div class="theme-dot" title="Sunset" style="background:linear-gradient(135deg,#F59E0B,#EF4444)"></div>
+          <div class="theme-dot" title="Rose" style="background:linear-gradient(135deg,#EC4899,#F43F5E)"></div>
+          <div class="theme-dot" title="Mono" style="background:linear-gradient(135deg,#6B7280,#374151)"></div>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

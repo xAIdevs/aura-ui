@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sophia M. — Profile · AURA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <style>
+    /* ── DESIGN TOKENS & RESET ──────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0A0A0F;
+      --bg2:     #10101A;
+      --bg3:     #16162A;
+      --card:    rgba(255,255,255,.04);
+      --card-b:  rgba(255,255,255,.08);
+      --accent:  #7C3AED;
+      --accent2: #A855F7;
+      --accent3: #C084FC;
+      --pink:    #EC4899;
+      --cyan:    #06B6D4;
+      --green:   #10B981;
+      --gold:    #F59E0B;
+      --text:    #F1F0FF;
+      --muted:   #6B6B8A;
+      --muted2:  #9896B0;
+      --border:  rgba(255,255,255,.07);
+      --border2: rgba(124,58,237,.35);
+      --glow:    0 0 40px rgba(124,58,237,.25);
+      --radius:  16px;
+      --radius2: 24px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px; left: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(124,58,237,.12) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(236,72,153,.08) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── SIDEBAR ────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0;
+      width: 72px; height: 100vh;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center;
+      padding: 24px 0; gap: 6px;
+      z-index: 100;
+    }
+    .sidebar .brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 28px;
+      letter-spacing: -1px;
+      text-decoration: none;
+    }
+    .sidebar .nav-item {
+      width: 46px; height: 46px;
+      border-radius: 14px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+      position: relative;
+      text-decoration: none;
+    }
+    .sidebar .nav-item:hover { background: var(--card-b); color: var(--text); }
+    .sidebar .nav-item.active {
+      background: linear-gradient(135deg, rgba(124,58,237,.3), rgba(168,85,247,.2));
+      color: var(--accent3);
+      box-shadow: 0 0 20px rgba(124,58,237,.2);
+    }
+    .sidebar .nav-item .badge {
+      position: absolute; top: 6px; right: 6px;
+      width: 8px; height: 8px;
+      background: var(--pink);
+      border-radius: 50%;
+      border: 2px solid var(--bg2);
+    }
+    .sidebar .nav-divider {
+      width: 32px; height: 1px;
+      background: var(--border); margin: 8px 0;
+    }
+    .sidebar .sidebar-avatar {
+      margin-top: auto;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; cursor: pointer;
+      border: 2px solid var(--border2);
+      text-decoration: none;
+    }
+    .sidebar [data-tip] { position: relative; }
+    .sidebar [data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: calc(100% + 12px); top: 50%; transform: translateY(-50%);
+      background: var(--bg3); border: 1px solid var(--border2);
+      color: var(--text); font-size: 11px; font-weight: 600;
+      white-space: nowrap; padding: 5px 10px; border-radius: 8px;
+      pointer-events: none; z-index: 200;
+    }
+
+    /* ── MAIN LAYOUT ────────────────────────────── */
+    .main-layout {
+      margin-left: 72px;
+      display: grid;
+      grid-template-columns: 340px 1fr 300px;
+      min-height: 100vh;
+      position: relative; z-index: 1;
+    }
+
+    /* ── LEFT PANEL ─────────────────────────────── */
+    .left-panel {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 28px 20px;
+      display: flex; flex-direction: column; gap: 6px;
+      overflow-y: auto; height: 100vh;
+      position: sticky; top: 0;
+    }
+    .left-panel h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px; font-weight: 700;
+      color: var(--text); margin-bottom: 16px;
+    }
+    .match-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px; border-radius: var(--radius);
+      border: 1px solid transparent; cursor: pointer;
+      transition: all .2s; text-decoration: none; color: inherit;
+    }
+    .match-card:hover { background: var(--card-b); border-color: var(--border); }
+    .match-card.active { background: rgba(124,58,237,.12); border-color: var(--border2); }
+    .match-avatar {
+      width: 50px; height: 50px; border-radius: 14px;
+      flex-shrink: 0; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; overflow: hidden;
+    }
+    .match-avatar .online-dot {
+      position: absolute; bottom: 2px; right: 2px;
+      width: 10px; height: 10px;
+      background: var(--green); border-radius: 50%;
+      border: 2px solid var(--bg2);
+    }
+    .match-info { flex: 1; min-width: 0; }
+    .match-name {
+      font-size: 14px; font-weight: 700; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .match-preview {
+      font-size: 12px; color: var(--muted2); margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .match-meta {
+      font-size: 11px; color: var(--muted);
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 4px; flex-shrink: 0;
+    }
+    .match-meta .unread {
+      background: var(--accent); color: #fff;
+      border-radius: 20px; padding: 1px 7px;
+      font-size: 10px; font-weight: 700;
+    }
+    .match-score { font-size: 11px; font-weight: 700; color: var(--accent3); }
+    .ai-suggestion { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); }
+    .ai-suggestion-label {
+      font-size: 11px; color: var(--muted); font-weight: 600;
+      text-transform: uppercase; letter-spacing: .8px; margin-bottom: 12px;
+    }
+    .ai-suggestion-card {
+      background: rgba(124,58,237,.1);
+      border: 1px solid rgba(124,58,237,.25);
+      border-radius: 14px; padding: 14px;
+    }
+    .ai-suggestion-card .sug-title {
+      font-size: 12px; color: var(--accent3);
+      font-weight: 700; margin-bottom: 5px;
+    }
+    .ai-suggestion-card .sug-text { font-size: 12px; color: var(--muted2); line-height: 1.5; }
+    .ai-suggestion-card .sug-text strong { color: var(--text); }
+
+    /* ── CENTER PANEL ───────────────────────────── */
+    .center-panel { padding: 28px 32px; overflow-y: auto; height: 100vh; }
+
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .page-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .top-actions { display: flex; gap: 10px; align-items: center; }
+    .analyzing-pill {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--card-b); border: 1px solid var(--border);
+      border-radius: 10px; padding: 7px 12px;
+      font-size: 12px; color: var(--muted2);
+    }
+    .btn-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: var(--card-b); border: 1px solid var(--border);
+      color: var(--muted2); font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .btn-icon:hover { border-color: var(--border2); color: var(--accent3); }
+
+    /* AI Banner */
+    .ai-banner {
+      background: linear-gradient(135deg, rgba(124,58,237,.15), rgba(236,72,153,.1));
+      border: 1px solid rgba(124,58,237,.3);
+      border-radius: var(--radius2); padding: 18px 22px;
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px; position: relative; overflow: hidden;
+    }
+    .ai-banner::before {
+      content: ''; position: absolute; top: -50%; right: -10%;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(168,85,247,.15), transparent 70%);
+      pointer-events: none;
+    }
+    .ai-banner .ai-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .ai-banner .ai-text h3 { font-size: 14px; font-weight: 700; color: var(--accent3); margin-bottom: 3px; }
+    .ai-banner .ai-text p { font-size: 13px; color: var(--muted2); line-height: 1.5; }
+    .ai-banner .ai-score { margin-left: auto; text-align: center; flex-shrink: 0; }
+    .ai-banner .ai-score .score-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 36px; font-weight: 700; line-height: 1;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .ai-banner .ai-score .score-label {
+      font-size: 11px; color: var(--muted);
+      font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+    }
+
+    /* Profile Hero */
+    .profile-hero {
+      display: grid; grid-template-columns: 340px 1fr;
+      gap: 24px; margin-bottom: 24px;
+    }
+
+    /* ── PHOTO GALLERY (spec styles) ─────────────── */
+    .main-photo-frame {
+      width: 100%; aspect-ratio: 3/4; border-radius: 24px;
+      overflow: hidden; position: relative; cursor: pointer;
+    }
+    .photo-bg {
+      width: 100%; height: 100%; display: flex; align-items: center;
+      justify-content: center; font-size: 100px;
+      transition: transform .4s ease;
+    }
+    .main-photo-frame:hover .photo-bg { transform: scale(1.04); }
+    .main-photo-frame::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,.1) 0%, transparent 30%, transparent 50%, rgba(0,0,0,.7) 100%);
+      pointer-events: none;
+    }
+    .photo-pills-row {
+      position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 5px; z-index: 10;
+    }
+    .photo-pill {
+      height: 3px; border-radius: 2px;
+      background: rgba(255,255,255,.3);
+      cursor: pointer; transition: .3s;
+    }
+    .photo-pill.active { background: #fff; }
+    .photo-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px; z-index: 10;
+    }
+
+    /* Photo nav arrows */
+    .photo-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      display: flex; justify-content: space-between;
+      width: 100%; padding: 0 12px;
+      z-index: 10; pointer-events: none;
+    }
+    .photo-nav button {
+      pointer-events: all;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(0,0,0,.4); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.15);
+      color: #fff; font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .photo-nav button:hover { background: rgba(124,58,237,.6); border-color: var(--accent2); }
+
+    /* Photo overlay info */
+    .name-age {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px; font-weight: 700; color: #fff;
+      display: flex; align-items: baseline; gap: 10px;
+      text-shadow: 0 2px 12px rgba(0,0,0,.5);
+    }
+    .name-age .age-tag { font-size: 20px; font-weight: 400; opacity: .85; }
+    .location-line { font-size: 13px; color: rgba(255,255,255,.75); margin: 4px 0 10px; }
+    .pill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill-tags span {
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 20px; padding: 4px 12px;
+      font-size: 12px; font-weight: 600; color: #fff;
+    }
+
+    /* Thumbnail strip */
+    .thumb-strip { display: flex; gap: 8px; margin-top: 10px; }
+    .thumb {
+      flex: 1; aspect-ratio: 1; border-radius: 10px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; opacity: .5;
+      border: 2px solid transparent; transition: all .2s; overflow: hidden;
+    }
+    .thumb:hover { opacity: .85; }
+    .thumb.active { opacity: 1; border-color: var(--accent2); }
+
+    /* Profile info column */
+    .profile-info-col { display: flex; flex-direction: column; gap: 16px; }
+    .profile-info-col .g-card { margin-bottom: 0; }
+
+    /* Action buttons */
+    .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn-action {
+      padding: 14px 18px; border-radius: var(--radius); border: none;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all .2s; position: relative; overflow: hidden;
+      text-decoration: none;
+    }
+    .btn-action::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(255,255,255,.08); opacity: 0; transition: opacity .2s;
+    }
+    .btn-action:hover::before { opacity: 1; }
+    .btn-action:hover { transform: translateY(-2px); }
+    .btn-action:active { transform: translateY(0); }
+    .btn-like {
+      background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff;
+      grid-column: span 2; padding: 16px; font-size: 15px;
+      box-shadow: 0 8px 24px rgba(124,58,237,.35);
+    }
+    .btn-like:hover { box-shadow: 0 12px 32px rgba(124,58,237,.5); }
+    .btn-super {
+      background: linear-gradient(135deg, rgba(6,182,212,.2), rgba(6,182,212,.1));
+      border: 1px solid rgba(6,182,212,.3) !important; color: var(--cyan);
+    }
+    .btn-pass {
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border) !important; color: var(--muted2);
+    }
+    .btn-boost {
+      background: linear-gradient(135deg, rgba(245,158,11,.2), rgba(245,158,11,.1));
+      border: 1px solid rgba(245,158,11,.3) !important; color: var(--gold);
+    }
+    .btn-msg-full {
+      background: linear-gradient(135deg, rgba(236,72,153,.2), rgba(236,72,153,.1));
+      border: 1px solid rgba(236,72,153,.3) !important; color: var(--pink);
+    }
+
+    /* Glass card */
+    .g-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius2); padding: 20px;
+      transition: border-color .2s; margin-bottom: 16px;
+    }
+    .g-card:hover { border-color: var(--border2); }
+    .g-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--muted); margin-bottom: 14px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .g-title::before {
+      content: ''; width: 3px; height: 14px;
+      border-radius: 2px; flex-shrink: 0;
+      background: linear-gradient(var(--accent2), var(--pink));
+    }
+
+    /* About */
+    .about-body { font-size: 14px; line-height: 1.75; color: var(--muted2); }
+    .about-body strong { color: var(--text); }
+    .hl {
+      background: linear-gradient(135deg, rgba(124,58,237,.25), rgba(168,85,247,.15));
+      border: 1px solid rgba(124,58,237,.3);
+      color: var(--accent3); border-radius: 6px;
+      padding: 1px 6px; font-weight: 600;
+    }
+
+    /* Info pills */
+    .info-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .info-pill {
+      display: flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: 10px; padding: 8px 13px;
+      font-size: 13px; font-weight: 600; color: var(--text);
+      transition: all .2s;
+    }
+    .info-pill:hover { border-color: var(--border2); background: rgba(124,58,237,.08); }
+    .pill-icon { font-size: 15px; }
+
+    /* Interests */
+    .interest-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .i-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 20px;
+      font-size: 13px; font-weight: 600; cursor: default; transition: all .2s;
+    }
+    .i-tag.off {
+      background: rgba(255,255,255,.04); border: 1px solid var(--border); color: var(--muted2);
+    }
+    .i-tag.on {
+      background: linear-gradient(135deg, rgba(124,58,237,.2), rgba(168,85,247,.15));
+      border: 1px solid rgba(124,58,237,.4); color: var(--accent3);
+      box-shadow: 0 0 10px rgba(124,58,237,.15);
+    }
+    .i-tag:hover { transform: translateY(-1px); }
+
+    /* Prompts */
+    .prompt-item {
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border); border-left: 3px solid var(--accent2);
+      border-radius: var(--radius); padding: 16px; margin-bottom: 10px;
+    }
+    .prompt-item:last-child { margin-bottom: 0; }
+    .p-q {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .7px; color: var(--accent3); margin-bottom: 7px;
+    }
+    .p-a { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    /* Bottom 2-col row */
+    .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .bottom-row .g-card { margin-bottom: 0; }
+
+    /* Gallery grid */
+    .gallery-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+    .gallery-tile {
+      aspect-ratio: 1; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; cursor: pointer; transition: opacity .2s; overflow: hidden;
+    }
+    .gallery-tile:hover { opacity: .75; }
+
+    /* Trait bars */
+    .trait-row { margin-bottom: 12px; }
+    .trait-row:last-child { margin-bottom: 0; }
+    .t-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 5px; }
+    .t-label span:first-child { color: var(--muted2); }
+    .t-label span:last-child { color: var(--text); }
+    .trait-track { height: 5px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; }
+    .trait-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+
+    /* Values & Lifestyle */
+    .values-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .value-pill {
+      padding: 7px 16px; border-radius: 20px;
+      font-size: 13px; font-weight: 600;
+      background: linear-gradient(135deg, rgba(124,58,237,.2), rgba(168,85,247,.15));
+      border: 1px solid rgba(124,58,237,.35); color: var(--accent3);
+      box-shadow: 0 0 12px rgba(124,58,237,.12);
+    }
+    .flags-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--green);
+      margin-bottom: 10px; margin-top: 4px;
+    }
+    .green-flags { display: flex; flex-direction: column; gap: 8px; }
+    .green-flag-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted2); }
+    .green-flag-item span:first-child { font-size: 15px; }
+
+    /* Looking For (center) */
+    .looking-for-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .lf-item {
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px; transition: border-color .2s;
+    }
+    .lf-item:hover { border-color: var(--border2); }
+    .lf-key {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted); margin-bottom: 6px;
+    }
+    .lf-val { font-size: 14px; font-weight: 700; color: var(--text); }
+
+    /* ── RIGHT PANEL ────────────────────────────── */
+    .right-panel {
+      background: var(--bg2); border-left: 1px solid var(--border);
+      padding: 28px 20px; overflow-y: auto; height: 100vh;
+      position: sticky; top: 0;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .ai-analysis {
+      background: linear-gradient(145deg, rgba(124,58,237,.12), rgba(10,10,15,.5));
+      border: 1px solid rgba(124,58,237,.25);
+      border-radius: var(--radius2); padding: 20px;
+    }
+    .ai-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .ai-icon-sm {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      display: flex; align-items: center; justify-content: center; font-size: 16px;
+    }
+    .ai-head h3 { font-size: 14px; font-weight: 700; color: var(--accent3); }
+    .ai-head p { font-size: 11px; color: var(--muted); }
+    .rp-title {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .rp-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* Stats row */
+    .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .stat-box {
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 10px; text-align: center;
+    }
+    .s-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px; font-weight: 700; line-height: 1.2;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .s-label {
+      font-size: 10px; color: var(--muted);
+      font-weight: 600; text-transform: uppercase;
+      letter-spacing: .4px; margin-top: 3px;
+    }
+
+    /* Vibe tags */
+    .vibe-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+    .vibe-tag { padding: 5px 11px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .vibe-tag.v1 { background: rgba(124,58,237,.2); border: 1px solid rgba(124,58,237,.4); color: var(--accent3); }
+    .vibe-tag.v2 { background: rgba(236,72,153,.15); border: 1px solid rgba(236,72,153,.35); color: #F472B6; }
+    .vibe-tag.v3 { background: rgba(6,182,212,.15); border: 1px solid rgba(6,182,212,.35); color: #22D3EE; }
+    .vibe-tag.v4 { background: rgba(16,185,129,.15); border: 1px solid rgba(16,185,129,.35); color: #34D399; }
+    .vibe-tag.v5 { background: rgba(245,158,11,.15); border: 1px solid rgba(245,158,11,.35); color: #FCD34D; }
+
+    /* Anthem card */
+    .anthem-card {
+      display: flex; align-items: center; gap: 12px;
+      background: linear-gradient(135deg, rgba(30,215,96,.12), rgba(30,215,96,.06));
+      border: 1px solid rgba(30,215,96,.25);
+      border-radius: var(--radius); padding: 14px;
+      cursor: pointer; transition: all .2s;
+    }
+    .anthem-card:hover { border-color: rgba(30,215,96,.45); transform: translateY(-1px); }
+    .anthem-alb {
+      width: 44px; height: 44px; border-radius: 8px;
+      background: linear-gradient(135deg, #1DB954, #117832);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .anthem-track { flex: 1; min-width: 0; }
+    .anthem-name {
+      font-size: 14px; font-weight: 700; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .anthem-artist { font-size: 12px; color: var(--muted2); margin-top: 2px; }
+    .anthem-play {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #1DB954; border: none; color: #fff;
+      font-size: 12px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: transform .15s;
+    }
+    .anthem-play:hover { transform: scale(1.1); }
+
+    /* Looking For list (right) */
+    .looking-list {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px;
+    }
+    .looking-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    }
+    .looking-row:last-child { border-bottom: none; }
+    .lk-key { color: var(--muted2); font-weight: 500; }
+    .lk-val { font-weight: 700; color: var(--text); }
+
+    /* Report button */
+    .report-btn {
+      width: 100%; padding: 10px;
+      background: transparent; border: 1px solid rgba(239,68,68,.2);
+      color: rgba(239,68,68,.6); border-radius: var(--radius);
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .report-btn:hover { border-color: #EF4444; color: #EF4444; background: rgba(239,68,68,.05); }
+
+    /* ── MODAL ──────────────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.7); backdrop-filter: blur(8px);
+      z-index: 300; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; animation: fadeIn .2s; }
+    .modal-box {
+      background: var(--bg3); border: 1px solid rgba(124,58,237,.3);
+      border-radius: var(--radius2); padding: 40px 36px;
+      max-width: 400px; width: 90%; text-align: center;
+      animation: modalIn .3s cubic-bezier(.34,1.56,.64,1);
+      box-shadow: 0 32px 80px rgba(0,0,0,.5), var(--glow);
+    }
+    .m-icon { font-size: 60px; margin-bottom: 14px; display: block; }
+    .modal-box h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px; font-weight: 700; margin-bottom: 8px;
+    }
+    .modal-box p { font-size: 14px; color: var(--muted2); line-height: 1.6; margin-bottom: 26px; }
+    .m-actions { display: flex; gap: 10px; }
+    .m-actions button {
+      flex: 1; padding: 13px; border-radius: 12px; border: none;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: all .15s;
+    }
+    .m-actions button:hover { transform: translateY(-1px); }
+    .m-cancel { background: rgba(255,255,255,.06) !important; color: var(--text) !important; border: 1px solid var(--border) !important; }
+    .m-confirm { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff !important; }
+
+    /* ── LIKE TOAST ─────────────────────────────── */
+    .like-toast {
+      position: fixed; bottom: 40px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: linear-gradient(135deg, var(--green), var(--cyan));
+      color: #fff; font-weight: 800; font-size: 18px;
+      padding: 14px 32px; border-radius: 50px;
+      z-index: 500; opacity: 0;
+      transition: all .4s cubic-bezier(.34,1.56,.64,1);
+      pointer-events: none; letter-spacing: 1.5px;
+    }
+    .like-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── SCROLLBAR ──────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(124,58,237,.4); }
+
+    /* ── ANIMATIONS ─────────────────────────────── */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes modalIn {
+      from { transform: scale(.8) translateY(20px); opacity: 0; }
+      to   { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    @keyframes pulse-glow {
+      0%,100% { box-shadow: 0 0 20px rgba(124,58,237,.4); }
+      50%      { box-shadow: 0 0 40px rgba(168,85,247,.7), 0 0 80px rgba(124,58,237,.3); }
+    }
+    .pulse { animation: pulse-glow 2.5s ease-in-out infinite; }
+
+    @keyframes bounce {
+      0%,60%,100% { transform: translateY(0); opacity: .4; }
+      30%          { transform: translateY(-5px); opacity: 1; }
+    }
+    .typing { display: inline-flex; gap: 3px; align-items: center; }
+    .typing span {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent3);
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: .2s; }
+    .typing span:nth-child(3) { animation-delay: .4s; }
+  </style>
+</head>
+<body data-page="profile">
+
+  <!-- ── SIDEBAR ──────────────────────────────── -->
+  <nav class="sidebar">
+    <a href="index.html" class="brand" data-tip="AURA">A</a>
+    <a href="discover.html" class="nav-item active" data-tip="Discover">🔮</a>
+    <a href="matches.html" class="nav-item" data-tip="Matches">💜<span class="badge"></span></a>
+    <a href="chat.html" class="nav-item" data-tip="Messages">💬<span class="badge"></span></a>
+    <a href="search.html" class="nav-item" data-tip="Search">🔍</a>
+    <div class="nav-divider"></div>
+    <a href="#" class="nav-item" data-tip="AI Insights">🧠</a>
+    <a href="my-account.html#premium" class="nav-item" data-tip="Premium">⚡</a>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">🌟</a>
+  </nav>
+
+  <!-- ── MAIN ─────────────────────────────────── -->
+  <div class="main-layout">
+
+    <!-- LEFT: Recent Matches -->
+    <div class="left-panel">
+      <h2>Recent Matches</h2>
+
+      <a href="chat.html" class="match-card active">
+        <div class="match-avatar" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">
+          🌸<div class="online-dot"></div>
+        </div>
+        <div class="match-info">
+          <div class="match-name">Sophia M.</div>
+          <div class="match-preview">Loved your travel story ✈️</div>
+        </div>
+        <div class="match-meta">
+          <span>2m</span>
+          <span class="unread">3</span>
+        </div>
+      </a>
+
+      <a href="chat.html" class="match-card">
+        <div class="match-avatar" style="background:linear-gradient(135deg,#06B6D4,#7C3AED);">🌙</div>
+        <div class="match-info">
+          <div class="match-name">Zara K.</div>
+          <div class="match-preview">Are you free this weekend?</div>
+        </div>
+        <div class="match-meta">
+          <span>18m</span>
+          <span class="match-score">✦ 94%</span>
+        </div>
+      </a>
+
+      <a href="chat.html" class="match-card">
+        <div class="match-avatar" style="background:linear-gradient(135deg,#F59E0B,#EC4899);">
+          🦋<div class="online-dot"></div>
+        </div>
+        <div class="match-info">
+          <div class="match-name">Priya S.</div>
+          <div class="match-preview">That ramen story though 😂</div>
+        </div>
+        <div class="match-meta">
+          <span>1h</span>
+          <span class="unread">1</span>
+        </div>
+      </a>
+
+      <a href="chat.html" class="match-card">
+        <div class="match-avatar" style="background:linear-gradient(135deg,#10B981,#06B6D4);">🍃</div>
+        <div class="match-info">
+          <div class="match-name">Aisha R.</div>
+          <div class="match-preview">I love jazz too! 🎷</div>
+        </div>
+        <div class="match-meta">
+          <span>3h</span>
+          <span class="match-score">✦ 88%</span>
+        </div>
+      </a>
+
+      <a href="chat.html" class="match-card">
+        <div class="match-avatar" style="background:linear-gradient(135deg,#EF4444,#F59E0B);">🌺</div>
+        <div class="match-info">
+          <div class="match-name">Luna V.</div>
+          <div class="match-preview">Dog moms unite 🐶</div>
+        </div>
+        <div class="match-meta">
+          <span>1d</span>
+        </div>
+      </a>
+
+      <a href="chat.html" class="match-card">
+        <div class="match-avatar" style="background:linear-gradient(135deg,#8B5CF6,#06B6D4);">
+          ⭐<div class="online-dot"></div>
+        </div>
+        <div class="match-info">
+          <div class="match-name">Mei L.</div>
+          <div class="match-preview">Coffee or matcha? ☕</div>
+        </div>
+        <div class="match-meta">
+          <span>2d</span>
+          <span class="match-score">✦ 91%</span>
+        </div>
+      </a>
+
+      <!-- AI Suggestion -->
+      <div class="ai-suggestion">
+        <div class="ai-suggestion-label">AI Suggestion</div>
+        <div class="ai-suggestion-card">
+          <div class="sug-title">🧠 AURA says...</div>
+          <div class="sug-text">Sophia's communication style matches yours with <strong>94% accuracy</strong>. Start with her Tokyo story!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTER: Full Profile Detail -->
+    <div class="center-panel">
+
+      <!-- Top bar -->
+      <div class="top-bar">
+        <h1 class="page-title">Sophia's Profile</h1>
+        <div class="top-actions">
+          <div class="analyzing-pill">
+            <span class="typing"><span></span><span></span><span></span></span>
+            <span>AURA is analyzing…</span>
+          </div>
+          <button class="btn-icon" title="Share">↗</button>
+          <button class="btn-icon" title="Bookmark">🔖</button>
+        </div>
+      </div>
+
+      <!-- AI Match Banner -->
+      <div class="ai-banner">
+        <div class="ai-icon pulse">🧠</div>
+        <div class="ai-text">
+          <h3>AURA AI Match Analysis</h3>
+          <p>Based on 47 shared data points — personality, values, communication style &amp; life goals. Sophia is in your top 3% of compatible profiles this week.</p>
+        </div>
+        <div class="ai-score">
+          <div class="score-val">94%</div>
+          <div class="score-label">Match Score</div>
+        </div>
+      </div>
+
+      <!-- Profile Hero -->
+      <div class="profile-hero">
+
+        <!-- Photo column -->
+        <div>
+          <div class="main-photo-frame" id="photoFrame">
+            <div class="photo-bg" id="mainPhoto" style="background:linear-gradient(160deg,#7C3AED 0%,#EC4899 50%,#F59E0B 100%);">
+              <span style="opacity:.2;user-select:none;">🌸</span>
+            </div>
+
+            <div class="photo-pills-row" id="photoPills">
+              <span class="photo-pill active" style="width:32px" data-idx="0"></span>
+              <span class="photo-pill" style="width:20px" data-idx="1"></span>
+              <span class="photo-pill" style="width:20px" data-idx="2"></span>
+              <span class="photo-pill" style="width:20px" data-idx="3"></span>
+              <span class="photo-pill" style="width:20px" data-idx="4"></span>
+            </div>
+
+            <div class="photo-nav">
+              <button id="photoPrev" aria-label="Previous photo">‹</button>
+              <button id="photoNext" aria-label="Next photo">›</button>
+            </div>
+
+            <div class="photo-overlay">
+              <div class="name-age">Sophia <span class="age-tag">26</span></div>
+              <div class="location-line">📍 New York, NY &nbsp;·&nbsp; 2.1 mi away</div>
+              <div class="pill-tags">
+                <span>🎨 UX Designer</span>
+                <span>🐶 Dog mom</span>
+                <span>✈️ 34 countries</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thumbnail strip -->
+          <div class="thumb-strip" id="thumbStrip">
+            <div class="thumb active" data-idx="0" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">🌸</div>
+            <div class="thumb" data-idx="1" style="background:linear-gradient(135deg,#06B6D4,#7C3AED);">🏔️</div>
+            <div class="thumb" data-idx="2" style="background:linear-gradient(135deg,#F59E0B,#EF4444);">🐶</div>
+            <div class="thumb" data-idx="3" style="background:linear-gradient(135deg,#10B981,#06B6D4);">🌅</div>
+            <div class="thumb" data-idx="4" style="background:linear-gradient(135deg,#EC4899,#F59E0B);">🗼</div>
+          </div>
+        </div>
+
+        <!-- Info column -->
+        <div class="profile-info-col">
+
+          <!-- Action buttons -->
+          <div class="action-buttons">
+            <button class="btn-action btn-like" id="likeBtn">✦ Send Like</button>
+            <button class="btn-action btn-super" onclick="doAction('super')">✦ Super Like</button>
+            <button class="btn-action btn-pass" onclick="doAction('pass')">✕ Pass</button>
+            <button class="btn-action btn-boost" onclick="doAction('boost')">⚡ Boost Profile</button>
+            <a href="chat.html" class="btn-action btn-msg-full">💬 Send Message</a>
+          </div>
+
+          <!-- About -->
+          <div class="g-card">
+            <div class="g-title">About Sophia</div>
+            <p class="about-body">
+              Hey 👋 I'm a <span class="hl">UX Designer</span> obsessed with turning complex ideas into
+              beautiful, human experiences. Outside work I'm either hiking trails,
+              hunting the perfect espresso, or bribing my golden retriever
+              <strong>Mochi</strong> with treats. I believe in <span class="hl">slow mornings</span>
+              and spontaneous midnight drives. Looking for someone who can hold deep
+              conversations <em>and</em> laugh at absolutely nothing.
+            </p>
+          </div>
+
+          <!-- Quick Facts -->
+          <div class="g-card">
+            <div class="g-title">Quick Facts</div>
+            <div class="info-pills">
+              <div class="info-pill"><span class="pill-icon">💼</span> UX Designer @ Meta</div>
+              <div class="info-pill"><span class="pill-icon">🎓</span> NYU — Design</div>
+              <div class="info-pill"><span class="pill-icon">📏</span> 5′7″</div>
+              <div class="info-pill"><span class="pill-icon">⭐</span> Libra ♎</div>
+              <div class="info-pill"><span class="pill-icon">🐶</span> Has a dog</div>
+              <div class="info-pill"><span class="pill-icon">🍷</span> Drinks socially</div>
+              <div class="info-pill"><span class="pill-icon">🚭</span> Non-smoker</div>
+              <div class="info-pill"><span class="pill-icon">👶</span> Wants kids someday</div>
+              <div class="info-pill"><span class="pill-icon">🙏</span> Spiritual</div>
+              <div class="info-pill"><span class="pill-icon">🌐</span> EN · ES</div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /profile-hero -->
+
+      <!-- Interests & Passions -->
+      <div class="g-card">
+        <div class="g-title">Interests &amp; Passions</div>
+        <div class="interest-tags">
+          <div class="i-tag on">🎨 UX Design</div>
+          <div class="i-tag on">🥾 Hiking</div>
+          <div class="i-tag on">✈️ Travel</div>
+          <div class="i-tag off">☕ Coffee</div>
+          <div class="i-tag on">📸 Photography</div>
+          <div class="i-tag off">🍜 Ramen</div>
+          <div class="i-tag on">🎵 Jazz</div>
+          <div class="i-tag off">📚 Sci-Fi</div>
+          <div class="i-tag on">🐶 Dogs</div>
+          <div class="i-tag off">🧘 Yoga</div>
+          <div class="i-tag on">🎬 Indie Films</div>
+          <div class="i-tag off">🌊 Ocean</div>
+          <div class="i-tag on">🌱 Sustainability</div>
+          <div class="i-tag off">🍕 Late-night food</div>
+        </div>
+      </div>
+
+      <!-- Sophia Opens Up -->
+      <div class="g-card">
+        <div class="g-title">Sophia Opens Up</div>
+        <div class="prompt-item">
+          <div class="p-q">✦ A life goal I'm chasing</div>
+          <div class="p-a">Design a product that reaches a billion users — and hike every trail in Patagonia before I'm 35. 🏞️</div>
+        </div>
+        <div class="prompt-item">
+          <div class="p-q">✦ The fastest way to my heart</div>
+          <div class="p-a">Show up with great tacos, send me a playlist I didn't know I needed, or laugh at my terrible puns. 🌮</div>
+        </div>
+        <div class="prompt-item">
+          <div class="p-q">✦ My most chaotic story</div>
+          <div class="p-a">Got lost in Tokyo at 1am, stumbled into a hidden jazz bar, ate the best ramen of my life and made 4 new friends. Zero regrets. 🎷</div>
+        </div>
+      </div>
+
+      <!-- Gallery + Compatibility -->
+      <div class="bottom-row">
+
+        <div class="g-card">
+          <div class="g-title">Photo Gallery</div>
+          <div class="gallery-grid">
+            <div class="gallery-tile" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">🌸</div>
+            <div class="gallery-tile" style="background:linear-gradient(135deg,#06B6D4,#7C3AED);">🗼</div>
+            <div class="gallery-tile" style="background:linear-gradient(135deg,#10B981,#06B6D4);">🐶</div>
+            <div class="gallery-tile" style="background:linear-gradient(135deg,#F59E0B,#EF4444);">🏔️</div>
+            <div class="gallery-tile" style="background:linear-gradient(135deg,#EC4899,#F59E0B);">🌅</div>
+            <div class="gallery-tile" style="background:linear-gradient(135deg,#A78BFA,#EC4899);">🎨</div>
+          </div>
+        </div>
+
+        <div class="g-card">
+          <div class="g-title">Compatibility Breakdown</div>
+          <div class="trait-row">
+            <div class="t-label"><span>Deep Conversations</span><span>96%</span></div>
+            <div class="trait-track"><div class="trait-fill" style="background:linear-gradient(90deg,#7C3AED,#A855F7);" data-w="96%"></div></div>
+          </div>
+          <div class="trait-row">
+            <div class="t-label"><span>Shared Values</span><span>91%</span></div>
+            <div class="trait-track"><div class="trait-fill" style="background:linear-gradient(90deg,#EC4899,#A855F7);" data-w="91%"></div></div>
+          </div>
+          <div class="trait-row">
+            <div class="t-label"><span>Adventure Seeking</span><span>87%</span></div>
+            <div class="trait-track"><div class="trait-fill" style="background:linear-gradient(90deg,#06B6D4,#7C3AED);" data-w="87%"></div></div>
+          </div>
+          <div class="trait-row">
+            <div class="t-label"><span>Life Goals</span><span>84%</span></div>
+            <div class="trait-track"><div class="trait-fill" style="background:linear-gradient(90deg,#10B981,#06B6D4);" data-w="84%"></div></div>
+          </div>
+          <div class="trait-row">
+            <div class="t-label"><span>Creative Mindset</span><span>79%</span></div>
+            <div class="trait-track"><div class="trait-fill" style="background:linear-gradient(90deg,#F59E0B,#EC4899);" data-w="79%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Values & Lifestyle -->
+      <div class="g-card">
+        <div class="g-title">Values &amp; Lifestyle</div>
+        <div class="values-pills">
+          <span class="value-pill">Authenticity</span>
+          <span class="value-pill">Growth</span>
+          <span class="value-pill">Creativity</span>
+          <span class="value-pill">Adventure</span>
+          <span class="value-pill">Mindfulness</span>
+        </div>
+        <div class="flags-title">✅ Green Flags</div>
+        <div class="green-flags">
+          <div class="green-flag-item"><span>✅</span> Avid reader</div>
+          <div class="green-flag-item"><span>✅</span> Emotionally intelligent</div>
+          <div class="green-flag-item"><span>✅</span> Has passport</div>
+          <div class="green-flag-item"><span>✅</span> Morning person</div>
+        </div>
+      </div>
+
+      <!-- Looking For -->
+      <div class="g-card">
+        <div class="g-title">Looking For</div>
+        <div class="looking-for-grid">
+          <div class="lf-item">
+            <div class="lf-key">Relationship</div>
+            <div class="lf-val">💑 Serious relationship</div>
+          </div>
+          <div class="lf-item">
+            <div class="lf-key">Commitment</div>
+            <div class="lf-val">🤝 Long-term</div>
+          </div>
+          <div class="lf-item">
+            <div class="lf-key">Moving</div>
+            <div class="lf-val">🏙️ Open to moving</div>
+          </div>
+          <div class="lf-item">
+            <div class="lf-key">Children</div>
+            <div class="lf-val">👶 Wants them someday</div>
+          </div>
+          <div class="lf-item" style="grid-column:span 2;">
+            <div class="lf-key">Communication</div>
+            <div class="lf-val">💬 Daily texts + quality time</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /center-panel -->
+
+    <!-- RIGHT: AI Analysis -->
+    <div class="right-panel">
+
+      <!-- AI Analysis -->
+      <div class="ai-analysis">
+        <div class="ai-head">
+          <div class="ai-icon-sm pulse">🧠</div>
+          <div>
+            <h3>AURA AI</h3>
+            <p>Compatibility Analysis</p>
+          </div>
+        </div>
+        <div class="trait-row">
+          <div class="t-label"><span>Emotional Connection</span><span>94%</span></div>
+          <div class="trait-track"><div class="trait-fill" style="background:linear-gradient(90deg,#7C3AED,#C084FC);" data-w="94%"></div></div>
+        </div>
+        <div class="trait-row">
+          <div class="t-label"><span>Intellectual Spark</span><span>91%</span></div>
+          <div class="trait-track"><div class="trait-fill" style="background:linear-gradient(90deg,#EC4899,#F472B6);" data-w="91%"></div></div>
+        </div>
+        <div class="trait-row">
+          <div class="t-label"><span>Values Alignment</span><span>88%</span></div>
+          <div class="trait-track"><div class="trait-fill" style="background:linear-gradient(90deg,#06B6D4,#67E8F9);" data-w="88%"></div></div>
+        </div>
+        <div class="trait-row">
+          <div class="t-label"><span>Lifestyle Fit</span><span>85%</span></div>
+          <div class="trait-track"><div class="trait-fill" style="background:linear-gradient(90deg,#10B981,#6EE7B7);" data-w="85%"></div></div>
+        </div>
+        <div class="trait-row">
+          <div class="t-label"><span>Humor Match</span><span>92%</span></div>
+          <div class="trait-track"><div class="trait-fill" style="background:linear-gradient(90deg,#F59E0B,#FCD34D);" data-w="92%"></div></div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div>
+        <div class="rp-title">Sophia's Stats</div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="s-val">34</div>
+            <div class="s-label">Countries</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">🐶 1</div>
+            <div class="s-label">Dog</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-val">☕</div>
+            <div class="s-label">Daily</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vibe Check -->
+      <div>
+        <div class="rp-title">Vibe Check</div>
+        <div class="vibe-tags">
+          <span class="vibe-tag v1">Creative</span>
+          <span class="vibe-tag v3">Adventurous</span>
+          <span class="vibe-tag v4">Thoughtful</span>
+          <span class="vibe-tag v2">Authentic</span>
+          <span class="vibe-tag v5">Ambitious</span>
+        </div>
+      </div>
+
+      <!-- Anthem -->
+      <div>
+        <div class="rp-title">Anthem</div>
+        <div class="anthem-card">
+          <div class="anthem-alb">🎵</div>
+          <div class="anthem-track">
+            <div class="anthem-name">Skinny Love</div>
+            <div class="anthem-artist">Bon Iver · Spotify</div>
+          </div>
+          <button class="anthem-play" id="anthemPlay">▶</button>
+        </div>
+      </div>
+
+      <!-- Looking For (right) -->
+      <div>
+        <div class="rp-title">Looking For</div>
+        <div class="looking-list">
+          <div class="looking-row">
+            <span class="lk-key">Relationship</span>
+            <span class="lk-val">💑 Serious</span>
+          </div>
+          <div class="looking-row">
+            <span class="lk-key">Commitment</span>
+            <span class="lk-val">🤝 Long-term</span>
+          </div>
+          <div class="looking-row">
+            <span class="lk-key">Moving</span>
+            <span class="lk-val">🏙️ Open</span>
+          </div>
+          <div class="looking-row">
+            <span class="lk-key">Children</span>
+            <span class="lk-val">👶 Someday</span>
+          </div>
+          <div class="looking-row">
+            <span class="lk-key">Verified</span>
+            <span class="lk-val" style="color:var(--green);">✔ ID Verified</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report -->
+      <button class="report-btn">🚩 Report or Block Sophia</button>
+
+    </div><!-- /right-panel -->
+  </div><!-- /main-layout -->
+
+  <!-- ── MATCH MODAL ────────────────────────── -->
+  <div class="modal-overlay" id="modal-match">
+    <div class="modal-box">
+      <span class="m-icon" id="modalIcon">🎉</span>
+      <h2 id="modalTitle">It's a Match!</h2>
+      <p id="modalText">You and Sophia both liked each other!</p>
+      <div class="m-actions">
+        <button class="m-cancel" id="keepDiscovering">Keep Discovering</button>
+        <button class="m-confirm" id="modalConfirm" onclick="window.location.href='chat.html'">Send a Message</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LIKE TOAST ──────────────────────────── -->
+  <div class="like-toast" id="likeToast">LIKED! ✦</div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    /* ── Photo carousel ── */
+    const photos = [
+      { bg: 'linear-gradient(160deg,#7C3AED 0%,#EC4899 50%,#F59E0B 100%)', icon: '🌸' },
+      { bg: 'linear-gradient(160deg,#06B6D4 0%,#7C3AED 50%,#1D4ED8 100%)', icon: '🏔️' },
+      { bg: 'linear-gradient(160deg,#F59E0B 0%,#EF4444 50%,#7C3AED 100%)', icon: '🐶' },
+      { bg: 'linear-gradient(160deg,#10B981 0%,#06B6D4 50%,#7C3AED 100%)', icon: '🌅' },
+      { bg: 'linear-gradient(160deg,#EC4899 0%,#F59E0B 50%,#EF4444 100%)', icon: '🗼' },
+    ];
+    let cur = 0;
+
+    function goPhoto(idx) {
+      cur = ((idx % photos.length) + photos.length) % photos.length;
+      const mp = document.getElementById('mainPhoto');
+      mp.style.background = photos[cur].bg;
+      mp.querySelector('span').textContent = photos[cur].icon;
+      document.querySelectorAll('#photoPills .photo-pill').forEach((s, i) => s.classList.toggle('active', i === cur));
+      document.querySelectorAll('#thumbStrip .thumb').forEach((t, i) => t.classList.toggle('active', i === cur));
+    }
+
+    document.getElementById('photoNext').addEventListener('click', e => { e.stopPropagation(); goPhoto(cur + 1); });
+    document.getElementById('photoPrev').addEventListener('click', e => { e.stopPropagation(); goPhoto(cur - 1); });
+    document.querySelectorAll('#photoPills .photo-pill').forEach((pill, i) => {
+      pill.addEventListener('click', e => { e.stopPropagation(); goPhoto(i); });
+    });
+    document.querySelectorAll('#thumbStrip .thumb').forEach((thumb, i) => {
+      thumb.addEventListener('click', () => goPhoto(i));
+    });
+    document.getElementById('photoFrame').addEventListener('click', function (e) {
+      if (e.target.closest('.photo-nav') || e.target.closest('.photo-pills-row')) return;
+      const r = this.getBoundingClientRect();
+      goPhoto(e.clientX - r.left < r.width / 2 ? cur - 1 : cur + 1);
+    });
+
+    /* ── Like button → toast → match modal ── */
+    const likeToast = document.getElementById('likeToast');
+    const matchModal = document.getElementById('modal-match');
+
+    document.getElementById('likeBtn').addEventListener('click', () => {
+      /* Reset modal back to match state in case it was repurposed */
+      document.getElementById('modalIcon').textContent = '🎉';
+      document.getElementById('modalTitle').textContent = "It's a Match!";
+      document.getElementById('modalText').textContent = 'You and Sophia both liked each other!';
+      document.getElementById('keepDiscovering').textContent = 'Keep Discovering';
+      document.getElementById('modalConfirm').textContent = 'Send a Message';
+      document.getElementById('modalConfirm').onclick = () => window.location.href = 'chat.html';
+
+      likeToast.classList.add('show');
+      setTimeout(() => likeToast.classList.remove('show'), 2400);
+      setTimeout(() => matchModal.classList.add('open'), 950);
+    });
+
+    document.getElementById('keepDiscovering').addEventListener('click', () => {
+      matchModal.classList.remove('open');
+    });
+    matchModal.addEventListener('click', e => {
+      if (!e.target.closest('.modal-box')) matchModal.classList.remove('open');
+    });
+
+    /* ── Other action buttons ── */
+    const actionData = {
+      super: ['✦', 'Super Like Sent!', "Sophia will see a special ✦ on your profile. Only 3 Super Likes per week — use them wisely.", 'Awesome!'],
+      pass:  ['✕', 'Passed on Sophia',  'No worries — AURA has 1,200+ profiles that match you. Keep exploring the universe. 🌌', 'Explore More'],
+      boost: ['⚡', 'Boost Activated!', "Your profile is now #1 in Sophia's stack for the next 30 minutes. Go get 'em. ⚡", "Let's Go!"],
+    };
+
+    function doAction(type) {
+      const d = actionData[type];
+      if (!d) return;
+      document.getElementById('modalIcon').textContent = d[0];
+      document.getElementById('modalTitle').textContent = d[1];
+      document.getElementById('modalText').textContent = d[2];
+      document.getElementById('keepDiscovering').textContent = 'Dismiss';
+      document.getElementById('modalConfirm').textContent = d[3];
+      document.getElementById('modalConfirm').onclick = () => matchModal.classList.remove('open');
+      matchModal.classList.add('open');
+    }
+
+    /* ── Anthem play toggle ── */
+    document.getElementById('anthemPlay').addEventListener('click', function () {
+      this.textContent = this.textContent === '▶' ? '⏸' : '▶';
+    });
+
+    /* ── Animate trait bars on scroll ── */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.trait-fill[data-w]').forEach(bar => {
+            setTimeout(() => { bar.style.width = bar.dataset.w; }, 150);
+          });
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.g-card, .ai-analysis').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>

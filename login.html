@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURA – Sign In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0A0A0F;
+      --bg2:       #10101A;
+      --bg3:       #16162A;
+      --card:      rgba(255,255,255,.04);
+      --card-b:    rgba(255,255,255,.08);
+      --accent:    #7C3AED;
+      --accent2:   #A855F7;
+      --accent3:   #C084FC;
+      --pink:      #EC4899;
+      --cyan:      #06B6D4;
+      --green:     #10B981;
+      --gold:      #F59E0B;
+      --white:     #FFFFFF;
+      --text:      #F1F0FF;
+      --muted:     #6B6B8A;
+      --muted2:    #9896B0;
+      --border:    rgba(255,255,255,.07);
+      --border2:   rgba(124,58,237,.35);
+      --glow:      0 0 40px rgba(124,58,237,.25);
+      --glow2:     0 0 80px rgba(168,85,247,.15);
+      --radius:    16px;
+      --radius2:   24px;
+      --input-bg:  rgba(255,255,255,.06);
+      --input-border: rgba(255,255,255,.12);
+      --accent-rgb: 124,58,237;
+    }
+
+    /* Light theme overrides */
+    [data-theme="light"] {
+      --bg:        #F8F7FF;
+      --bg2:       #FFFFFF;
+      --bg3:       #F0EEFF;
+      --card:      rgba(0,0,0,.03);
+      --card-b:    rgba(0,0,0,.06);
+      --text:      #1A1030;
+      --muted:     #8B89A8;
+      --muted2:    #6B69A0;
+      --border:    rgba(0,0,0,.08);
+      --border2:   rgba(124,58,237,.25);
+      --input-bg:  rgba(0,0,0,.04);
+      --input-border: rgba(0,0,0,.12);
+    }
+    /* Neon theme overrides */
+    [data-theme="neon"] {
+      --accent:  #00F0FF;
+      --accent2: #B000FF;
+      --pink:    #FF006A;
+      --accent3: #80F8FF;
+      --border2: rgba(0,240,255,.35);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px; left: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(124,58,237,.12) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(236,72,153,.08) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── AUTH LAYOUT ───────────────────────────── */
+    .auth-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── LEFT FORM PANEL ───────────────────────── */
+    .auth-form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 64px;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .auth-form-panel .top-nav {
+      position: absolute;
+      top: 32px; left: 64px; right: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    .back-home {
+      font-size: 13px;
+      color: var(--muted2);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color .2s;
+    }
+    .back-home:hover { color: var(--accent3); }
+
+    .form-container {
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .auth-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .auth-subheading {
+      font-size: 15px;
+      color: var(--muted2);
+      margin-bottom: 36px;
+    }
+
+    /* ── STEP TRANSITIONS ──────────────────────── */
+    .auth-step {
+      animation: stepIn .35s cubic-bezier(.22,.68,0,1.2);
+    }
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hidden { display: none !important; }
+
+    /* ── PHONE INPUT ───────────────────────────── */
+    .input-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted2);
+      margin-bottom: 8px;
+      letter-spacing: .3px;
+    }
+
+    .phone-group { display: flex; gap: 0; margin-bottom: 20px; }
+    .country-code {
+      display: flex; align-items: center; gap: 6px;
+      padding: 0 14px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-right: none;
+      border-radius: 12px 0 0 12px;
+      cursor: pointer;
+      font-size: 14px; font-weight: 600; color: var(--text);
+      white-space: nowrap;
+      min-width: 90px; height: 52px;
+      transition: border-color .2s;
+      user-select: none;
+    }
+    .country-code:hover { border-color: var(--border2); }
+    .country-code .chevron { color: var(--muted); font-size: 10px; margin-left: auto; }
+
+    .phone-number {
+      flex: 1; padding: 0 16px; height: 52px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-left: none;
+      border-radius: 0 12px 12px 0;
+      color: var(--text); font-size: 16px; font-family: 'Inter', sans-serif;
+      transition: border-color .2s;
+      outline: none;
+    }
+    .phone-number::placeholder { color: var(--muted); }
+    .phone-number:focus { border-color: var(--accent2); }
+
+    /* Country dropdown */
+    .country-dropdown {
+      position: absolute;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      padding: 6px;
+      width: 220px;
+      z-index: 200;
+      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+      animation: dropIn .2s ease;
+    }
+    @keyframes dropIn {
+      from { opacity: 0; transform: translateY(-8px) scale(.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .country-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px; color: var(--text);
+      transition: background .15s;
+    }
+    .country-option:hover { background: var(--card-b); }
+    .country-option .code { color: var(--accent3); font-weight: 600; margin-left: auto; }
+
+    /* ── INPUT STYLES ──────────────────────────── */
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .form-input::placeholder { color: var(--muted); }
+    .form-input:focus {
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.18);
+    }
+
+    /* ── BUTTONS ───────────────────────────────── */
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all .25s;
+      box-shadow: 0 8px 30px rgba(124,58,237,.35);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent, rgba(255,255,255,.1));
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 40px rgba(124,58,237,.5); }
+    .btn-primary:hover::after { opacity: 1; }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ── DIVIDER ───────────────────────────────── */
+    .divider {
+      display: flex; align-items: center; gap: 14px;
+      margin: 24px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── SOCIAL BUTTONS ────────────────────────── */
+    .social-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+    .btn-social {
+      display: flex; align-items: center; justify-content: center; gap: 9px;
+      padding: 13px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-social:hover { border-color: var(--border2); background: var(--card-b); }
+    .social-icon { font-size: 17px; }
+
+    /* ── FOOTER TEXT ───────────────────────────── */
+    .auth-footer {
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted2);
+      margin-top: 8px;
+    }
+    .auth-footer a { color: var(--accent3); text-decoration: none; font-weight: 600; }
+    .auth-footer a:hover { text-decoration: underline; }
+
+    /* ── OTP ───────────────────────────────────── */
+    .otp-group { display: flex; gap: 10px; justify-content: center; margin: 24px 0; }
+    .otp-box {
+      width: 52px; height: 60px;
+      text-align: center; font-size: 22px; font-weight: 700;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      transition: .15s;
+      outline: none;
+    }
+    .otp-box:focus {
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.2);
+    }
+    .otp-box.filled { border-color: var(--accent); background: rgba(124,58,237,.12); }
+
+    .otp-sent-text {
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted2);
+      margin-bottom: 4px;
+    }
+    .otp-sent-text strong { color: var(--text); }
+
+    .otp-actions {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 14px;
+    }
+    .link-btn {
+      background: none; border: none;
+      color: var(--accent3);
+      font-size: 13px; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      padding: 0;
+      transition: opacity .2s;
+    }
+    .link-btn:hover { opacity: .75; }
+    .link-btn:disabled { color: var(--muted); cursor: default; }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: none; border: none;
+      color: var(--muted2);
+      font-size: 14px; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      margin-bottom: 28px;
+      padding: 0;
+      transition: color .2s;
+    }
+    .back-btn:hover { color: var(--text); }
+
+    /* ── RIGHT BRAND PANEL ─────────────────────── */
+    .auth-brand-panel {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 52px;
+      background: linear-gradient(145deg, #0D0818 0%, #140D2B 40%, #1A0B2E 100%);
+    }
+
+    /* Multi-layer radial glow */
+    .auth-brand-panel::before {
+      content: '';
+      position: absolute;
+      top: -100px; left: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(124,58,237,.35) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .auth-brand-panel::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; right: -80px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(236,72,153,.25) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .brand-panel-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .brand-wordmark {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 72px;
+      font-weight: 700;
+      letter-spacing: -4px;
+      background: linear-gradient(135deg, #fff 20%, var(--accent2) 60%, var(--pink) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .brand-tagline {
+      font-size: 18px;
+      font-weight: 600;
+      color: rgba(255,255,255,.75);
+      margin-bottom: 48px;
+      letter-spacing: -.3px;
+    }
+
+    /* Feature highlights */
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 52px;
+      text-align: left;
+    }
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+      transition: transform .2s, background .2s;
+    }
+    .feature-item:hover { background: rgba(255,255,255,.09); transform: translateX(4px); }
+    .feature-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(124,58,237,.4), rgba(168,85,247,.3));
+      border: 1px solid rgba(124,58,237,.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .feature-text .ft-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .feature-text .ft-desc {
+      font-size: 12px;
+      color: rgba(255,255,255,.5);
+    }
+
+    /* ── FLOATING DECO CARDS ───────────────────── */
+    .deco-cards {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .deco-card {
+      position: absolute;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 20px;
+      padding: 14px 16px;
+      backdrop-filter: blur(10px);
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+      50%      { transform: translateY(-10px) rotate(var(--r, 0deg)); }
+    }
+
+    .deco-card-1 {
+      top: 12%; right: 6%;
+      --r: 6deg;
+      animation-delay: 0s;
+      width: 155px;
+    }
+    .deco-card-2 {
+      top: 38%; left: 4%;
+      --r: -5deg;
+      animation-delay: 1.4s;
+      width: 140px;
+    }
+    .deco-card-3 {
+      bottom: 18%; right: 8%;
+      --r: 4deg;
+      animation-delay: .7s;
+      width: 148px;
+    }
+
+    .deco-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      margin-bottom: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .deco-name { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+    .deco-sub { font-size: 11px; color: rgba(255,255,255,.5); }
+
+    /* AI badge */
+    .ai-badge {
+      position: absolute;
+      bottom: 28%; left: 6%;
+      --r: -3deg;
+      animation: float 3.5s ease-in-out infinite;
+      animation-delay: 2s;
+      background: linear-gradient(135deg, rgba(124,58,237,.6), rgba(236,72,153,.4));
+      border: 1px solid rgba(168,85,247,.5);
+      border-radius: 50px;
+      padding: 10px 18px;
+      backdrop-filter: blur(14px);
+      display: flex; align-items: center; gap: 9px;
+      white-space: nowrap;
+      z-index: 2;
+    }
+    .ai-badge-pct {
+      font-size: 22px; font-weight: 800;
+      background: linear-gradient(135deg, #fff, var(--accent3));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .ai-badge-text { font-size: 12px; color: rgba(255,255,255,.7); line-height: 1.3; }
+
+    /* ── THEME SWITCHER ────────────────────────── */
+    .theme-btn {
+      position: fixed;
+      top: 20px; right: 20px;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--card-b);
+      border: 1px solid var(--border2);
+      color: var(--accent3);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 999;
+      transition: all .2s;
+      backdrop-filter: blur(10px);
+    }
+    .theme-btn:hover { background: rgba(124,58,237,.2); transform: rotate(20deg); }
+
+    /* ── RESPONSIVE ────────────────────────────── */
+    @media (max-width: 900px) {
+      .auth-layout { grid-template-columns: 1fr; }
+      .auth-brand-panel { display: none; }
+      .auth-form-panel { padding: 100px 28px 48px; align-items: center; }
+      .auth-form-panel .top-nav { left: 28px; right: 28px; }
+      .form-container { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Theme switcher -->
+  <button class="theme-btn" onclick="cycleTheme()" title="Switch theme">◐</button>
+
+  <div class="auth-layout">
+
+    <!-- ════════════════════════════════════════
+         LEFT: FORM PANEL
+    ═════════════════════════════════════════ -->
+    <div class="auth-form-panel">
+      <div class="top-nav">
+        <a href="index.html" class="brand-logo">AURA</a>
+        <a href="index.html" class="back-home">← Back to home</a>
+      </div>
+
+      <div class="form-container">
+
+        <!-- ── STEP 1: PHONE ───────────────────── -->
+        <div id="step-phone" class="auth-step">
+          <h1 class="auth-heading">Welcome back</h1>
+          <p class="auth-subheading">Sign in to continue your journey</p>
+
+          <label class="input-label">Phone number</label>
+          <div class="phone-group" style="position:relative;">
+            <div class="country-code" id="country-btn" onclick="toggleCountryDropdown()">
+              <span id="country-flag">🇺🇸</span>
+              <span id="country-dial">+1</span>
+              <span class="chevron">▾</span>
+            </div>
+            <input
+              type="tel"
+              class="phone-number"
+              id="phone-input"
+              placeholder="(555) 000-0000"
+              oninput="formatPhone(this)"
+            />
+            <!-- Country dropdown -->
+            <div class="country-dropdown hidden" id="country-dropdown" style="top:56px;left:0;">
+              <div class="country-option" onclick="selectCountry('🇺🇸','+1','US')">
+                <span>🇺🇸</span> United States <span class="code">+1</span>
+              </div>
+              <div class="country-option" onclick="selectCountry('🇬🇧','+44','UK')">
+                <span>🇬🇧</span> United Kingdom <span class="code">+44</span>
+              </div>
+              <div class="country-option" onclick="selectCountry('🇨🇦','+1','CA')">
+                <span>🇨🇦</span> Canada <span class="code">+1</span>
+              </div>
+              <div class="country-option" onclick="selectCountry('🇦🇺','+61','AU')">
+                <span>🇦🇺</span> Australia <span class="code">+61</span>
+              </div>
+              <div class="country-option" onclick="selectCountry('🇩🇪','+49','DE')">
+                <span>🇩🇪</span> Germany <span class="code">+49</span>
+              </div>
+              <div class="country-option" onclick="selectCountry('🇫🇷','+33','FR')">
+                <span>🇫🇷</span> France <span class="code">+33</span>
+              </div>
+              <div class="country-option" onclick="selectCountry('🇯🇵','+81','JP')">
+                <span>🇯🇵</span> Japan <span class="code">+81</span>
+              </div>
+              <div class="country-option" onclick="selectCountry('🇮🇳','+91','IN')">
+                <span>🇮🇳</span> India <span class="code">+91</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-primary" style="margin-bottom:28px;" onclick="showOTPStep()">
+            Continue →
+          </button>
+
+          <div class="divider">or continue with</div>
+
+          <div class="social-btns">
+            <button class="btn-social">
+              <span class="social-icon">🍎</span> Apple
+            </button>
+            <button class="btn-social">
+              <span class="social-icon" style="font-style:normal;font-weight:800;font-family:'Inter',sans-serif;color:#4285F4;">G</span> Google
+            </button>
+          </div>
+
+          <p class="auth-footer">
+            New to AURA? <a href="signup.html">Create account →</a>
+          </p>
+        </div>
+
+        <!-- ── STEP 2: OTP ─────────────────────── -->
+        <div id="step-otp" class="auth-step hidden">
+          <button class="back-btn" onclick="showPhoneStep()">← Back</button>
+
+          <h1 class="auth-heading">Check your phone</h1>
+          <p class="auth-subheading" style="margin-bottom:24px;">
+            We sent a 6-digit code to your number
+          </p>
+          <p class="otp-sent-text">Code sent to <strong id="otp-display-phone">+1 (555) 012-3456</strong></p>
+
+          <div class="otp-group" id="otp-group">
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" oninput="otpInput(this,0)" onkeydown="otpKeydown(this,0,event)" />
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" oninput="otpInput(this,1)" onkeydown="otpKeydown(this,1,event)" />
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" oninput="otpInput(this,2)" onkeydown="otpKeydown(this,2,event)" />
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" oninput="otpInput(this,3)" onkeydown="otpKeydown(this,3,event)" />
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" oninput="otpInput(this,4)" onkeydown="otpKeydown(this,4,event)" />
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" oninput="otpInput(this,5)" onkeydown="otpKeydown(this,5,event)" />
+          </div>
+
+          <button class="btn-primary" style="margin-bottom:20px;" onclick="verifyOTP()">
+            Verify & Sign In
+          </button>
+
+          <div class="otp-actions">
+            <button class="link-btn" id="resend-btn" onclick="resendCode()" disabled>
+              Resend code (<span id="resend-timer">30</span>s)
+            </button>
+            <button class="link-btn" onclick="showPhoneStep()">Change number</button>
+          </div>
+        </div>
+
+      </div><!-- /form-container -->
+    </div><!-- /auth-form-panel -->
+
+    <!-- ════════════════════════════════════════
+         RIGHT: BRAND PANEL
+    ═════════════════════════════════════════ -->
+    <div class="auth-brand-panel">
+
+      <!-- Floating decorative match cards -->
+      <div class="deco-cards">
+        <div class="deco-card deco-card-1">
+          <div class="deco-avatar" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">🌸</div>
+          <div class="deco-name">Sophia, 26</div>
+          <div class="deco-sub">📍 2.3 miles away</div>
+          <div style="margin-top:8px;display:flex;align-items:center;gap:5px;">
+            <div style="flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.15);">
+              <div style="width:94%;height:100%;background:linear-gradient(90deg,#7C3AED,#EC4899);border-radius:4px;"></div>
+            </div>
+            <span style="font-size:11px;color:rgba(255,255,255,.7);font-weight:700;">94%</span>
+          </div>
+        </div>
+
+        <div class="deco-card deco-card-2">
+          <div class="deco-avatar" style="background:linear-gradient(135deg,#06B6D4,#7C3AED);">⚡</div>
+          <div class="deco-name">Alex, 29</div>
+          <div class="deco-sub">🎨 Designer</div>
+          <div style="margin-top:6px;font-size:11px;color:rgba(255,255,255,.5);">
+            🎵 Music &nbsp; ✈️ Travel
+          </div>
+        </div>
+
+        <div class="deco-card deco-card-3">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <div class="deco-avatar" style="background:linear-gradient(135deg,#EC4899,#F59E0B);width:30px;height:30px;font-size:14px;flex-shrink:0;margin-bottom:0;">✨</div>
+            <div>
+              <div class="deco-name" style="font-size:12px;">New match!</div>
+              <div class="deco-sub">Maya liked your profile</div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:rgba(255,255,255,.4);">just now</div>
+        </div>
+
+        <!-- AI compatibility badge -->
+        <div class="ai-badge">
+          <span style="font-size:22px;">🔮</span>
+          <div>
+            <div class="ai-badge-pct">96%</div>
+            <div class="ai-badge-text">compatibility<br>match</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="brand-panel-inner">
+        <div class="brand-wordmark">AURA</div>
+        <p class="brand-tagline">Find your person.<br>Powered by AI.</p>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-icon">🧠</div>
+            <div class="feature-text">
+              <div class="ft-title">Smart matching</div>
+              <div class="ft-desc">AI learns your preferences over time</div>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔮</div>
+            <div class="feature-text">
+              <div class="ft-title">Compatibility Score</div>
+              <div class="ft-desc">47 data points analyzed per match</div>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">✦</div>
+            <div class="feature-text">
+              <div class="ft-title">Real connections</div>
+              <div class="ft-desc">Not just swipes — meaningful bonds</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:center;gap:24px;">
+          <div style="text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:#fff;">2.8M+</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.45);">Active members</div>
+          </div>
+          <div style="width:1px;height:36px;background:rgba(255,255,255,.15);"></div>
+          <div style="text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:#fff;">94%</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.45);">Match accuracy</div>
+          </div>
+          <div style="width:1px;height:36px;background:rgba(255,255,255,.15);"></div>
+          <div style="text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:#fff;">48K</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.45);">Couples formed</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /auth-brand-panel -->
+
+  </div><!-- /auth-layout -->
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    /* ── Step management ── */
+    function showOTPStep() {
+      const phone = document.getElementById('phone-input').value.trim();
+      if (!phone) { document.getElementById('phone-input').focus(); return; }
+      const dial  = document.getElementById('country-dial').textContent;
+      document.getElementById('otp-display-phone').textContent = dial + ' ' + phone;
+      document.getElementById('step-phone').classList.add('hidden');
+      const stepOtp = document.getElementById('step-otp');
+      stepOtp.classList.remove('hidden');
+      stepOtp.classList.remove('auth-step');
+      void stepOtp.offsetWidth; // reflow for animation
+      stepOtp.classList.add('auth-step');
+      stepOtp.querySelector('.otp-box').focus();
+      startResendTimer();
+    }
+
+    function showPhoneStep() {
+      document.getElementById('step-otp').classList.add('hidden');
+      const stepPhone = document.getElementById('step-phone');
+      stepPhone.classList.remove('hidden');
+      stepPhone.classList.remove('auth-step');
+      void stepPhone.offsetWidth;
+      stepPhone.classList.add('auth-step');
+      clearInterval(window._resendInterval);
+    }
+
+    /* ── Phone formatting ── */
+    function formatPhone(input) {
+      let v = input.value.replace(/\D/g,'');
+      if (v.length > 10) v = v.slice(0,10);
+      if (v.length >= 7)       input.value = '(' + v.slice(0,3) + ') ' + v.slice(3,6) + '-' + v.slice(6);
+      else if (v.length >= 4)  input.value = '(' + v.slice(0,3) + ') ' + v.slice(3);
+      else if (v.length >= 1)  input.value = v;
+    }
+
+    /* ── Country picker ── */
+    function toggleCountryDropdown() {
+      document.getElementById('country-dropdown').classList.toggle('hidden');
+    }
+    function selectCountry(flag, dial) {
+      document.getElementById('country-flag').textContent = flag;
+      document.getElementById('country-dial').textContent = dial;
+      document.getElementById('country-dropdown').classList.add('hidden');
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#country-btn') && !e.target.closest('#country-dropdown')) {
+        const dd = document.getElementById('country-dropdown');
+        if (dd) dd.classList.add('hidden');
+      }
+    });
+
+    /* ── OTP input ── */
+    function otpInput(el, idx) {
+      const boxes = document.querySelectorAll('.otp-box');
+      const v = el.value.replace(/\D/g,'');
+      el.value = v;
+      if (v) {
+        el.classList.add('filled');
+        if (idx < 5) boxes[idx+1].focus();
+      } else {
+        el.classList.remove('filled');
+      }
+    }
+    function otpKeydown(el, idx, e) {
+      const boxes = document.querySelectorAll('.otp-box');
+      if (e.key === 'Backspace' && !el.value && idx > 0) boxes[idx-1].focus();
+      if (e.key === 'ArrowLeft'  && idx > 0) boxes[idx-1].focus();
+      if (e.key === 'ArrowRight' && idx < 5) boxes[idx+1].focus();
+    }
+
+    function verifyOTP() {
+      const boxes  = document.querySelectorAll('.otp-box');
+      const code   = [...boxes].map(b => b.value).join('');
+      if (code.length < 6) { boxes[code.length]?.focus(); return; }
+      // Animate success then redirect
+      const btn = document.querySelector('#step-otp .btn-primary');
+      btn.textContent = 'Signing in…';
+      btn.disabled = true;
+      setTimeout(() => { window.location.href = 'discover.html'; }, 1200);
+    }
+
+    /* ── Resend timer ── */
+    function startResendTimer() {
+      const btn  = document.getElementById('resend-btn');
+      const span = document.getElementById('resend-timer');
+      btn.disabled = true;
+      let sec = 30;
+      clearInterval(window._resendInterval);
+      window._resendInterval = setInterval(() => {
+        sec--;
+        span.textContent = sec;
+        if (sec <= 0) {
+          clearInterval(window._resendInterval);
+          btn.disabled = false;
+          btn.textContent = 'Resend code';
+        }
+      }, 1000);
+    }
+
+    function resendCode() {
+      const btn  = document.getElementById('resend-btn');
+      btn.innerHTML = 'Resend code (<span id="resend-timer">30</span>s)';
+      startResendTimer();
+    }
+
+    /* ── Theme cycle (fallback if theme.js not loaded) ── */
+    if (typeof cycleTheme === 'undefined') {
+      const themes = ['dark','light','neon'];
+      let ti = 0;
+      window.cycleTheme = () => {
+        ti = (ti + 1) % themes.length;
+        document.documentElement.setAttribute('data-theme', themes[ti]);
+      };
+    }
+  </script>
+</body>
+</html>
