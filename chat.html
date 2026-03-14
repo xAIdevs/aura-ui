@@ -11,32 +11,6 @@
   <link rel="stylesheet" href="css/animations.css" />
   <link rel="stylesheet" href="css/themes.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:      #0A0A0F;
-      --bg2:     #10101A;
-      --bg3:     #16162A;
-      --card:    rgba(255,255,255,.04);
-      --card-b:  rgba(255,255,255,.08);
-      --accent:  #7C3AED;
-      --accent2: #A855F7;
-      --accent3: #C084FC;
-      --pink:    #EC4899;
-      --cyan:    #06B6D4;
-      --green:   #10B981;
-      --gold:    #F59E0B;
-      --white:   #FFFFFF;
-      --text:    #F1F0FF;
-      --muted:   #6B6B8A;
-      --muted2:  #9896B0;
-      --border:  rgba(255,255,255,.07);
-      --border2: rgba(124,58,237,.35);
-      --glow:    0 0 40px rgba(124,58,237,.25);
-      --radius:  16px;
-      --radius2: 24px;
-    }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -1199,7 +1173,9 @@
           </div>
           <div class="ai-queue-body" id="aiQueueBody">
             <div class="queue-item">
-              <div class="queue-avatar" style="background:linear-gradient(135deg,#7C3AED,#06B6D4)">🌙</div>
+              <div class="queue-avatar" style="overflow:hidden;">
+                <img src="https://randomuser.me/api/portraits/women/7.jpg" class="photo-avatar" loading="lazy" alt="Elena W." style="width:100%;height:100%;object-fit:cover;display:block;" />
+              </div>
               <div class="queue-info">
                 <div class="queue-name">Elena W.</div>
                 <div class="queue-score">✦ 97% match · New!</div>
@@ -1207,7 +1183,9 @@
               <button class="say-hi-btn" onclick="sayHi('Elena')">Say Hi ✨</button>
             </div>
             <div class="queue-item">
-              <div class="queue-avatar" style="background:linear-gradient(135deg,#EC4899,#F59E0B)">🌺</div>
+              <div class="queue-avatar" style="overflow:hidden;">
+                <img src="https://randomuser.me/api/portraits/women/8.jpg" class="photo-avatar" loading="lazy" alt="Cora S." style="width:100%;height:100%;object-fit:cover;display:block;" />
+              </div>
               <div class="queue-info">
                 <div class="queue-name">Cora S.</div>
                 <div class="queue-score">✦ 93% match · New!</div>
@@ -1221,7 +1199,9 @@
 
         <!-- Conversation 1 — ACTIVE -->
         <div class="conv-item active has-unread" onclick="selectConv(this)">
-          <div class="conv-avatar" style="background:linear-gradient(135deg,#7C3AED,#EC4899)">💜</div>
+          <div class="conv-avatar" style="overflow:hidden;border-radius:14px;">
+            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="photo-avatar" loading="lazy" alt="Sophia M." style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
           <div class="conv-body">
             <div class="conv-name">Sophia M.</div>
             <div class="conv-preview">Loved your travel story ✈️</div>
@@ -1235,7 +1215,9 @@
 
         <!-- Conversation 2 -->
         <div class="conv-item" onclick="selectConv(this)">
-          <div class="conv-avatar" style="background:linear-gradient(135deg,#A855F7,#06B6D4)">🔮</div>
+          <div class="conv-avatar" style="overflow:hidden;border-radius:14px;">
+            <img src="https://randomuser.me/api/portraits/women/2.jpg" class="photo-avatar" loading="lazy" alt="Zara K." style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
           <div class="conv-body">
             <div class="conv-name">Zara K.</div>
             <div class="conv-preview">Are you free this weekend?</div>
@@ -1249,8 +1231,8 @@
 
         <!-- Conversation 3 — online, unread -->
         <div class="conv-item has-unread" onclick="selectConv(this)">
-          <div class="conv-avatar" style="background:linear-gradient(135deg,#EC4899,#F59E0B)">
-            🌸
+          <div class="conv-avatar" style="overflow:hidden;border-radius:14px;">
+            <img src="https://randomuser.me/api/portraits/women/3.jpg" class="photo-avatar" loading="lazy" alt="Priya S." style="width:100%;height:100%;object-fit:cover;display:block;" />
             <span class="online-dot"></span>
           </div>
           <div class="conv-body">
@@ -1266,7 +1248,9 @@
 
         <!-- Conversation 4 -->
         <div class="conv-item" onclick="selectConv(this)">
-          <div class="conv-avatar" style="background:linear-gradient(135deg,#10B981,#06B6D4)">🎷</div>
+          <div class="conv-avatar" style="overflow:hidden;border-radius:14px;">
+            <img src="https://randomuser.me/api/portraits/women/4.jpg" class="photo-avatar" loading="lazy" alt="Aisha R." style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
           <div class="conv-body">
             <div class="conv-name">Aisha R.</div>
             <div class="conv-preview">I love jazz too! 🎷</div>
@@ -1280,7 +1264,9 @@
 
         <!-- Conversation 5 -->
         <div class="conv-item" onclick="selectConv(this)">
-          <div class="conv-avatar" style="background:linear-gradient(135deg,#F59E0B,#EC4899)">🐶</div>
+          <div class="conv-avatar" style="overflow:hidden;border-radius:14px;">
+            <img src="https://randomuser.me/api/portraits/women/5.jpg" class="photo-avatar" loading="lazy" alt="Luna V." style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
           <div class="conv-body">
             <div class="conv-name">Luna V.</div>
             <div class="conv-preview">Dog moms unite 🐶</div>
@@ -1294,8 +1280,8 @@
 
         <!-- Conversation 6 — online -->
         <div class="conv-item" onclick="selectConv(this)">
-          <div class="conv-avatar" style="background:linear-gradient(135deg,#06B6D4,#7C3AED)">
-            ☕
+          <div class="conv-avatar" style="overflow:hidden;border-radius:14px;">
+            <img src="https://randomuser.me/api/portraits/women/6.jpg" class="photo-avatar" loading="lazy" alt="Mei L." style="width:100%;height:100%;object-fit:cover;display:block;" />
             <span class="online-dot"></span>
           </div>
           <div class="conv-body">
@@ -1311,7 +1297,9 @@
 
         <!-- Conversation 7 -->
         <div class="conv-item" onclick="selectConv(this)">
-          <div class="conv-avatar" style="background:linear-gradient(135deg,#C084FC,#F59E0B)">🌴</div>
+          <div class="conv-avatar" style="overflow:hidden;border-radius:14px;">
+            <img src="https://randomuser.me/api/portraits/women/7.jpg" class="photo-avatar" loading="lazy" alt="Aria T." style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
           <div class="conv-body">
             <div class="conv-name">Aria T.</div>
             <div class="conv-preview">Just got back from Bali 🌴</div>
@@ -1325,7 +1313,9 @@
 
         <!-- Conversation 8 -->
         <div class="conv-item" onclick="selectConv(this)">
-          <div class="conv-avatar" style="background:linear-gradient(135deg,#EC4899,#A855F7)">🎵</div>
+          <div class="conv-avatar" style="overflow:hidden;border-radius:14px;">
+            <img src="https://randomuser.me/api/portraits/women/8.jpg" class="photo-avatar" loading="lazy" alt="Nova K." style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
           <div class="conv-body">
             <div class="conv-name">Nova K.</div>
             <div class="conv-preview">Your music taste 🎵</div>
@@ -1345,13 +1335,20 @@
 
       <!-- Chat Header -->
       <div class="chat-header">
-        <div class="chat-header-avatar">
-          💜
+        <div class="chat-header-avatar" style="overflow:hidden;">
+          <img src="https://randomuser.me/api/portraits/women/1.jpg" class="photo-avatar" loading="lazy" alt="Sophia M." style="width:100%;height:100%;object-fit:cover;display:block;" />
           <span class="online-dot"></span>
         </div>
         <div class="chat-header-info">
           <div class="chat-header-name">Sophia M.</div>
           <div class="chat-header-status">Online now</div>
+          <div class="connection-bar" style="margin-top:4px; display:flex; align-items:center; gap:8px;">
+            <span style="font-size:11px; color:var(--muted2);">Connection</span>
+            <div style="flex:1; height:4px; background:var(--card-b); border-radius:99px; overflow:hidden; max-width:80px;">
+              <div style="width:87%; height:100%; background:linear-gradient(90deg,var(--accent),var(--pink)); border-radius:99px;"></div>
+            </div>
+            <span style="font-size:11px; font-weight:700; color:var(--accent3);">87%</span>
+          </div>
         </div>
         <div class="chat-match-badge">✦ 94% match</div>
         <div class="chat-header-actions">
@@ -1515,7 +1512,9 @@
       <!-- Mini profile header -->
       <div class="rp-profile-head">
         <div class="rp-avatar-wrap">
-          <div class="rp-avatar">💜</div>
+          <div class="rp-avatar" style="overflow:hidden;padding:0;">
+            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="photo-avatar" loading="lazy" alt="Sophia M." style="width:100%;height:100%;object-fit:cover;display:block;border-radius:22px;" />
+          </div>
           <span class="rp-online-badge"></span>
         </div>
         <div>

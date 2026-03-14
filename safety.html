@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safety Center – AURA AI Dating</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    .safety-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+    @media(max-width:900px){ .safety-grid { grid-template-columns:1fr; } }
+    .step-circle {
+      width:36px; height:36px; border-radius:50%; flex-shrink:0;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#fff; font-size:14px; font-weight:800;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .resource-card {
+      background:rgba(239,68,68,.07); border:1px solid rgba(239,68,68,.2);
+      border-radius:var(--radius3); padding:16px;
+    }
+    .lnav-link { font-size:14px;font-weight:500;color:var(--muted2);text-decoration:none;transition:color .2s; }
+    .lnav-link:hover { color:var(--text); }
+    .guidelines-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    @media(max-width:900px){ .guidelines-grid { grid-template-columns:1fr 1fr; } }
+    @media(max-width:600px){ .guidelines-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body data-page="safety">
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <!-- Nav -->
+  <nav class="landing-nav">
+    <a href="index.html" style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-1px;text-decoration:none;" class="grad-text">AURA</a>
+    <div class="nav-links" style="display:flex;gap:28px;align-items:center;">
+      <a href="index.html"           class="lnav-link">Home</a>
+      <a href="ai-how-it-works.html" class="lnav-link">AI Tech</a>
+      <a href="premium.html"         class="lnav-link">Premium</a>
+      <a href="events.html"          class="lnav-link">Events</a>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <button class="nav-hamburger" aria-label="Menu" aria-expanded="false">☰</button>
+      <div id="theme-switcher"></div>
+      <a href="login.html"  class="btn btn-ghost btn-sm">Sign In</a>
+      <a href="signup.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+  </nav>
+  <div class="nav-mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="ai-how-it-works.html">AI Technology</a>
+    <a href="premium.html">Premium</a>
+    <a href="events.html">Events</a>
+    <a href="login.html">Sign In</a>
+  </div>
+
+  <div class="page-layout">
+
+    <!-- Hero -->
+    <section class="page-section" style="padding-top:120px;text-align:center;">
+      <div class="page-section-inner">
+        <div style="font-size:48px;margin-bottom:20px;" class="animate-scale-in">🛡️</div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);margin-bottom:18px;" class="animate-fade-up">Safety First</div>
+        <h1 style="font-size:var(--display-1,clamp(2.5rem,6vw,4.5rem));font-weight:800;margin-bottom:20px;line-height:1.05;" class="animate-fade-up delay-100">
+          Your safety is our<br><span class="grad-text">top priority</span>
+        </h1>
+        <p style="font-size:clamp(1rem,1.8vw,1.2rem);color:var(--muted2);line-height:1.7;max-width:580px;margin:0 auto 48px;" class="animate-fade-up delay-200">
+          AURA is built with safety at its foundation — from verified photos to encrypted conversations and 24/7 human moderation.
+        </p>
+        <div style="display:flex;gap:28px;justify-content:center;flex-wrap:wrap;" class="animate-fade-up delay-300">
+          <div style="text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:var(--green);">99.7%</div>
+            <div style="font-size:12px;color:var(--muted2);">Report resolution rate</div>
+          </div>
+          <div style="width:1px;background:var(--border);"></div>
+          <div style="text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:var(--green);">&lt;2hr</div>
+            <div style="font-size:12px;color:var(--muted2);">Avg response to reports</div>
+          </div>
+          <div style="width:1px;background:var(--border);"></div>
+          <div style="text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:var(--green);">24/7</div>
+            <div style="font-size:12px;color:var(--muted2);">Human moderation team</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Safety Features -->
+    <section class="page-section" style="padding-top:0;">
+      <div class="page-section-inner">
+        <h2 style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;text-align:center;margin-bottom:40px;">8 Layers of Protection</h2>
+        <div class="safety-grid">
+
+          <div class="safety-item animate-on-scroll">
+            <div class="safety-icon">📸</div>
+            <div>
+              <div class="safety-title">Photo Verification</div>
+              <div class="safety-desc">All profile photos are verified using AI facial recognition to prevent fake profiles and catfishing. Verified users get a ✓ badge.</div>
+            </div>
+          </div>
+
+          <div class="safety-item animate-on-scroll delay-50">
+            <div class="safety-icon">🔍</div>
+            <div>
+              <div class="safety-title">Background Check</div>
+              <div class="safety-desc">Optional but encouraged — run a background check through our partner Checkr to verify identity and screen for registered sex offenders.</div>
+            </div>
+          </div>
+
+          <div class="safety-item animate-on-scroll delay-100">
+            <div class="safety-icon">🕶</div>
+            <div>
+              <div class="safety-title">Incognito Mode</div>
+              <div class="safety-desc">Browse profiles privately with AURA Pro. Control who can see that you've visited their profile, on your terms.</div>
+            </div>
+          </div>
+
+          <div class="safety-item animate-on-scroll delay-150">
+            <div class="safety-icon">🚫</div>
+            <div>
+              <div class="safety-title">Block &amp; Report</div>
+              <div class="safety-desc">Block anyone instantly from their profile or a conversation. Reports are reviewed by our human moderation team within 2 hours.</div>
+            </div>
+          </div>
+
+          <div class="safety-item animate-on-scroll delay-200">
+            <div class="safety-icon">📍</div>
+            <div>
+              <div class="safety-title">Safe Meeting Guide</div>
+              <div class="safety-desc">Built-in guide for safe first meetings — public venue suggestions, share your plans feature, and check-in reminders sent to your emergency contact.</div>
+            </div>
+          </div>
+
+          <div class="safety-item animate-on-scroll delay-250">
+            <div class="safety-icon">🆘</div>
+            <div>
+              <div class="safety-title">Emergency Contacts</div>
+              <div class="safety-desc">Add up to 3 trusted contacts. They receive your live location automatically when you activate the safety check-in for a date.</div>
+            </div>
+          </div>
+
+          <div class="safety-item animate-on-scroll delay-300">
+            <div class="safety-icon">🔒</div>
+            <div>
+              <div class="safety-title">Safe Message Filter</div>
+              <div class="safety-desc">AI automatically detects and filters threatening, harassing, or inappropriate messages before they reach your inbox — with full context preserved for reporting.</div>
+            </div>
+          </div>
+
+          <div class="safety-item animate-on-scroll delay-350">
+            <div class="safety-icon">👁</div>
+            <div>
+              <div class="safety-title">Location Privacy</div>
+              <div class="safety-desc">Your exact location is never shown. We only display distance in miles/km. Your neighborhood and home address are never stored or shared.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- How to Report -->
+    <section class="page-section" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+      <div class="page-section-inner">
+        <div class="two-col-feature">
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent3);margin-bottom:16px;">How to Report</div>
+            <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;margin-bottom:24px;">Reporting is<br>fast and easy</h2>
+            <div style="display:flex;flex-direction:column;gap:20px;">
+              <div style="display:flex;gap:16px;align-items:flex-start;">
+                <div class="step-circle">1</div>
+                <div>
+                  <div style="font-size:15px;font-weight:700;margin-bottom:4px;">Tap the ⋯ menu</div>
+                  <div style="font-size:14px;color:var(--muted2);">On any profile or in a conversation, tap the three-dot menu in the top right corner.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:16px;align-items:flex-start;">
+                <div class="step-circle">2</div>
+                <div>
+                  <div style="font-size:15px;font-weight:700;margin-bottom:4px;">Select "Report" or "Block"</div>
+                  <div style="font-size:14px;color:var(--muted2);">Choose the appropriate action. Blocking immediately prevents any contact, reporting sends a review request.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:16px;align-items:flex-start;">
+                <div class="step-circle">3</div>
+                <div>
+                  <div style="font-size:15px;font-weight:700;margin-bottom:4px;">Choose a reason</div>
+                  <div style="font-size:14px;color:var(--muted2);">Select the category that best describes the issue. The more detail you add, the faster our team can act.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:16px;align-items:flex-start;">
+                <div class="step-circle">4</div>
+                <div>
+                  <div style="font-size:15px;font-weight:700;margin-bottom:4px;">We investigate</div>
+                  <div style="font-size:14px;color:var(--muted2);">Our moderation team reviews your report within 2 hours and takes action — from warning to permanent ban.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div class="resource-card">
+              <div style="font-size:18px;margin-bottom:8px;">🆘 Emergency</div>
+              <div style="font-size:14px;font-weight:700;color:var(--red);margin-bottom:6px;">If you are in immediate danger</div>
+              <div style="font-size:13px;color:var(--muted2);">Call <strong style="color:var(--text);">911</strong> or your local emergency number immediately. AURA's safety team is not a substitute for emergency services.</div>
+            </div>
+            <div class="ai-insight-card">
+              <div class="ai-insight-label">📞 Safety Hotlines</div>
+              <div style="font-size:13px;color:var(--text2);line-height:1.7;">
+                <strong>National DV Hotline:</strong> 1-800-799-7233<br>
+                <strong>RAINN:</strong> 1-800-656-4673<br>
+                <strong>Crisis Text Line:</strong> Text HOME to 741741
+              </div>
+            </div>
+            <div class="g-card" style="padding:16px;">
+              <div style="font-size:14px;font-weight:700;margin-bottom:8px;">📬 Safety Team Email</div>
+              <div style="font-size:13px;color:var(--muted2);">For non-urgent safety concerns: <span style="color:var(--accent3);">safety@aura.app</span></div>
+              <div style="font-size:12px;color:var(--muted);margin-top:6px;">Response time: within 4 hours</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Guidelines -->
+    <section class="page-section">
+      <div class="page-section-inner">
+        <h2 style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;text-align:center;margin-bottom:40px;">Community Guidelines</h2>
+        <div class="guidelines-grid">
+          <div class="g-card" style="padding:18px;">
+            <div style="font-size:24px;margin-bottom:10px;">✅</div>
+            <h3 style="font-size:15px;font-weight:700;color:var(--green);margin-bottom:6px;">Be Authentic</h3>
+            <p style="font-size:13px;color:var(--muted2);line-height:1.55;">Use real photos and honest information. Catfishing and fake profiles are permanently banned.</p>
+          </div>
+          <div class="g-card" style="padding:18px;">
+            <div style="font-size:24px;margin-bottom:10px;">🤝</div>
+            <h3 style="font-size:15px;font-weight:700;color:var(--green);margin-bottom:6px;">Be Respectful</h3>
+            <p style="font-size:13px;color:var(--muted2);line-height:1.55;">Treat everyone with kindness. Harassment, hate speech, and discrimination are zero-tolerance offenses.</p>
+          </div>
+          <div class="g-card" style="padding:18px;">
+            <div style="font-size:24px;margin-bottom:10px;">🔒</div>
+            <h3 style="font-size:15px;font-weight:700;color:var(--green);margin-bottom:6px;">Protect Privacy</h3>
+            <p style="font-size:13px;color:var(--muted2);line-height:1.55;">Never share other users' photos, contact info, or private messages outside of AURA.</p>
+          </div>
+          <div class="g-card" style="padding:18px;">
+            <div style="font-size:24px;margin-bottom:10px;">🚫</div>
+            <h3 style="font-size:15px;font-weight:700;color:var(--red);margin-bottom:6px;">No Solicitation</h3>
+            <p style="font-size:13px;color:var(--muted2);line-height:1.55;">No spam, scams, promotional content, or solicitation of any kind. Violations result in immediate removal.</p>
+          </div>
+          <div class="g-card" style="padding:18px;">
+            <div style="font-size:24px;margin-bottom:10px;">🔞</div>
+            <h3 style="font-size:15px;font-weight:700;color:var(--red);margin-bottom:6px;">Adults Only</h3>
+            <p style="font-size:13px;color:var(--muted2);line-height:1.55;">AURA is strictly for users 18+. Attempting to connect with minors results in permanent ban and is reported to authorities.</p>
+          </div>
+          <div class="g-card" style="padding:18px;">
+            <div style="font-size:24px;margin-bottom:10px;">💬</div>
+            <h3 style="font-size:15px;font-weight:700;color:var(--green);margin-bottom:6px;">Honest Intentions</h3>
+            <p style="font-size:13px;color:var(--muted2);line-height:1.55;">Be upfront about what you're looking for. AURA celebrates all relationship types — just be honest about yours.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="page-section" style="background:var(--bg2);border-top:1px solid var(--border);">
+      <div class="page-section-inner" style="max-width:560px;margin:0 auto;text-align:center;">
+        <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);font-weight:800;margin-bottom:12px;">Contact Safety Team</h2>
+        <p style="color:var(--muted2);margin-bottom:32px;font-size:14px;">Have a safety concern that doesn't fit the in-app report form? Reach out directly.</p>
+        <div style="text-align:left;">
+          <div class="form-group" style="margin-bottom:16px;">
+            <label class="form-label">Your email</label>
+            <input class="form-input" type="email" placeholder="you@email.com" aria-label="Your email">
+          </div>
+          <div class="form-group" style="margin-bottom:16px;">
+            <label class="form-label">Subject</label>
+            <select class="form-input" aria-label="Subject">
+              <option>Report a user</option>
+              <option>Report a bug / vulnerability</option>
+              <option>Account safety question</option>
+              <option>Other safety concern</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:24px;">
+            <label class="form-label">Details</label>
+            <textarea class="form-input" rows="4" placeholder="Please describe your concern in as much detail as possible..." aria-label="Details" style="resize:vertical;"></textarea>
+          </div>
+          <button class="btn btn-primary w-100">Send to Safety Team</button>
+          <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:12px;">We respond within 4 hours. For emergencies, call 911.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background:var(--bg2);border-top:1px solid var(--border);padding:40px 0;">
+      <div class="page-section-inner" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;" class="grad-text">AURA</span>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;">
+          <a href="ai-how-it-works.html" style="font-size:13px;color:var(--muted2);text-decoration:none;">AI Technology</a>
+          <a href="premium.html"         style="font-size:13px;color:var(--muted2);text-decoration:none;">Premium</a>
+          <a href="safety.html"          style="font-size:13px;color:var(--accent3);text-decoration:none;font-weight:600;">Safety</a>
+          <a href="events.html"          style="font-size:13px;color:var(--muted2);text-decoration:none;">Events</a>
+        </div>
+        <span style="font-size:12px;color:var(--muted);">© 2026 AURA Technologies, Inc.</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

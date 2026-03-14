@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications – AURA AI Dating</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+</head>
+<body data-page="notifications">
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <aside class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html"      class="nav-item" data-tip="Discover">🔥</a>
+    <a href="matches.html"       class="nav-item" data-tip="Matches">💜</a>
+    <a href="chat.html"          class="nav-item" data-tip="Chat">💬</a>
+    <a href="search.html"        class="nav-item" data-tip="Search">🔍</a>
+    <a href="events.html"        class="nav-item" data-tip="Events">🎉</a>
+    <div class="nav-divider"></div>
+    <a href="notifications.html" class="nav-item active" data-tip="Notifications">🔔</a>
+    <div class="nav-divider"></div>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">
+      <img src="https://randomuser.me/api/portraits/women/10.jpg" class="photo-avatar" loading="lazy" alt="My profile">
+    </a>
+  </aside>
+
+  <main class="app-layout no-right">
+    <div class="panel-center" style="max-width:700px;margin:0 auto;">
+      <div class="topbar">
+        <div>
+          <h1 class="page-title">Notifications</h1>
+          <span style="font-size:13px;color:var(--muted2);">
+            <span class="notif-badge-count" style="display:inline-block;background:var(--accent2);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-right:6px;">5</span>
+            unread
+          </span>
+        </div>
+        <button class="btn btn-ghost btn-sm" data-action="mark-all-read">Mark all read</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="scroll-area-x" style="margin-bottom:24px;">
+        <div style="display:flex;gap:6px;padding-bottom:4px;">
+          <button class="filter-chip notif-tab active" data-tab="all">All</button>
+          <button class="filter-chip notif-tab" data-tab="matches">Matches</button>
+          <button class="filter-chip notif-tab" data-tab="messages">Messages</button>
+          <button class="filter-chip notif-tab" data-tab="ai">AI Insights</button>
+          <button class="filter-chip notif-tab" data-tab="system">System</button>
+        </div>
+      </div>
+
+      <!-- Today -->
+      <div class="section-divider">Today</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;">
+
+        <div class="notif-item unread" data-category="matches">
+          <div class="notif-avatar">
+            <img src="https://randomuser.me/api/portraits/women/1.jpg" loading="lazy" alt="Sofia">
+          </div>
+          <div class="notif-content">
+            <div class="notif-title">New Match — Sofia M. 💜</div>
+            <div class="notif-body">You and Sofia both liked each other! AURA chemistry score: 94%</div>
+            <div class="notif-time">2 min ago</div>
+          </div>
+          <div class="notif-dot"></div>
+        </div>
+
+        <div class="notif-item unread" data-category="ai">
+          <div class="notif-icon">🧠</div>
+          <div class="notif-content">
+            <div class="notif-title">AURA Brain Weekly Report</div>
+            <div class="notif-body">Your compatibility report is ready — 3 exceptional matches found this week</div>
+            <div class="notif-time">45 min ago</div>
+          </div>
+          <div class="notif-dot"></div>
+        </div>
+
+        <div class="notif-item unread" data-category="messages">
+          <div class="notif-avatar">
+            <img src="https://randomuser.me/api/portraits/women/2.jpg" loading="lazy" alt="Zoe">
+          </div>
+          <div class="notif-content">
+            <div class="notif-title">Zoe K. sent you a message</div>
+            <div class="notif-body">"Hey! I noticed we both love hiking in Yosemite..."</div>
+            <div class="notif-time">1 hr ago</div>
+          </div>
+          <div class="notif-dot"></div>
+        </div>
+
+        <div class="notif-item unread" data-category="matches">
+          <div class="notif-avatar">
+            <img src="https://randomuser.me/api/portraits/women/3.jpg" loading="lazy" alt="Maya">
+          </div>
+          <div class="notif-content">
+            <div class="notif-title">Maya R. liked your profile</div>
+            <div class="notif-body">AURA detected 89% compatibility — view your full report</div>
+            <div class="notif-time">3 hr ago</div>
+          </div>
+          <div class="notif-dot"></div>
+        </div>
+
+        <div class="notif-item" data-category="ai">
+          <div class="notif-icon">✨</div>
+          <div class="notif-content">
+            <div class="notif-title">Conversation tip ready</div>
+            <div class="notif-body">AURA has a personalized ice-breaker ready for your chat with Sofia</div>
+            <div class="notif-time">5 hr ago</div>
+          </div>
+        </div>
+
+        <div class="notif-item unread" data-category="system">
+          <div class="notif-icon">🛡️</div>
+          <div class="notif-content">
+            <div class="notif-title">Profile photo verified</div>
+            <div class="notif-body">Your profile photo has been successfully verified — your profile now shows a ✓ badge</div>
+            <div class="notif-time">6 hr ago</div>
+          </div>
+          <div class="notif-dot"></div>
+        </div>
+
+      </div>
+
+      <!-- Yesterday -->
+      <div class="section-divider">Yesterday</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;">
+
+        <div class="notif-item" data-category="messages">
+          <div class="notif-avatar">
+            <img src="https://randomuser.me/api/portraits/women/4.jpg" loading="lazy" alt="Lena">
+          </div>
+          <div class="notif-content">
+            <div class="notif-title">Lena P. replied to you</div>
+            <div class="notif-body">"That sounds amazing, I'd love to try that restaurant!"</div>
+            <div class="notif-time">Yesterday, 8:42 PM</div>
+          </div>
+        </div>
+
+        <div class="notif-item" data-category="matches">
+          <div class="notif-avatar">
+            <img src="https://randomuser.me/api/portraits/women/5.jpg" loading="lazy" alt="Mia">
+          </div>
+          <div class="notif-content">
+            <div class="notif-title">Mia T. super liked you ⭐</div>
+            <div class="notif-body">Stand out — Mia is very interested. 85% AURA chemistry predicted.</div>
+            <div class="notif-time">Yesterday, 3:15 PM</div>
+          </div>
+        </div>
+
+        <div class="notif-item" data-category="system">
+          <div class="notif-icon">🎉</div>
+          <div class="notif-content">
+            <div class="notif-title">7-Day streak!</div>
+            <div class="notif-body">You've been active for 7 days in a row. You earned +50 AURA points!</div>
+            <div class="notif-time">Yesterday, 12:00 PM</div>
+          </div>
+        </div>
+
+        <div class="notif-item" data-category="ai">
+          <div class="notif-icon">📊</div>
+          <div class="notif-content">
+            <div class="notif-title">Profile attractiveness updated</div>
+            <div class="notif-body">Adding your hiking photos boosted your match rate by 34% this week</div>
+            <div class="notif-time">Yesterday, 9:00 AM</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- This week -->
+      <div class="section-divider">This week</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:40px;">
+
+        <div class="notif-item" data-category="ai">
+          <div class="notif-icon">🎯</div>
+          <div class="notif-content">
+            <div class="notif-title">Personality vector refined</div>
+            <div class="notif-body">AURA updated your personality model — your matches are now 18% more accurate</div>
+            <div class="notif-time">Mon, 9:00 AM</div>
+          </div>
+        </div>
+
+        <div class="notif-item" data-category="system">
+          <div class="notif-icon">💎</div>
+          <div class="notif-content">
+            <div class="notif-title">Upgrade to AURA+</div>
+            <div class="notif-body">See who liked you, unlock unlimited matches, and get AI-powered conversation coaching</div>
+            <div class="notif-time">Sun, 10:00 AM</div>
+          </div>
+        </div>
+
+        <div class="notif-item" data-category="matches">
+          <div class="notif-avatar">
+            <img src="https://randomuser.me/api/portraits/women/6.jpg" loading="lazy" alt="Aria">
+          </div>
+          <div class="notif-content">
+            <div class="notif-title">Aria V. viewed your profile</div>
+            <div class="notif-body">83% AURA chemistry — upgrade to see who's interested</div>
+            <div class="notif-time">Sat, 7:30 PM</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

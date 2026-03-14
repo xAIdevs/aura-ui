@@ -13,29 +13,6 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg:      #0A0A0F;
-      --bg2:     #10101A;
-      --bg3:     #16162A;
-      --card:    rgba(255,255,255,.04);
-      --card-b:  rgba(255,255,255,.08);
-      --accent:  #7C3AED;
-      --accent2: #A855F7;
-      --accent3: #C084FC;
-      --pink:    #EC4899;
-      --cyan:    #06B6D4;
-      --green:   #10B981;
-      --gold:    #F59E0B;
-      --text:    #F1F0FF;
-      --muted:   #6B6B8A;
-      --muted2:  #9896B0;
-      --border:  rgba(255,255,255,.07);
-      --border2: rgba(124,58,237,.35);
-      --glow:    0 0 40px rgba(124,58,237,.25);
-      --radius:  16px;
-      --radius2: 24px;
-    }
-
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', sans-serif;
@@ -808,6 +785,32 @@
         </div>
       </div>
 
+      <!-- AI Daily Pick -->
+      <div class="g-card" style="margin-bottom:24px; padding:0; overflow:hidden; background:linear-gradient(135deg,rgba(var(--accent-rgb),.12),rgba(var(--pink-rgb),.08)); border-color:rgba(var(--accent-rgb),.25);">
+        <div style="padding:16px 20px 0;">
+          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--accent3); margin-bottom:12px;">✨ AI Daily Pick</div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:56px; height:56px; border-radius:50%; overflow:hidden; flex-shrink:0; border:2px solid rgba(var(--accent-rgb),.4);">
+              <img src="https://randomuser.me/api/portraits/women/3.jpg" class="photo-avatar" loading="lazy" alt="Daily pick" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div>
+              <div style="font-size:16px; font-weight:700; color:var(--text);">Sofia, 26</div>
+              <div style="font-size:13px; color:var(--muted2);">98% compatibility · 2 mi away</div>
+            </div>
+            <a href="profile.html" class="btn btn-primary btn-sm" style="margin-left:auto;">View</a>
+          </div>
+        </div>
+        <div style="height:4px; background:linear-gradient(90deg,var(--accent),var(--pink)); margin-top:16px;"></div>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;">
+        <button class="filter-chip active">All Matches</button>
+        <button class="filter-chip">New</button>
+        <button class="filter-chip">Active</button>
+        <button class="filter-chip">High Compatibility</button>
+      </div>
+
       <!-- All Matches Section -->
       <div class="section-label">All Matches</div>
 
@@ -816,8 +819,8 @@
 
         <!-- Card 1 -->
         <a href="profile.html" class="match-card-grid">
-          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#7C3AED 0%,#EC4899 60%,#F59E0B 100%)">
-            🌸
+          <div class="mc-avatar-area">
+            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="photo-avatar" loading="lazy" alt="Sofia" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
             <div class="mc-score high">⚡ 97%</div>
             <div class="mc-online"></div>
             <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
@@ -839,8 +842,8 @@
 
         <!-- Card 2 -->
         <a href="profile.html" class="match-card-grid">
-          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#06B6D4 0%,#7C3AED 60%,#A855F7 100%)">
-            🌊
+          <div class="mc-avatar-area">
+            <img src="https://randomuser.me/api/portraits/women/2.jpg" class="photo-avatar" loading="lazy" alt="Mia" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
             <div class="mc-score high">⚡ 94%</div>
             <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
           </div>
@@ -860,8 +863,8 @@
 
         <!-- Card 3 -->
         <a href="profile.html" class="match-card-grid">
-          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#10B981 0%,#06B6D4 50%,#7C3AED 100%)">
-            🌿
+          <div class="mc-avatar-area">
+            <img src="https://randomuser.me/api/portraits/women/4.jpg" class="photo-avatar" loading="lazy" alt="Aria" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
             <div class="mc-score mid">✨ 91%</div>
             <div class="mc-online"></div>
             <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
@@ -882,8 +885,8 @@
 
         <!-- Card 4 -->
         <a href="profile.html" class="match-card-grid">
-          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#F59E0B 0%,#EC4899 60%,#7C3AED 100%)">
-            🌻
+          <div class="mc-avatar-area">
+            <img src="https://randomuser.me/api/portraits/women/5.jpg" class="photo-avatar" loading="lazy" alt="Luna" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
             <div class="mc-score mid">✨ 89%</div>
             <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
           </div>
@@ -903,8 +906,8 @@
 
         <!-- Card 5 -->
         <a href="profile.html" class="match-card-grid">
-          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#A855F7 0%,#06B6D4 60%,#10B981 100%)">
-            🦋
+          <div class="mc-avatar-area">
+            <img src="https://randomuser.me/api/portraits/women/6.jpg" class="photo-avatar" loading="lazy" alt="Zara" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
             <div class="mc-score mid">✨ 87%</div>
             <div class="mc-online"></div>
             <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
@@ -925,8 +928,8 @@
 
         <!-- Card 6 -->
         <a href="profile.html" class="match-card-grid">
-          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#EC4899 0%,#F59E0B 60%,#10B981 100%)">
-            🌺
+          <div class="mc-avatar-area">
+            <img src="https://randomuser.me/api/portraits/women/7.jpg" class="photo-avatar" loading="lazy" alt="Nadia" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
             <div class="mc-score mid">✨ 85%</div>
             <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
           </div>
@@ -946,8 +949,8 @@
 
         <!-- Card 7 -->
         <a href="profile.html" class="match-card-grid">
-          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#7C3AED 0%,#06B6D4 60%,#EC4899 100%)">
-            🌙
+          <div class="mc-avatar-area">
+            <img src="https://randomuser.me/api/portraits/women/8.jpg" class="photo-avatar" loading="lazy" alt="Cleo" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
             <div class="mc-score mid">✨ 83%</div>
             <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
           </div>
@@ -967,8 +970,8 @@
 
         <!-- Card 8 -->
         <a href="profile.html" class="match-card-grid">
-          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#10B981 0%,#F59E0B 60%,#EC4899 100%)">
-            🌷
+          <div class="mc-avatar-area">
+            <img src="https://randomuser.me/api/portraits/women/9.jpg" class="photo-avatar" loading="lazy" alt="Jade" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
             <div class="mc-score mid">✨ 81%</div>
             <div class="mc-online"></div>
             <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
@@ -989,8 +992,8 @@
 
         <!-- Card 9 -->
         <a href="profile.html" class="match-card-grid">
-          <div class="mc-avatar-area" style="background:linear-gradient(160deg,#A855F7 0%,#EC4899 50%,#06B6D4 100%)">
-            🔮
+          <div class="mc-avatar-area">
+            <img src="https://randomuser.me/api/portraits/women/12.jpg" class="photo-avatar" loading="lazy" alt="Nova" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
             <div class="mc-score mid">✨ 79%</div>
             <div class="mc-overlay"><span class="mc-overlay-text">View Profile</span></div>
           </div>

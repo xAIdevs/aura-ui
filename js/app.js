@@ -9,11 +9,11 @@
 
 let currentPhoto = 0;
 const photos = [
-  { bg: 'linear-gradient(135deg,#667eea 0%,#764ba2 100%)', emoji: '✨' },
-  { bg: 'linear-gradient(135deg,#f093fb 0%,#f5576c 100%)', emoji: '🌸' },
-  { bg: 'linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)', emoji: '🌊' },
-  { bg: 'linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)', emoji: '🌿' },
-  { bg: 'linear-gradient(135deg,#fa709a 0%,#fee140 100%)', emoji: '🌅' },
+  { src: 'https://randomuser.me/api/portraits/women/10.jpg', alt: 'Profile photo 1' },
+  { src: 'https://randomuser.me/api/portraits/women/11.jpg', alt: 'Profile photo 2' },
+  { src: 'https://randomuser.me/api/portraits/women/12.jpg', alt: 'Profile photo 3' },
+  { src: 'https://randomuser.me/api/portraits/women/13.jpg', alt: 'Profile photo 4' },
+  { src: 'https://randomuser.me/api/portraits/women/14.jpg', alt: 'Profile photo 5' },
 ];
 
 function goPhoto(index, event) {
@@ -25,13 +25,24 @@ function goPhoto(index, event) {
 
   const main = frame.querySelector('.main-photo');
   if (main) {
-    main.style.background = photos[currentPhoto].bg;
-    const emojiEl = main.querySelector('.photo-emoji');
-    if (emojiEl) emojiEl.textContent = photos[currentPhoto].emoji;
+    const imgEl = main.querySelector('img.photo-avatar, img.main-photo-img');
+    if (imgEl) {
+      imgEl.src = photos[currentPhoto].src;
+      imgEl.alt = photos[currentPhoto].alt;
+    } else {
+      main.style.background = `url(${photos[currentPhoto].src}) center/cover no-repeat`;
+    }
   }
 
   frame.querySelectorAll('.photo-pill').forEach((p, i)  => p.classList.toggle('active', i === currentPhoto));
-  frame.querySelectorAll('.photo-thumb').forEach((t, i) => t.classList.toggle('active', i === currentPhoto));
+  frame.querySelectorAll('.photo-thumb').forEach((t, i) => {
+    t.classList.toggle('active', i === currentPhoto);
+    const thumbImg = t.querySelector('img');
+    if (thumbImg && photos[i]) {
+      thumbImg.src = photos[i].src;
+      thumbImg.alt = photos[i].alt;
+    }
+  });
 }
 
 function nextPhoto(event) {
@@ -774,9 +785,240 @@ function initScrollAnimations() {
         obs.unobserve(en.target);
       }
     });
-  }, { threshold: 0.8 });
+  }, { threshold: 0.2 });
 
   els.forEach(el => obs.observe(el));
+}
+
+/* ─────────────────────────────────────────────
+   15. ONBOARDING SLIDES
+───────────────────────────────────────────── */
+
+let currentSlide = 0;
+
+function initOnboarding() {
+  const slides = Array.from(document.querySelectorAll('.onboarding-slide'));
+  const dots   = Array.from(document.querySelectorAll('.onboarding-dot'));
+  const total  = slides.length;
+  if (!total) return;
+
+  function showSlide(n) {
+    const prev = currentSlide;
+    currentSlide = ((n % total) + total) % total;
+
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit');
+      if (i === prev && i !== currentSlide) s.classList.add('exit');
+    });
+    slides[currentSlide].classList.add('active');
+    dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+
+    const nextBtn = document.querySelector('[data-action="next-slide"]');
+    if (nextBtn) nextBtn.textContent = currentSlide === total - 1 ? 'Get Started →' : 'Next →';
+  }
+
+  document.querySelector('[data-action="next-slide"]')
+    ?.addEventListener('click', () => {
+      if (currentSlide === total - 1) window.location.href = 'signup.html';
+      else showSlide(currentSlide + 1);
+    });
+
+  document.querySelector('[data-action="prev-slide"]')
+    ?.addEventListener('click', () => showSlide(currentSlide - 1));
+
+  dots.forEach((d, i) => d.addEventListener('click', () => showSlide(i)));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') showSlide(currentSlide + 1);
+    if (e.key === 'ArrowLeft')  showSlide(currentSlide - 1);
+  });
+
+  // Touch swipe
+  let touchX = 0;
+  document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) dx < 0 ? showSlide(currentSlide + 1) : showSlide(currentSlide - 1);
+  }, { passive: true });
+
+  showSlide(0);
+}
+
+/* ─────────────────────────────────────────────
+   16. MOBILE NAV
+───────────────────────────────────────────── */
+
+function initMobileNav() {
+  const hamburger = document.querySelector('.nav-hamburger');
+  const menu      = document.querySelector('.nav-mobile-menu');
+  if (!hamburger || !menu) return;
+
+  hamburger.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', String(open));
+    hamburger.textContent = open ? '✕' : '☰';
+  });
+
+  menu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      menu.classList.remove('open');
+      hamburger.textContent = '☰';
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────
+   17. NOTIFICATIONS
+───────────────────────────────────────────── */
+
+function initNotifications() {
+  const tabs  = document.querySelectorAll('.notif-tab');
+  const items = document.querySelectorAll('.notif-item');
+
+  function filterNotifs(category) {
+    items.forEach(item => {
+      const cat = item.dataset.category || 'all';
+      item.style.display = (category === 'all' || cat === category) ? '' : 'none';
+    });
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      filterNotifs(tab.dataset.tab || 'all');
+    });
+  });
+
+  const markAllBtn = document.querySelector('[data-action="mark-all-read"]');
+  if (markAllBtn) {
+    markAllBtn.addEventListener('click', () => {
+      document.querySelectorAll('.notif-item.unread').forEach(item => {
+        item.classList.remove('unread');
+        item.querySelector('.notif-dot')?.remove();
+      });
+      updateUnreadBadge();
+    });
+  }
+
+  function updateUnreadBadge() {
+    const count = document.querySelectorAll('.notif-item.unread').length;
+    const badge = document.querySelector('.notif-badge-count');
+    if (badge) badge.textContent = count > 0 ? String(count) : '';
+  }
+
+  updateUnreadBadge();
+}
+
+/* ─────────────────────────────────────────────
+   18. VIDEO DATE
+───────────────────────────────────────────── */
+
+let callActive = false;
+let callSeconds = 0;
+let callTimer = null;
+
+function initVideoDate() {
+  const lobby  = document.getElementById('video-lobby');
+  const inCall = document.getElementById('video-in-call');
+  const joinBtn = document.querySelector('[data-action="join-call"]');
+  const endBtn  = document.querySelector('[data-action="end-call"]');
+  const muteBtn = document.querySelector('[data-action="toggle-mute"]');
+  const camBtn  = document.querySelector('[data-action="toggle-camera"]');
+  const timerEl = document.querySelector('.video-timer');
+
+  if (joinBtn) {
+    joinBtn.addEventListener('click', () => {
+      if (lobby)  lobby.style.display  = 'none';
+      if (inCall) inCall.style.display = '';
+      callActive  = true;
+      callSeconds = 0;
+      callTimer   = setInterval(() => {
+        callSeconds++;
+        if (timerEl) {
+          const m = Math.floor(callSeconds / 60).toString().padStart(2, '0');
+          const s = (callSeconds % 60).toString().padStart(2, '00');
+          timerEl.textContent = `${m}:${s}`;
+        }
+      }, 1000);
+    });
+  }
+
+  if (endBtn) {
+    endBtn.addEventListener('click', () => {
+      clearInterval(callTimer);
+      callActive = false;
+      if (inCall) inCall.style.display = 'none';
+      if (lobby)  lobby.style.display  = '';
+    });
+  }
+
+  if (muteBtn) {
+    let muted = false;
+    muteBtn.addEventListener('click', () => {
+      muted = !muted;
+      muteBtn.textContent  = muted ? '🔇' : '🎤';
+      muteBtn.title        = muted ? 'Unmute' : 'Mute';
+    });
+  }
+
+  if (camBtn) {
+    let camOff = false;
+    camBtn.addEventListener('click', () => {
+      camOff = !camOff;
+      camBtn.textContent = camOff ? '📵' : '📷';
+      camBtn.title       = camOff ? 'Turn camera on' : 'Turn camera off';
+    });
+  }
+}
+
+/* ─────────────────────────────────────────────
+   19. PREMIUM BILLING TOGGLE
+───────────────────────────────────────────── */
+
+function initPremiumBilling() {
+  const toggle    = document.querySelector('[data-action="billing-toggle"]');
+  const priceEls  = document.querySelectorAll('[data-monthly][data-annual]');
+
+  if (!toggle) return;
+
+  let isAnnual = false;
+
+  toggle.addEventListener('click', () => {
+    isAnnual = !isAnnual;
+    toggle.classList.toggle('annual', isAnnual);
+    toggle.setAttribute('aria-checked', String(isAnnual));
+
+    const label = document.querySelector('.billing-label');
+    if (label) label.textContent = isAnnual ? 'Annual (save 30%)' : 'Monthly';
+
+    priceEls.forEach(el => {
+      el.textContent = isAnnual ? el.dataset.annual : el.dataset.monthly;
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────
+   20. EVENTS FILTER
+───────────────────────────────────────────── */
+
+function initEvents() {
+  const catLinks = document.querySelectorAll('.event-cat-link');
+  const cards    = document.querySelectorAll('.event-card-wrap');
+
+  catLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      catLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+      const cat = link.dataset.cat || 'all';
+      cards.forEach(card => {
+        const cardCat = card.dataset.cat || 'all';
+        card.style.display = (cat === 'all' || cardCat === cat) ? '' : 'none';
+      });
+    });
+  });
 }
 
 /* ─────────────────────────────────────────────
@@ -792,10 +1034,16 @@ document.addEventListener('DOMContentLoaded', () => {
   initFilterChips();
   initPhoneInput();
   initScrollAnimations();
+  initMobileNav();
 
   // Page-specific inits driven by <body data-page="...">
   const page = document.body.dataset.page;
-  if (page === 'discover') initDiscoverCards();
-  if (page === 'signup')   showStep(1);
-  if (page === 'profile')  initPhotoGallery();
+  if (page === 'discover')      initDiscoverCards();
+  if (page === 'signup')        showStep(1);
+  if (page === 'profile')       initPhotoGallery();
+  if (page === 'onboarding')    initOnboarding();
+  if (page === 'notifications') initNotifications();
+  if (page === 'video-date')    initVideoDate();
+  if (page === 'premium')       initPremiumBilling();
+  if (page === 'events')        initEvents();
 });

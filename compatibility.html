@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compatibility Report – AURA AI Dating</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    .avatars-row { display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:18px; }
+    .avatar-circle { width:72px;height:72px;border-radius:50%;overflow:hidden;border:3px solid rgba(var(--accent-rgb),.45); }
+    .avatar-circle img { width:100%;height:100%;object-fit:cover; }
+    .personality-cols { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
+    .growth-item { display:flex;gap:12px;padding:14px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:12px;margin-bottom:10px; }
+    .report-match { padding:12px;cursor:pointer;border-radius:var(--radius3);transition:background .2s; }
+    .report-match:hover { background:var(--card-b); }
+    .report-match.active { background:rgba(var(--accent-rgb),.1);border:1px solid rgba(var(--accent-rgb),.3); }
+  </style>
+</head>
+<body data-page="compatibility">
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <aside class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html"      class="nav-item" data-tip="Discover">🔥</a>
+    <a href="matches.html"       class="nav-item" data-tip="Matches">💜</a>
+    <a href="chat.html"          class="nav-item" data-tip="Chat">💬</a>
+    <a href="search.html"        class="nav-item" data-tip="Search">🔍</a>
+    <a href="events.html"        class="nav-item" data-tip="Events">🎉</a>
+    <div class="nav-divider"></div>
+    <a href="notifications.html" class="nav-item" data-tip="Notifications">🔔</a>
+    <div class="nav-divider"></div>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">
+      <img src="https://randomuser.me/api/portraits/women/10.jpg" class="photo-avatar" loading="lazy" alt="My profile">
+    </a>
+  </aside>
+
+  <main class="app-layout">
+    <!-- Left Panel -->
+    <div class="panel-left">
+      <div class="panel-header"><span class="panel-title">Reports</span></div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div class="report-match active">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+              <img src="https://randomuser.me/api/portraits/women/1.jpg" class="photo-avatar" loading="lazy" alt="Sofia">
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--text);">Sofia M.</div>
+              <div style="font-size:12px;color:var(--accent3);font-weight:600;">94% chemistry</div>
+            </div>
+          </div>
+        </div>
+        <div class="report-match">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+              <img src="https://randomuser.me/api/portraits/women/2.jpg" class="photo-avatar" loading="lazy" alt="Zoe">
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--text);">Zoe K.</div>
+              <div style="font-size:12px;color:var(--muted2);">87% chemistry</div>
+            </div>
+          </div>
+        </div>
+        <div class="report-match">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+              <img src="https://randomuser.me/api/portraits/women/3.jpg" class="photo-avatar" loading="lazy" alt="Maya">
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--text);">Maya R.</div>
+              <div style="font-size:12px;color:var(--muted2);">82% chemistry</div>
+            </div>
+          </div>
+        </div>
+        <div class="report-match">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+              <img src="https://randomuser.me/api/portraits/women/4.jpg" class="photo-avatar" loading="lazy" alt="Lena">
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--text);">Lena P.</div>
+              <div style="font-size:12px;color:var(--muted2);">78% chemistry</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Panel: Report -->
+    <div class="panel-center">
+      <!-- Header -->
+      <div style="text-align:center;padding:28px 0 20px;">
+        <div class="avatars-row">
+          <div class="avatar-circle">
+            <img src="https://randomuser.me/api/portraits/women/10.jpg" class="photo-avatar" loading="lazy" alt="You">
+          </div>
+          <span style="font-size:28px;">💜</span>
+          <div class="avatar-circle">
+            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="photo-avatar" loading="lazy" alt="Sofia">
+          </div>
+        </div>
+        <div style="font-size:13px;color:var(--muted2);margin-bottom:14px;">You &amp; Sofia M.</div>
+        <svg width="130" height="130" viewBox="0 0 130 130" style="display:block;margin:0 auto;">
+          <circle cx="65" cy="65" r="56" fill="none" stroke="var(--card-b)" stroke-width="11" transform="rotate(-90 65 65)"/>
+          <circle cx="65" cy="65" r="56" fill="none" stroke="url(#cg)" stroke-width="11" stroke-linecap="round" stroke-dasharray="352" stroke-dashoffset="21" transform="rotate(-90 65 65)"/>
+          <defs><linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--accent)"/><stop offset="100%" stop-color="var(--pink)"/></linearGradient></defs>
+          <text x="65" y="60" text-anchor="middle" font-size="26" font-weight="800" fill="var(--text)" font-family="Space Grotesk,sans-serif">94%</text>
+          <text x="65" y="77" text-anchor="middle" font-size="11" fill="var(--muted2)" font-family="Inter,sans-serif">Chemistry</text>
+        </svg>
+        <div style="font-size:12px;color:var(--muted2);margin-top:10px;">Exceptional match · Top 2% of all connections</div>
+      </div>
+
+      <!-- Signal Breakdown -->
+      <div class="g-card" style="padding:20px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h3 style="font-size:16px;font-weight:700;">Compatibility Signals</h3>
+          <span style="font-size:12px;color:var(--accent3);cursor:pointer;text-decoration:underline;">View all 47</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="vector-row"><span class="vector-label">Core Values</span>      <div class="vector-bar"><div class="vector-fill animate-on-scroll" data-w="97%" style="width:97%"></div></div><span class="vector-value">97%</span></div>
+          <div class="vector-row"><span class="vector-label">Communication</span>    <div class="vector-bar"><div class="vector-fill animate-on-scroll" data-w="94%" style="width:94%"></div></div><span class="vector-value">94%</span></div>
+          <div class="vector-row"><span class="vector-label">Life Goals</span>        <div class="vector-bar"><div class="vector-fill animate-on-scroll" data-w="91%" style="width:91%"></div></div><span class="vector-value">91%</span></div>
+          <div class="vector-row"><span class="vector-label">Emotional Style</span>  <div class="vector-bar"><div class="vector-fill animate-on-scroll" data-w="89%" style="width:89%"></div></div><span class="vector-value">89%</span></div>
+          <div class="vector-row"><span class="vector-label">Humor</span>             <div class="vector-bar"><div class="vector-fill animate-on-scroll" data-w="96%" style="width:96%"></div></div><span class="vector-value">96%</span></div>
+          <div class="vector-row"><span class="vector-label">Adventure</span>         <div class="vector-bar"><div class="vector-fill animate-on-scroll" data-w="88%" style="width:88%"></div></div><span class="vector-value">88%</span></div>
+          <div class="vector-row"><span class="vector-label">Intellectual Depth</span><div class="vector-bar"><div class="vector-fill animate-on-scroll" data-w="92%" style="width:92%"></div></div><span class="vector-value">92%</span></div>
+          <div class="vector-row"><span class="vector-label">Attachment Style</span>  <div class="vector-bar"><div class="vector-fill animate-on-scroll" data-w="85%" style="width:85%"></div></div><span class="vector-value">85%</span></div>
+        </div>
+      </div>
+
+      <!-- Personality Comparison -->
+      <div class="g-card" style="padding:20px;margin-bottom:16px;">
+        <h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">Personality Profiles</h3>
+        <div class="personality-cols">
+          <div>
+            <h4 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted2);margin-bottom:10px;">You</h4>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <span class="vibe-tag v1">Creative</span>
+              <span class="vibe-tag v2">Adventurous</span>
+              <span class="vibe-tag v3">Empathetic</span>
+              <span class="vibe-tag v4">Curious</span>
+            </div>
+          </div>
+          <div>
+            <h4 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted2);margin-bottom:10px;">Sofia</h4>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <span class="vibe-tag v1">Warm</span>
+              <span class="vibe-tag v2">Witty</span>
+              <span class="vibe-tag v5">Grounded</span>
+              <span class="vibe-tag v3">Open</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:16px;padding:12px;background:rgba(var(--accent-rgb),.06);border-radius:10px;font-size:13px;color:var(--muted2);">
+          🧩 <strong style="color:var(--text);">Complementary strengths:</strong> Sofia's Grounded nature balances your Adventurous side — a classic stability + excitement dynamic that builds lasting attraction.
+        </div>
+      </div>
+
+      <!-- Growth Areas -->
+      <div style="margin-bottom:16px;">
+        <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">Growth Opportunities</h3>
+        <div class="growth-item">
+          <span style="font-size:20px;flex-shrink:0;">🌿</span>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--gold);margin-bottom:3px;">Communication pace</div>
+            <div style="font-size:13px;color:var(--muted2);">Sofia responds more deliberately — this thoughtfulness deepens conversation quality over time.</div>
+          </div>
+        </div>
+        <div class="growth-item">
+          <span style="font-size:20px;flex-shrink:0;">🏡</span>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--gold);margin-bottom:3px;">Weekend rhythm</div>
+            <div style="font-size:13px;color:var(--muted2);">Sofia prefers cozy weekends while you love exploring. This complementary dynamic creates wonderful balance.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Recommendation -->
+      <div class="ai-insight-card" style="margin-bottom:16px;">
+        <div class="ai-insight-label">🧠 AURA BRAIN™ Recommendation</div>
+        <p class="ai-insight-text">This connection has exceptional long-term potential. Sofia's emotional intelligence (top 8%) perfectly complements your creative energy. AURA predicts a 91% relationship satisfaction probability if you connect authentically in the first conversation.</p>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="panel-right">
+      <div class="g-card" style="padding:16px;text-align:center;">
+        <div style="width:68px;height:68px;border-radius:50%;overflow:hidden;margin:0 auto 12px;border:2px solid rgba(var(--accent-rgb),.4);">
+          <img src="https://randomuser.me/api/portraits/women/1.jpg" class="photo-avatar" loading="lazy" alt="Sofia">
+        </div>
+        <div style="font-size:17px;font-weight:700;margin-bottom:3px;">Sofia M.</div>
+        <div style="font-size:13px;color:var(--muted2);margin-bottom:16px;">28 · San Francisco</div>
+        <a href="chat.html"    class="btn btn-primary w-100"   style="margin-bottom:10px;">💬 Send Message</a>
+        <a href="profile.html" class="btn btn-secondary w-100" style="margin-bottom:10px;">View Profile</a>
+        <a href="video-date.html" class="btn btn-ghost w-100"  style="margin-bottom:10px;">📹 Video Date</a>
+        <button class="btn btn-ghost w-100" onclick="window.print()">🔖 Save Report</button>
+      </div>
+
+      <div class="g-card" style="padding:16px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:12px;">Quick Stats</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted2);">Distance</span><span style="color:var(--text);font-weight:600;">2.1 mi</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted2);">Last active</span><span style="color:var(--green);font-weight:600;">Today</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted2);">Mutual interests</span><span style="color:var(--text);font-weight:600;">8 shared</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted2);">Life stage</span><span style="color:var(--text);font-weight:600;">Aligned ✓</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted2);">Verified</span><span style="color:var(--green);font-weight:600;">✓ Photo + ID</span></div>
+        </div>
+      </div>
+
+      <div id="theme-switcher"></div>
+    </div>
+  </main>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

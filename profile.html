@@ -14,29 +14,6 @@
     /* ── DESIGN TOKENS & RESET ──────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg:      #0A0A0F;
-      --bg2:     #10101A;
-      --bg3:     #16162A;
-      --card:    rgba(255,255,255,.04);
-      --card-b:  rgba(255,255,255,.08);
-      --accent:  #7C3AED;
-      --accent2: #A855F7;
-      --accent3: #C084FC;
-      --pink:    #EC4899;
-      --cyan:    #06B6D4;
-      --green:   #10B981;
-      --gold:    #F59E0B;
-      --text:    #F1F0FF;
-      --muted:   #6B6B8A;
-      --muted2:  #9896B0;
-      --border:  rgba(255,255,255,.07);
-      --border2: rgba(124,58,237,.35);
-      --glow:    0 0 40px rgba(124,58,237,.25);
-      --radius:  16px;
-      --radius2: 24px;
-    }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -859,8 +836,8 @@
         <!-- Photo column -->
         <div>
           <div class="main-photo-frame" id="photoFrame">
-            <div class="photo-bg" id="mainPhoto" style="background:linear-gradient(160deg,#7C3AED 0%,#EC4899 50%,#F59E0B 100%);">
-              <span style="opacity:.2;user-select:none;">🌸</span>
+            <div class="photo-bg" id="mainPhoto" style="background:none;">
+              <img src="https://randomuser.me/api/portraits/women/10.jpg" class="photo-avatar main-photo-img" loading="lazy" alt="Profile photo" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
             </div>
 
             <div class="photo-pills-row" id="photoPills">
@@ -889,11 +866,11 @@
 
           <!-- Thumbnail strip -->
           <div class="thumb-strip" id="thumbStrip">
-            <div class="thumb active" data-idx="0" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">🌸</div>
-            <div class="thumb" data-idx="1" style="background:linear-gradient(135deg,#06B6D4,#7C3AED);">🏔️</div>
-            <div class="thumb" data-idx="2" style="background:linear-gradient(135deg,#F59E0B,#EF4444);">🐶</div>
-            <div class="thumb" data-idx="3" style="background:linear-gradient(135deg,#10B981,#06B6D4);">🌅</div>
-            <div class="thumb" data-idx="4" style="background:linear-gradient(135deg,#EC4899,#F59E0B);">🗼</div>
+            <div class="thumb active" data-idx="0"><img src="https://randomuser.me/api/portraits/women/10.jpg" class="photo-avatar" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px;"></div>
+            <div class="thumb" data-idx="1"><img src="https://randomuser.me/api/portraits/women/11.jpg" class="photo-avatar" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px;"></div>
+            <div class="thumb" data-idx="2"><img src="https://randomuser.me/api/portraits/women/12.jpg" class="photo-avatar" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px;"></div>
+            <div class="thumb" data-idx="3"><img src="https://randomuser.me/api/portraits/women/13.jpg" class="photo-avatar" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px;"></div>
+            <div class="thumb" data-idx="4"><img src="https://randomuser.me/api/portraits/women/14.jpg" class="photo-avatar" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px;"></div>
           </div>
         </div>
 
@@ -986,12 +963,12 @@
         <div class="g-card">
           <div class="g-title">Photo Gallery</div>
           <div class="gallery-grid">
-            <div class="gallery-tile" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">🌸</div>
-            <div class="gallery-tile" style="background:linear-gradient(135deg,#06B6D4,#7C3AED);">🗼</div>
-            <div class="gallery-tile" style="background:linear-gradient(135deg,#10B981,#06B6D4);">🐶</div>
-            <div class="gallery-tile" style="background:linear-gradient(135deg,#F59E0B,#EF4444);">🏔️</div>
-            <div class="gallery-tile" style="background:linear-gradient(135deg,#EC4899,#F59E0B);">🌅</div>
-            <div class="gallery-tile" style="background:linear-gradient(135deg,#A78BFA,#EC4899);">🎨</div>
+            <div class="gallery-tile"><img src="https://randomuser.me/api/portraits/women/10.jpg" class="photo-avatar" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+            <div class="gallery-tile"><img src="https://randomuser.me/api/portraits/women/11.jpg" class="photo-avatar" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+            <div class="gallery-tile"><img src="https://randomuser.me/api/portraits/women/12.jpg" class="photo-avatar" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+            <div class="gallery-tile"><img src="https://randomuser.me/api/portraits/women/13.jpg" class="photo-avatar" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+            <div class="gallery-tile"><img src="https://randomuser.me/api/portraits/women/14.jpg" class="photo-avatar" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+            <div class="gallery-tile"><img src="https://randomuser.me/api/portraits/women/15.jpg" class="photo-avatar" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
           </div>
         </div>
 
@@ -1063,6 +1040,19 @@
             <div class="lf-key">Communication</div>
             <div class="lf-val">💬 Daily texts + quality time</div>
           </div>
+        </div>
+      </div>
+
+      <!-- Shared Interests -->
+      <div class="g-card" style="margin-top:20px;">
+        <div class="panel-header"><span class="panel-title">Shared Interests</span></div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span class="vibe-tag v1">🎵 Music</span>
+          <span class="vibe-tag v2">✈️ Travel</span>
+          <span class="vibe-tag v3">🍜 Foodie</span>
+          <span class="vibe-tag v4">📸 Photography</span>
+          <span class="vibe-tag v5">🧘 Wellness</span>
+          <span class="vibe-tag v1">🎬 Cinema</span>
         </div>
       </div>
 
