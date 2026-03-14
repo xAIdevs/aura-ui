@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How AURA AI Works – AURA AI Dating</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    .engine-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    @media(max-width:768px){ .engine-grid { grid-template-columns:1fr; } }
+    .radar-wrap {
+      width:220px; height:220px; margin:0 auto;
+      position:relative; display:flex; align-items:center; justify-content:center;
+    }
+    .radar-wrap svg { width:100%; height:100%; }
+    .lnav-link {
+      font-size:14px; font-weight:500; color:var(--muted2);
+      text-decoration:none; transition:color .2s;
+    }
+    .lnav-link:hover { color:var(--text); }
+  </style>
+</head>
+<body data-page="ai-how-it-works">
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <!-- Nav -->
+  <nav class="landing-nav">
+    <a href="index.html" style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-1px;text-decoration:none;" class="grad-text">AURA</a>
+    <div class="nav-links" style="display:flex;gap:28px;align-items:center;">
+      <a href="index.html"        class="lnav-link">Home</a>
+      <a href="premium.html"      class="lnav-link">Premium</a>
+      <a href="safety.html"       class="lnav-link">Safety</a>
+      <a href="events.html"       class="lnav-link">Events</a>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <button class="nav-hamburger" aria-label="Menu" aria-expanded="false">☰</button>
+      <div id="theme-switcher"></div>
+      <a href="login.html"  class="btn btn-ghost btn-sm">Sign In</a>
+      <a href="signup.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+  </nav>
+  <div class="nav-mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="premium.html">Premium</a>
+    <a href="safety.html">Safety</a>
+    <a href="events.html">Events</a>
+    <a href="login.html">Sign In</a>
+  </div>
+
+  <div class="page-layout">
+
+    <!-- Hero -->
+    <section class="page-section" style="padding-top:130px;text-align:center;">
+      <div class="page-section-inner">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent3);margin-bottom:18px;" class="animate-fade-up">Inside the AI</div>
+        <h1 style="font-size:var(--display-1,clamp(2.5rem,6vw,4.5rem));font-weight:800;margin-bottom:24px;line-height:1.05;" class="animate-fade-up delay-100">
+          Inside the<br><span class="grad-text">AURA BRAIN™</span>
+        </h1>
+        <p style="font-size:clamp(1rem,1.8vw,1.2rem);color:var(--muted2);line-height:1.7;max-width:600px;margin:0 auto 52px;" class="animate-fade-up delay-200">
+          A transparent look at how our AI creates meaningful connections through 47 compatibility signals, deep behavioral analysis, and real chemistry prediction.
+        </p>
+        <!-- Neural SVG -->
+        <div class="animate-fade-up delay-300">
+          <svg viewBox="0 0 520 280" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;margin:0 auto;display:block;">
+            <g opacity=".25" stroke="var(--accent2)" stroke-width="1.2">
+              <line x1="80"  y1="140" x2="200" y2="90"/><line x1="80"  y1="140" x2="200" y2="190"/>
+              <line x1="200" y1="90"  x2="330" y2="60"/><line x1="200" y1="90"  x2="330" y2="140"/>
+              <line x1="200" y1="190" x2="330" y2="140"/><line x1="200" y1="190" x2="330" y2="220"/>
+              <line x1="330" y1="60"  x2="440" y2="140"/><line x1="330" y1="140" x2="440" y2="140"/><line x1="330" y1="220" x2="440" y2="140"/>
+            </g>
+            <circle cx="80"  cy="140" r="10" fill="var(--accent2)" opacity=".9"/>
+            <circle cx="200" cy="90"  r="7"  fill="var(--pink)"    opacity=".85"/>
+            <circle cx="200" cy="190" r="7"  fill="var(--cyan)"    opacity=".85"/>
+            <circle cx="330" cy="60"  r="6"  fill="var(--green)"   opacity=".8"/>
+            <circle cx="330" cy="140" r="9"  fill="var(--accent3)" opacity=".9"/>
+            <circle cx="330" cy="220" r="6"  fill="var(--gold)"    opacity=".8"/>
+            <circle cx="440" cy="140" r="10" fill="var(--pink)"    opacity=".9"/>
+            <text x="80"  y="162" text-anchor="middle" fill="var(--muted2)" font-size="11" font-family="Inter">You</text>
+            <text x="200" y="80"  text-anchor="middle" fill="var(--muted2)" font-size="10" font-family="Inter">Personality</text>
+            <text x="200" y="208" text-anchor="middle" fill="var(--muted2)" font-size="10" font-family="Inter">Behavior</text>
+            <text x="330" y="50"  text-anchor="middle" fill="var(--muted2)" font-size="10" font-family="Inter">Values</text>
+            <text x="330" y="162" text-anchor="middle" fill="var(--muted2)" font-size="10" font-family="Inter">Chemistry</text>
+            <text x="330" y="238" text-anchor="middle" fill="var(--muted2)" font-size="10" font-family="Inter">Timing</text>
+            <text x="440" y="160" text-anchor="middle" fill="var(--muted2)" font-size="11" font-family="Inter">Match</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Three Engines -->
+    <section class="page-section" style="padding-top:0;">
+      <div class="page-section-inner">
+        <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;text-align:center;margin-bottom:48px;">The Three Engines</h2>
+        <div class="engine-grid">
+          <div class="ai-insight-card animate-on-scroll">
+            <div class="ai-insight-label">01 — Neural Core</div>
+            <h3 style="font-size:19px;font-weight:700;margin-bottom:10px;color:var(--text);">Deep Personality Mapping</h3>
+            <p class="ai-insight-text">Analyzes 16 personality dimensions using validated psychometric models adapted for modern relationships. Updated continuously from real connection outcomes.</p>
+          </div>
+          <div class="ai-insight-card animate-on-scroll delay-100">
+            <div class="ai-insight-label">02 — Behavioral Learning</div>
+            <h3 style="font-size:19px;font-weight:700;margin-bottom:10px;color:var(--text);">Pattern Recognition</h3>
+            <p class="ai-insight-text">Learns from your swipes, messages, and dates — who you click with, when, and why — to refine suggestions over time with every interaction.</p>
+          </div>
+          <div class="ai-insight-card animate-on-scroll delay-200">
+            <div class="ai-insight-label">03 — Chemistry Prediction</div>
+            <h3 style="font-size:19px;font-weight:700;margin-bottom:10px;color:var(--text);">Real Compatibility Score</h3>
+            <p class="ai-insight-text">Predicts long-term relationship satisfaction using data from millions of successful connections, not just superficial attribute matching.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Personality Vectors -->
+    <section class="page-section" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+      <div class="page-section-inner">
+        <div class="two-col-feature">
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent3);margin-bottom:16px;">Personality Analysis</div>
+            <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;margin-bottom:20px;">Personality<br>Vector Analysis</h2>
+            <p style="color:var(--muted2);line-height:1.7;margin-bottom:28px;">We map your personality across 16 dimensions — from openness to communication style. Our AI finds matches with complementary vectors, not just similarities.</p>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div class="vector-row">
+                <span class="vector-label">Openness</span>
+                <div class="vector-bar"><div class="vector-fill" style="width:88%"></div></div>
+                <span class="vector-value">88%</span>
+              </div>
+              <div class="vector-row">
+                <span class="vector-label">Conscientiousness</span>
+                <div class="vector-bar"><div class="vector-fill" style="width:72%"></div></div>
+                <span class="vector-value">72%</span>
+              </div>
+              <div class="vector-row">
+                <span class="vector-label">Extraversion</span>
+                <div class="vector-bar"><div class="vector-fill" style="width:65%"></div></div>
+                <span class="vector-value">65%</span>
+              </div>
+              <div class="vector-row">
+                <span class="vector-label">Agreeableness</span>
+                <div class="vector-bar"><div class="vector-fill" style="width:91%"></div></div>
+                <span class="vector-value">91%</span>
+              </div>
+              <div class="vector-row">
+                <span class="vector-label">Emotional Stability</span>
+                <div class="vector-bar"><div class="vector-fill" style="width:79%"></div></div>
+                <span class="vector-value">79%</span>
+              </div>
+              <div class="vector-row">
+                <span class="vector-label">Curiosity</span>
+                <div class="vector-bar"><div class="vector-fill" style="width:94%"></div></div>
+                <span class="vector-value">94%</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;">
+            <div class="radar-wrap">
+              <svg viewBox="0 0 220 220" fill="none">
+                <polygon points="110,10 200,70 178,170 42,170 20,70" fill="none" stroke="var(--border)" stroke-width="1"/>
+                <polygon points="110,40 172,86 155,152 65,152 48,86"  fill="none" stroke="var(--border)" stroke-width="1"/>
+                <polygon points="110,70 144,102 132,134 88,134 76,102" fill="none" stroke="var(--border)" stroke-width="1"/>
+                <polygon points="110,18 188,68 166,162 54,162 32,68" fill="rgba(124,58,237,.15)" stroke="var(--accent2)" stroke-width="1.5"/>
+                <circle cx="110" cy="110" r="3" fill="var(--accent2)"/>
+                <text x="110" y="6"   text-anchor="middle" fill="var(--muted2)" font-size="9">Open</text>
+                <text x="205" y="72"  text-anchor="start"  fill="var(--muted2)" font-size="9">Agree</text>
+                <text x="183" y="175" text-anchor="start"  fill="var(--muted2)" font-size="9">Stable</text>
+                <text x="37"  y="175" text-anchor="end"    fill="var(--muted2)" font-size="9">Social</text>
+                <text x="15"  y="72"  text-anchor="end"    fill="var(--muted2)" font-size="9">Curious</text>
+              </svg>
+            </div>
+            <div class="ai-insight-card" style="width:100%;">
+              <div class="ai-insight-label">✨ AI Insight</div>
+              <p class="ai-insight-text">Your high Agreeableness (91%) pairs best with Conscientious profiles — they balance your collaborative nature with reliable structure.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Behavioral Patterns -->
+    <section class="page-section">
+      <div class="page-section-inner">
+        <div class="two-col-feature reverse">
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--pink);margin-bottom:16px;">Behavioral Learning</div>
+            <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;margin-bottom:20px;">Pattern<br>Recognition</h2>
+            <p style="color:var(--muted2);line-height:1.7;margin-bottom:24px;">AURA BRAIN™ watches how you naturally interact — not what you say you want. It learns from every swipe, every message length, every response time.</p>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;">
+              <li style="display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--text2);">
+                <span style="font-size:18px;">⏱</span>
+                <div><strong style="color:var(--text);display:block;margin-bottom:2px;">Response timing patterns</strong>How quickly you reply reveals your communication style and interest level.</div>
+              </li>
+              <li style="display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--text2);">
+                <span style="font-size:18px;">📝</span>
+                <div><strong style="color:var(--text);display:block;margin-bottom:2px;">Message depth analysis</strong>Short vs. long replies indicate communication preferences and engagement.</div>
+              </li>
+              <li style="display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--text2);">
+                <span style="font-size:18px;">🔁</span>
+                <div><strong style="color:var(--text);display:block;margin-bottom:2px;">Conversation evolution</strong>How conversations develop over time predicts long-term connection potential.</div>
+              </li>
+            </ul>
+          </div>
+          <div style="display:grid;gap:12px;">
+            <div class="g-card" style="padding:16px;">
+              <div style="font-size:11px;color:var(--muted2);margin-bottom:8px;">Avg response time</div>
+              <div style="font-size:28px;font-weight:800;color:var(--text);">4.2 min</div>
+              <div style="font-size:12px;color:var(--green);">↑ Highly engaged pattern</div>
+            </div>
+            <div class="g-card" style="padding:16px;">
+              <div style="font-size:11px;color:var(--muted2);margin-bottom:8px;">Avg message length</div>
+              <div style="font-size:28px;font-weight:800;color:var(--text);">64 words</div>
+              <div style="font-size:12px;color:var(--accent3);">Thoughtful communicator</div>
+            </div>
+            <div class="g-card" style="padding:16px;">
+              <div style="font-size:11px;color:var(--muted2);margin-bottom:8px;">Conversation depth score</div>
+              <div style="font-size:28px;font-weight:800;color:var(--text);">8.7 / 10</div>
+              <div style="font-size:12px;color:var(--pink);">Deep connector</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chemistry Score -->
+    <section class="page-section" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+      <div class="page-section-inner" style="text-align:center;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent3);margin-bottom:16px;">Chemistry Score</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;margin-bottom:20px;">Real Chemistry, Predicted</h2>
+        <p style="color:var(--muted2);line-height:1.7;max-width:560px;margin:0 auto 52px;">Our AI calculates a Chemistry Score for every potential match, combining personality alignment, communication compatibility, and life-stage synchronicity.</p>
+        <div style="display:flex;justify-content:center;gap:48px;flex-wrap:wrap;margin-bottom:48px;">
+          <div style="text-align:center;">
+            <svg width="110" height="110" viewBox="0 0 110 110" style="transform:rotate(-90deg);">
+              <circle cx="55" cy="55" r="48" fill="none" stroke="var(--card-b)" stroke-width="9"/>
+              <circle cx="55" cy="55" r="48" fill="none" stroke="url(#rg1)" stroke-width="9" stroke-linecap="round" stroke-dasharray="301" stroke-dashoffset="18"/>
+              <defs><linearGradient id="rg1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--accent)"/><stop offset="100%" stop-color="var(--pink)"/></linearGradient></defs>
+            </svg>
+            <div style="font-size:26px;font-weight:800;margin-top:6px;">94%</div>
+            <div style="font-size:12px;color:var(--muted2);margin-top:2px;">Sofia M., 28</div>
+          </div>
+          <div style="text-align:center;">
+            <svg width="110" height="110" viewBox="0 0 110 110" style="transform:rotate(-90deg);">
+              <circle cx="55" cy="55" r="48" fill="none" stroke="var(--card-b)" stroke-width="9"/>
+              <circle cx="55" cy="55" r="48" fill="none" stroke="url(#rg2)" stroke-width="9" stroke-linecap="round" stroke-dasharray="301" stroke-dashoffset="54"/>
+              <defs><linearGradient id="rg2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--cyan)"/><stop offset="100%" stop-color="var(--accent2)"/></linearGradient></defs>
+            </svg>
+            <div style="font-size:26px;font-weight:800;margin-top:6px;">82%</div>
+            <div style="font-size:12px;color:var(--muted2);margin-top:2px;">Zoe K., 26</div>
+          </div>
+          <div style="text-align:center;">
+            <svg width="110" height="110" viewBox="0 0 110 110" style="transform:rotate(-90deg);">
+              <circle cx="55" cy="55" r="48" fill="none" stroke="var(--card-b)" stroke-width="9"/>
+              <circle cx="55" cy="55" r="48" fill="none" stroke="url(#rg3)" stroke-width="9" stroke-linecap="round" stroke-dasharray="301" stroke-dashoffset="66"/>
+              <defs><linearGradient id="rg3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--green)"/><stop offset="100%" stop-color="var(--cyan)"/></linearGradient></defs>
+            </svg>
+            <div style="font-size:26px;font-weight:800;margin-top:6px;">78%</div>
+            <div style="font-size:12px;color:var(--muted2);margin-top:2px;">Maya R., 25</div>
+          </div>
+        </div>
+        <a href="compatibility.html" class="btn btn-secondary">View Full Compatibility Report →</a>
+      </div>
+    </section>
+
+    <!-- Privacy + CTA -->
+    <section class="page-section">
+      <div class="page-section-inner">
+        <div class="two-col-feature">
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:16px;">🔒 Privacy First</div>
+            <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;margin-bottom:20px;">Your data is yours,<br>always</h2>
+            <p style="color:var(--muted2);line-height:1.7;margin-bottom:24px;">All analysis happens on-device where possible. We never sell your data, and you can delete everything permanently at any time.</p>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+              <li style="display:flex;gap:10px;align-items:center;font-size:14px;color:var(--text2);"><span style="color:var(--green);font-size:16px;">✓</span>End-to-end encrypted conversations</li>
+              <li style="display:flex;gap:10px;align-items:center;font-size:14px;color:var(--text2);"><span style="color:var(--green);font-size:16px;">✓</span>On-device personality analysis</li>
+              <li style="display:flex;gap:10px;align-items:center;font-size:14px;color:var(--text2);"><span style="color:var(--green);font-size:16px;">✓</span>GDPR &amp; CCPA fully compliant</li>
+              <li style="display:flex;gap:10px;align-items:center;font-size:14px;color:var(--text2);"><span style="color:var(--green);font-size:16px;">✓</span>One-click data deletion</li>
+            </ul>
+            <a href="safety.html" class="btn btn-secondary" style="margin-top:24px;">View Safety Center</a>
+          </div>
+          <div style="text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;">
+            <div style="font-size:80px;">🛡️</div>
+            <div class="g-card" style="padding:16px;width:100%;text-align:left;">
+              <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:6px;">SOC 2 Type II Certified</div>
+              <div style="font-size:13px;color:var(--muted2);">Our infrastructure is independently audited to the highest security standards.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="page-section" style="background:var(--bg2);border-top:1px solid var(--border);text-align:center;">
+      <div class="page-section-inner">
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:800;margin-bottom:16px;">Ready to experience<br><span class="grad-text">real AI chemistry?</span></h2>
+        <p style="color:var(--muted2);margin-bottom:36px;font-size:clamp(1rem,1.5vw,1.1rem);">Join 2.4 million people who found meaningful connections through AURA.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <a href="signup.html" class="btn btn-primary btn-lg">Start for Free</a>
+          <a href="discover.html" class="btn btn-secondary btn-lg">Browse Matches</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background:var(--bg2);border-top:1px solid var(--border);padding:40px 0;">
+      <div class="page-section-inner" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;" class="grad-text">AURA</span>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;">
+          <a href="ai-how-it-works.html" style="font-size:13px;color:var(--muted2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted2)'">AI Technology</a>
+          <a href="premium.html"         style="font-size:13px;color:var(--muted2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted2)'">Premium</a>
+          <a href="safety.html"          style="font-size:13px;color:var(--muted2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted2)'">Safety</a>
+          <a href="events.html"          style="font-size:13px;color:var(--muted2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted2)'">Events</a>
+        </div>
+        <span style="font-size:12px;color:var(--muted);">© 2026 AURA Technologies, Inc.</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

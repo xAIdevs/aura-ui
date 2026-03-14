@@ -12,21 +12,6 @@
   <link rel="stylesheet" href="css/themes.css">
 
   <style>
-    /* Fallback vars in case external CSS fails to load */
-    :root {
-      --bg:#0A0A0F; --bg2:#10101A; --bg3:#16162A; --bg4:#1E1E30;
-      --card:rgba(255,255,255,.04); --card-b:rgba(255,255,255,.08); --card-c:rgba(255,255,255,.12);
-      --accent:#7C3AED; --accent2:#A855F7; --accent3:#C084FC; --accent-rgb:124,58,237;
-      --pink:#EC4899; --pink-rgb:236,72,153; --cyan:#06B6D4;
-      --green:#10B981; --red:#EF4444; --gold:#F59E0B;
-      --text:#F1F0FF; --text2:#C4C2D8;
-      --muted:#6B6B8A; --muted2:#9896B0;
-      --border:rgba(255,255,255,.07); --border2:rgba(124,58,237,.35); --border3:rgba(124,58,237,.6);
-      --glow:0 0 40px rgba(124,58,237,.25); --glow2:0 0 80px rgba(168,85,247,.15); --glow3:0 0 20px rgba(124,58,237,.4);
-      --shadow:0 8px 32px rgba(0,0,0,.4); --shadow2:0 16px 48px rgba(0,0,0,.5);
-      --radius:16px; --radius2:24px; --radius3:12px; --sidebar-w:72px;
-    }
-
     /* ── PAGE LAYOUT ──────────────────────────────── */
     body { display: flex; overflow-x: hidden; }
 
@@ -558,7 +543,9 @@
       <!-- Profile mini -->
       <div class="profile-mini">
         <div class="profile-avatar-wrap">
-          <div class="profile-avatar">🌟</div>
+          <div class="profile-avatar" style="padding:0;overflow:hidden;">
+            <img src="https://randomuser.me/api/portraits/women/10.jpg" class="photo-avatar" loading="lazy" alt="My profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+          </div>
           <div class="avatar-edit-btn" title="Edit photo">✏️</div>
         </div>
         <div class="profile-name">Alex Chen</div>
@@ -578,8 +565,10 @@
       <nav class="tab-nav">
         <button class="tab-nav-item active" data-tab="profile">👤 &nbsp;Profile</button>
         <button class="tab-nav-item" data-tab="settings">⚙️ &nbsp;Settings</button>
-        <button class="tab-nav-item" data-tab="premium">⚡ &nbsp;Premium</button>
-        <button class="tab-nav-item" data-tab="privacy">🔒 &nbsp;Privacy &amp; Safety</button>
+        <a href="notifications.html" class="tab-nav-item" style="text-decoration:none;">🔔 &nbsp;Notifications</a>
+        <a href="premium.html" class="tab-nav-item" style="text-decoration:none;">⚡ &nbsp;Premium</a>
+        <a href="safety.html" class="tab-nav-item" style="text-decoration:none;">🔒 &nbsp;Safety</a>
+        <button class="tab-nav-item" data-tab="privacy">🛡️ &nbsp;Privacy</button>
         <button class="tab-nav-item" data-tab="help">❓ &nbsp;Help</button>
       </nav>
 
@@ -866,7 +855,7 @@
 
           <div class="plan-header-row">
             <div class="free-badge">Free Plan</div>
-            <button class="upgrade-pill">⚡ Upgrade Now</button>
+            <a href="premium.html" class="upgrade-pill" style="text-decoration:none;">⚡ Upgrade Now</a>
           </div>
 
           <!-- Billing toggle -->

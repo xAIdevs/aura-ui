@@ -13,31 +13,6 @@
 
   <style>
     /* ── DISCOVER-SPECIFIC ───────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:        #0A0A0F;
-      --bg2:       #10101A;
-      --bg3:       #16162A;
-      --card:      rgba(255,255,255,.04);
-      --card-b:    rgba(255,255,255,.08);
-      --accent:    #7C3AED;
-      --accent2:   #A855F7;
-      --accent3:   #C084FC;
-      --pink:      #EC4899;
-      --cyan:      #06B6D4;
-      --green:     #10B981;
-      --gold:      #F59E0B;
-      --text:      #F1F0FF;
-      --muted:     #6B6B8A;
-      --muted2:    #9896B0;
-      --border:    rgba(255,255,255,.07);
-      --border2:   rgba(124,58,237,.35);
-      --shadow:    0 4px 20px rgba(0,0,0,.4);
-      --shadow2:   0 8px 32px rgba(0,0,0,.5);
-      --radius:    16px;
-      --radius2:   24px;
-    }
 
     html { scroll-behavior: smooth; }
     body {
@@ -1082,32 +1057,32 @@
       <div class="ai-picks-scroll">
         <!-- Card 1 -->
         <div class="pick-card" tabindex="0" aria-label="Sofia, 26 – 94% match">
-          <div class="pick-avatar" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">
-            🌸
+          <div class="pick-avatar" style="overflow:hidden;">
+            <img src="https://randomuser.me/api/portraits/women/4.jpg" class="photo-avatar" loading="lazy" alt="Sofia, 26" style="width:100%;height:100%;object-fit:cover;display:block;" />
             <div class="pick-match-badge">✦ 94%</div>
           </div>
           <div class="pick-name">Sofia, 26</div>
         </div>
         <!-- Card 2 -->
         <div class="pick-card" tabindex="0" aria-label="Mia, 24 – 91% match">
-          <div class="pick-avatar" style="background:linear-gradient(135deg,#06B6D4,#7C3AED);">
-            🦋
+          <div class="pick-avatar" style="overflow:hidden;">
+            <img src="https://randomuser.me/api/portraits/women/5.jpg" class="photo-avatar" loading="lazy" alt="Mia, 24" style="width:100%;height:100%;object-fit:cover;display:block;" />
             <div class="pick-match-badge">✦ 91%</div>
           </div>
           <div class="pick-name">Mia, 24</div>
         </div>
         <!-- Card 3 -->
         <div class="pick-card" tabindex="0" aria-label="Luna, 27 – 89% match">
-          <div class="pick-avatar" style="background:linear-gradient(135deg,#F59E0B,#EC4899);">
-            🌙
+          <div class="pick-avatar" style="overflow:hidden;">
+            <img src="https://randomuser.me/api/portraits/women/6.jpg" class="photo-avatar" loading="lazy" alt="Luna, 27" style="width:100%;height:100%;object-fit:cover;display:block;" />
             <div class="pick-match-badge">✦ 89%</div>
           </div>
           <div class="pick-name">Luna, 27</div>
         </div>
         <!-- Card 4 -->
         <div class="pick-card" tabindex="0" aria-label="Zoe, 25 – 87% match">
-          <div class="pick-avatar" style="background:linear-gradient(135deg,#10B981,#06B6D4);">
-            🌿
+          <div class="pick-avatar" style="overflow:hidden;">
+            <img src="https://randomuser.me/api/portraits/women/7.jpg" class="photo-avatar" loading="lazy" alt="Zoe, 25" style="width:100%;height:100%;object-fit:cover;display:block;" />
             <div class="pick-match-badge">✦ 87%</div>
           </div>
           <div class="pick-name">Zoe, 25</div>
@@ -1120,8 +1095,8 @@
 
       <!-- Nearby list -->
       <div class="nearby-item" tabindex="0">
-        <div class="nearby-avatar" style="background:linear-gradient(135deg,#A855F7,#EC4899);">
-          🌺
+        <div class="nearby-avatar" style="overflow:hidden;">
+          <img src="https://randomuser.me/api/portraits/women/1.jpg" class="photo-avatar" loading="lazy" alt="Ava" style="width:100%;height:100%;object-fit:cover;display:block;" />
           <div class="online-dot"></div>
         </div>
         <div class="nearby-info">
@@ -1140,8 +1115,8 @@
       </div>
 
       <div class="nearby-item" tabindex="0">
-        <div class="nearby-avatar" style="background:linear-gradient(135deg,#06B6D4,#10B981);">
-          🌊
+        <div class="nearby-avatar" style="overflow:hidden;">
+          <img src="https://randomuser.me/api/portraits/women/2.jpg" class="photo-avatar" loading="lazy" alt="Chloe" style="width:100%;height:100%;object-fit:cover;display:block;" />
         </div>
         <div class="nearby-info">
           <div class="nearby-name">Chloe&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">23</span></div>
@@ -1158,8 +1133,8 @@
       </div>
 
       <div class="nearby-item" tabindex="0">
-        <div class="nearby-avatar" style="background:linear-gradient(135deg,#F59E0B,#EF4444);">
-          🔥
+        <div class="nearby-avatar" style="overflow:hidden;">
+          <img src="https://randomuser.me/api/portraits/women/3.jpg" class="photo-avatar" loading="lazy" alt="Riley" style="width:100%;height:100%;object-fit:cover;display:block;" />
           <div class="online-dot"></div>
         </div>
         <div class="nearby-info">
@@ -1178,8 +1153,8 @@
       </div>
 
       <div class="nearby-item" tabindex="0">
-        <div class="nearby-avatar" style="background:linear-gradient(135deg,#7C3AED,#06B6D4);">
-          💎
+        <div class="nearby-avatar" style="overflow:hidden;">
+          <img src="https://randomuser.me/api/portraits/women/8.jpg" class="photo-avatar" loading="lazy" alt="Emma" style="width:100%;height:100%;object-fit:cover;display:block;" />
         </div>
         <div class="nearby-info">
           <div class="nearby-name">Emma&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">29</span></div>
@@ -1196,8 +1171,8 @@
       </div>
 
       <div class="nearby-item" tabindex="0">
-        <div class="nearby-avatar" style="background:linear-gradient(135deg,#EC4899,#F59E0B);">
-          🌻
+        <div class="nearby-avatar" style="overflow:hidden;">
+          <img src="https://randomuser.me/api/portraits/women/6.jpg" class="photo-avatar" loading="lazy" alt="Nora" style="width:100%;height:100%;object-fit:cover;display:block;" />
           <div class="online-dot"></div>
         </div>
         <div class="nearby-info">
@@ -1265,8 +1240,8 @@
         <!-- Card 3 (bottom) -->
         <div class="profile-card" aria-hidden="true">
           <div class="card-photo">
-            <div class="card-photo-bg" style="background:linear-gradient(135deg,#10B981 0%,#06B6D4 100%);">
-              🌿
+            <div class="card-photo-bg">
+              <img src="https://randomuser.me/api/portraits/women/3.jpg" class="photo-avatar" loading="lazy" alt="Profile photo" style="width:100%;height:100%;object-fit:cover;display:block;" />
             </div>
           </div>
         </div>
@@ -1274,9 +1249,11 @@
         <!-- Card 2 (middle) -->
         <div class="profile-card" aria-hidden="true">
           <div class="card-photo">
-            <div class="card-photo-bg" style="background:linear-gradient(135deg,#F59E0B 0%,#EC4899 100%);">
-              🌙
+            <div class="card-photo-bg">
+              <img src="https://randomuser.me/api/portraits/women/2.jpg" class="photo-avatar" loading="lazy" alt="Profile photo" style="width:100%;height:100%;object-fit:cover;display:block;" />
             </div>
+            <!-- AI Match badge -->
+            <div class="card-match-badge">✦ 88%</div>
           </div>
         </div>
 
@@ -1284,8 +1261,8 @@
         <div class="profile-card" id="top-card" role="article" aria-label="Sophia's profile card">
           <div class="card-photo">
             <!-- Photo bg -->
-            <div class="card-photo-bg" style="background:linear-gradient(135deg,#7C3AED 0%,#EC4899 50%,#F59E0B 100%);">
-              🌸
+            <div class="card-photo-bg">
+              <img src="https://randomuser.me/api/portraits/women/1.jpg" class="photo-avatar" loading="lazy" alt="Sophia, 26" style="width:100%;height:100%;object-fit:cover;display:block;" />
             </div>
             <!-- Photo pills -->
             <div class="card-pills">
@@ -1389,10 +1366,10 @@
       <div class="insight-card">
         <div class="insight-title">Who Liked You</div>
         <div class="liked-blur-row">
-          <div class="blur-avatar">🌸</div>
-          <div class="blur-avatar" style="background:linear-gradient(135deg,#06B6D4,#7C3AED)">🦋</div>
-          <div class="blur-avatar" style="background:linear-gradient(135deg,#F59E0B,#EC4899)">🌙</div>
-          <div class="blur-avatar" style="background:linear-gradient(135deg,#10B981,#06B6D4)">🌿</div>
+          <div class="blur-avatar" style="overflow:hidden;"><img src="https://randomuser.me/api/portraits/women/4.jpg" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
+          <div class="blur-avatar" style="overflow:hidden;"><img src="https://randomuser.me/api/portraits/men/1.jpg" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
+          <div class="blur-avatar" style="overflow:hidden;"><img src="https://randomuser.me/api/portraits/women/5.jpg" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
+          <div class="blur-avatar" style="overflow:hidden;"><img src="https://randomuser.me/api/portraits/men/2.jpg" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
         </div>
         <div class="premium-teaser"><strong>12 people</strong> liked your profile this week. Upgrade to see who!</div>
         <button class="btn-upgrade" onclick="window.location='my-account.html#premium'">⚡ Upgrade to Premium</button>

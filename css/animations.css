@@ -310,3 +310,84 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ── NEW KEYFRAMES ───────────────────────────────────── */
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(30px, -20px) scale(1.05); }
+  66%       { transform: translate(-20px, 15px) scale(.97); }
+}
+
+@keyframes neuralPulse {
+  0%, 100% { opacity: .3; r: 4; }
+  50%       { opacity: 1;  r: 6; }
+}
+
+@keyframes ringFill {
+  from { stroke-dashoffset: 283; }
+  to   { stroke-dashoffset: var(--ring-offset, 50); }
+}
+
+@keyframes glassReveal {
+  from { opacity: 0; backdrop-filter: blur(0); transform: translateY(20px); }
+  to   { opacity: 1; backdrop-filter: blur(12px); transform: translateY(0); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes textReveal {
+  from { opacity: 0; letter-spacing: .5em; }
+  to   { opacity: 1; letter-spacing: normal; }
+}
+
+@keyframes dataFlow {
+  0%   { stroke-dashoffset: 200; opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes waveFlow {
+  0%   { d: path("M0,20 Q25,10 50,20 Q75,30 100,20"); }
+  50%  { d: path("M0,20 Q25,30 50,20 Q75,10 100,20"); }
+  100% { d: path("M0,20 Q25,10 50,20 Q75,30 100,20"); }
+}
+
+/* ── ANIMATION UTILITY CLASSES (new) ────────────────── */
+.animate-orb-float   { animation: orbFloat 8s ease-in-out infinite; }
+.animate-ring-fill   { animation: ringFill 1.5s cubic-bezier(.4,0,.2,1) forwards; }
+.animate-glass-reveal { animation: glassReveal .5s cubic-bezier(.4,0,.2,1) forwards; }
+.animate-slide-up    { animation: slideInUp .45s cubic-bezier(.4,0,.2,1) forwards; }
+.animate-zoom-in     { animation: zoomIn .35s cubic-bezier(.34,1.2,.64,1) forwards; }
+.animate-text-reveal { animation: textReveal .6s cubic-bezier(.4,0,.2,1) forwards; }
+
+/* ── EXTENDED DELAY UTILITIES ────────────────────────── */
+.delay-900  { animation-delay: 900ms; }
+.delay-1000 { animation-delay: 1000ms; }
+.delay-1100 { animation-delay: 1100ms; }
+.delay-1200 { animation-delay: 1200ms; }
+
+/* ── ONBOARDING SLIDE TRANSITIONS ────────────────────── */
+.onboarding-slide {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity .5s cubic-bezier(.4,0,.2,1), transform .5s cubic-bezier(.4,0,.2,1);
+  pointer-events: none;
+}
+.onboarding-slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+.onboarding-slide.exit {
+  opacity: 0;
+  transform: translateX(-60px);
+}

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events – AURA AI Dating</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    .event-cat-link {
+      display:block; padding:9px 14px; border-radius:10px;
+      font-size:14px; font-weight:500; color:var(--muted2);
+      text-decoration:none; transition:all .2s; cursor:pointer;
+      background:transparent; border:none; width:100%; text-align:left;
+    }
+    .event-cat-link:hover  { background:var(--card-b); color:var(--text); }
+    .event-cat-link.active { background:rgba(var(--accent-rgb),.15); color:var(--accent3); font-weight:600; }
+    .events-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+    @media(max-width:768px){ .events-grid { grid-template-columns:1fr; } }
+    .feat-cover {
+      height:220px; position:relative; overflow:hidden;
+      background:linear-gradient(135deg,var(--accent),var(--pink));
+      display:flex; align-items:center; justify-content:center; font-size:70px;
+    }
+    .feat-overlay {
+      position:absolute; bottom:0; left:0; right:0; padding:48px 20px 20px;
+      background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 100%);
+    }
+    .attendee-row { display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid var(--border); }
+    .attendee-row:last-child { border-bottom:none; }
+    .att-av { width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0; }
+    .att-av img { width:100%;height:100%;object-fit:cover; }
+    .ecard-cover {
+      width:100%; aspect-ratio:16/9;
+      display:flex; align-items:center; justify-content:center; font-size:40px;
+    }
+    .ematch {
+      display:flex; align-items:center; gap:8px;
+      font-size:12px; color:var(--accent3); font-weight:600; margin-top:8px;
+    }
+    .ematch-bar { flex:1; height:4px; background:var(--card-b); border-radius:99px; overflow:hidden; }
+    .ematch-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+  </style>
+</head>
+<body data-page="events">
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <aside class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html"      class="nav-item" data-tip="Discover">🔥</a>
+    <a href="matches.html"       class="nav-item" data-tip="Matches">💜</a>
+    <a href="chat.html"          class="nav-item" data-tip="Chat">💬</a>
+    <a href="search.html"        class="nav-item" data-tip="Search">🔍</a>
+    <a href="events.html"        class="nav-item active" data-tip="Events">🎉</a>
+    <div class="nav-divider"></div>
+    <a href="notifications.html" class="nav-item" data-tip="Notifications">🔔</a>
+    <div class="nav-divider"></div>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">
+      <img src="https://randomuser.me/api/portraits/women/10.jpg" class="photo-avatar" loading="lazy" alt="My profile">
+    </a>
+  </aside>
+
+  <main class="app-layout">
+    <!-- Left Panel -->
+    <div class="panel-left">
+      <div class="panel-header"><span class="panel-title">Events</span></div>
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <button class="event-cat-link active" data-cat="all">🌟 All Events</button>
+        <button class="event-cat-link" data-cat="online">💻 Online</button>
+        <button class="event-cat-link" data-cat="in-person">📍 In-Person</button>
+        <button class="event-cat-link" data-cat="speed">⚡ Speed Dating</button>
+        <button class="event-cat-link" data-cat="activity">🏃 Activity</button>
+        <button class="event-cat-link" data-cat="social">🎭 Social</button>
+      </div>
+      <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border);">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:10px;">Your City</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text);">San Francisco, CA</div>
+        <div style="font-size:12px;color:var(--muted2);margin-top:4px;">28 upcoming events</div>
+      </div>
+    </div>
+
+    <!-- Center Panel -->
+    <div class="panel-center">
+      <div class="topbar">
+        <h1 class="page-title">Discover Events</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost btn-sm">📍 Near Me</button>
+          <button class="btn btn-secondary btn-sm">🔽 Filter</button>
+        </div>
+      </div>
+
+      <!-- Featured -->
+      <div class="g-card" style="padding:0;overflow:hidden;margin-bottom:24px;" class="event-card-wrap" data-cat="in-person">
+        <div class="feat-cover">🌙
+          <div style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,var(--accent2),var(--pink));color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;text-transform:uppercase;letter-spacing:.8px;">✨ AURA Picks</div>
+          <div class="feat-overlay">
+            <div style="font-size:12px;color:rgba(255,255,255,.7);margin-bottom:4px;">Sat, Mar 21 · 7:00 PM</div>
+            <div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px;">AURA Rooftop Social Night</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.7);">SkyLounge SF · 42 attending</div>
+          </div>
+        </div>
+        <div style="padding:16px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:12px;color:var(--accent3);font-weight:700;">94% avg AI match among attendees</div>
+            <div style="font-size:12px;color:var(--muted2);">Exclusive AURA member event</div>
+          </div>
+          <button class="btn btn-primary btn-sm">Register</button>
+        </div>
+      </div>
+
+      <!-- Events Grid -->
+      <div class="events-grid">
+
+        <div class="event-card event-card-wrap" data-cat="online">
+          <div class="ecard-cover" style="background:linear-gradient(135deg,var(--accent),var(--cyan));">☕</div>
+          <div class="event-card-body">
+            <div style="font-size:11px;color:var(--accent3);font-weight:600;margin-bottom:4px;">ONLINE · Tomorrow</div>
+            <div class="event-card-title">Virtual Coffee Speed Dating</div>
+            <div class="event-card-meta">Thu, Mar 19 · 6:00 PM · 24 spots left</div>
+            <div class="ematch"><div class="ematch-bar"><div class="ematch-fill" style="width:88%;"></div></div>88% avg match</div>
+          </div>
+        </div>
+
+        <div class="event-card event-card-wrap" data-cat="activity">
+          <div class="ecard-cover" style="background:linear-gradient(135deg,#10B981,#06B6D4);">🧘</div>
+          <div class="event-card-body">
+            <div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:4px;">IN-PERSON · This Sat</div>
+            <div class="event-card-title">Yoga &amp; Brunch Social</div>
+            <div class="event-card-meta">Sat, Mar 22 · 10:00 AM · Golden Gate Park</div>
+            <div class="ematch" style="color:var(--green);"><div class="ematch-bar"><div class="ematch-fill" style="width:91%;background:linear-gradient(90deg,var(--green),var(--cyan));"></div></div>91% avg match</div>
+          </div>
+        </div>
+
+        <div class="event-card event-card-wrap" data-cat="speed">
+          <div class="ecard-cover" style="background:linear-gradient(135deg,var(--pink),var(--gold));">⚡</div>
+          <div class="event-card-body">
+            <div style="font-size:11px;color:var(--pink);font-weight:600;margin-bottom:4px;">SPEED DATING · Friday</div>
+            <div class="event-card-title">AI-Matched Speed Dating</div>
+            <div class="event-card-meta">Fri, Mar 21 · 8:00 PM · The Grove</div>
+            <div class="ematch" style="color:var(--pink);"><div class="ematch-bar"><div class="ematch-fill" style="width:95%;background:linear-gradient(90deg,var(--pink),var(--gold));"></div></div>95% avg match</div>
+          </div>
+        </div>
+
+        <div class="event-card event-card-wrap" data-cat="social">
+          <div class="ecard-cover" style="background:linear-gradient(135deg,var(--accent2),var(--pink));">🎨</div>
+          <div class="event-card-body">
+            <div style="font-size:11px;color:var(--gold);font-weight:600;margin-bottom:4px;">SOCIAL · Next week</div>
+            <div class="event-card-title">Paint &amp; Sip Evening</div>
+            <div class="event-card-meta">Tue, Mar 25 · 7:30 PM · The Canvas Room</div>
+            <div class="ematch" style="color:var(--gold);"><div class="ematch-bar"><div class="ematch-fill" style="width:82%;background:linear-gradient(90deg,var(--accent2),var(--pink));"></div></div>82% avg match</div>
+          </div>
+        </div>
+
+        <div class="event-card event-card-wrap" data-cat="online">
+          <div class="ecard-cover" style="background:linear-gradient(135deg,var(--cyan),var(--accent));">🎮</div>
+          <div class="event-card-body">
+            <div style="font-size:11px;color:var(--cyan);font-weight:600;margin-bottom:4px;">ONLINE · Weekly</div>
+            <div class="event-card-title">Multiplayer Game Night</div>
+            <div class="event-card-meta">Every Fri · 9:00 PM · Online</div>
+            <div class="ematch" style="color:var(--cyan);"><div class="ematch-bar"><div class="ematch-fill" style="width:79%;background:linear-gradient(90deg,var(--cyan),var(--accent));"></div></div>79% avg match</div>
+          </div>
+        </div>
+
+        <div class="event-card event-card-wrap" data-cat="activity">
+          <div class="ecard-cover" style="background:linear-gradient(135deg,var(--green),var(--gold));">🥾</div>
+          <div class="event-card-body">
+            <div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:4px;">ACTIVITY · Weekend</div>
+            <div class="event-card-title">Group Hiking at Muir Woods</div>
+            <div class="event-card-meta">Sun, Mar 23 · 9:00 AM · Muir Woods</div>
+            <div class="ematch" style="color:var(--green);"><div class="ematch-bar"><div class="ematch-fill" style="width:86%;background:linear-gradient(90deg,var(--green),var(--gold));"></div></div>86% avg match</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="panel-right">
+      <div class="g-card" style="padding:16px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Who's Going 🎉</div>
+        <div style="font-size:11px;color:var(--muted2);margin-bottom:14px;">Compatible at AURA Rooftop Social</div>
+        <div>
+          <div class="attendee-row"><div class="att-av"><img src="https://randomuser.me/api/portraits/women/1.jpg" loading="lazy" alt="Sofia"></div><div style="flex:1;"><div style="font-size:13px;font-weight:600;">Sofia M., 28</div><div style="font-size:12px;color:var(--accent3);font-weight:600;">94% match</div></div><button class="btn btn-ghost btn-sm" style="padding:4px 10px;font-size:11px;">Say Hi</button></div>
+          <div class="attendee-row"><div class="att-av"><img src="https://randomuser.me/api/portraits/women/4.jpg" loading="lazy" alt="Lena"></div><div style="flex:1;"><div style="font-size:13px;font-weight:600;">Lena K., 26</div><div style="font-size:12px;color:var(--accent3);font-weight:600;">88% match</div></div><button class="btn btn-ghost btn-sm" style="padding:4px 10px;font-size:11px;">Say Hi</button></div>
+          <div class="attendee-row"><div class="att-av"><img src="https://randomuser.me/api/portraits/women/5.jpg" loading="lazy" alt="Mia"></div><div style="flex:1;"><div style="font-size:13px;font-weight:600;">Mia T., 25</div><div style="font-size:12px;color:var(--accent3);font-weight:600;">85% match</div></div><button class="btn btn-ghost btn-sm" style="padding:4px 10px;font-size:11px;">Say Hi</button></div>
+          <div class="attendee-row"><div class="att-av"><img src="https://randomuser.me/api/portraits/women/6.jpg" loading="lazy" alt="Aria"></div><div style="flex:1;"><div style="font-size:13px;font-weight:600;">Aria V., 29</div><div style="font-size:12px;color:var(--muted2);">83% match</div></div><button class="btn btn-ghost btn-sm" style="padding:4px 10px;font-size:11px;">Say Hi</button></div>
+          <div class="attendee-row"><div class="att-av"><img src="https://randomuser.me/api/portraits/women/7.jpg" loading="lazy" alt="Nina"></div><div style="flex:1;"><div style="font-size:13px;font-weight:600;">Nina S., 27</div><div style="font-size:12px;color:var(--muted2);">81% match</div></div><button class="btn btn-ghost btn-sm" style="padding:4px 10px;font-size:11px;">Say Hi</button></div>
+        </div>
+        <div style="font-size:12px;color:var(--muted2);text-align:center;margin-top:12px;">+37 more attending</div>
+      </div>
+
+      <div class="g-card" style="padding:16px;border-color:rgba(var(--accent-rgb),.3);background:rgba(var(--accent-rgb),.07);">
+        <div style="font-size:15px;font-weight:700;margin-bottom:3px;">AURA Rooftop Social</div>
+        <div style="font-size:13px;color:var(--muted2);margin-bottom:14px;">Sat, Mar 21 · 7:00 PM</div>
+        <div style="font-size:26px;font-weight:800;margin-bottom:14px;">Free <span style="font-size:13px;color:var(--muted2);font-weight:400;">for AURA+</span></div>
+        <button class="btn btn-primary w-100" style="margin-bottom:6px;">Register Now</button>
+        <div style="font-size:11px;color:var(--muted2);text-align:center;">8 spots remaining</div>
+      </div>
+
+      <div id="theme-switcher"></div>
+    </div>
+  </main>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

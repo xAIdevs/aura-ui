@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to AURA</title>
+  <meta name="description" content="Discover AURA — the AI-powered dating app that finds matches who truly resonate with your soul." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    /* ── ONBOARDING PAGE OVERRIDES ────────────────────── */
+    body { overflow: hidden; }
+
+    .onboarding-wrap {
+      position: fixed; inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    /* ── SLIDES CONTAINER ─────────────────────────────── */
+    .slides-container {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      padding: 0 24px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .onboarding-slide {
+      position: absolute;
+      width: calc(100% - 48px);
+      text-align: center;
+      opacity: 0;
+      transform: translateX(40px);
+      pointer-events: none;
+      transition: opacity .4s cubic-bezier(.4,0,.2,1), transform .4s cubic-bezier(.4,0,.2,1);
+    }
+    .onboarding-slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+    .onboarding-slide.exit-left {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+
+    /* ── BOTTOM NAV ───────────────────────────────────── */
+    .ob-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 520px;
+      padding: 24px 24px 40px;
+    }
+
+    .onboarding-dots {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .onboarding-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--card-b);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .3s cubic-bezier(.4,0,.2,1);
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .onboarding-dot:hover { background: var(--muted); }
+    .onboarding-dot.active {
+      background: var(--accent2);
+      width: 24px;
+      border-radius: 4px;
+      border-color: var(--accent2);
+    }
+
+    /* ── SLIDE 1: WELCOME ─────────────────────────────── */
+    .ob-welcome-emoji {
+      font-size: 72px;
+      margin-bottom: 24px;
+      display: block;
+      line-height: 1;
+    }
+
+    /* ── SLIDE 2: NODE GRAPH ──────────────────────────── */
+    .node-graph {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 32px;
+    }
+    .node-graph svg { width: 100%; height: 100%; }
+
+    /* Orbit animation for dashed rings */
+    @keyframes orbit-spin {
+      from { transform-origin: 100px 100px; transform: rotate(0deg); }
+      to   { transform-origin: 100px 100px; transform: rotate(360deg); }
+    }
+    .orbit-ring-1 { animation: orbit-spin 20s linear infinite; }
+    .orbit-ring-2 { animation: orbit-spin 30s linear infinite reverse; }
+
+    /* Pulse for centre node */
+    @keyframes node-pulse {
+      0%, 100% { r: 6; opacity: .9; }
+      50%       { r: 8; opacity: 1; }
+    }
+    .node-center { animation: node-pulse 2.4s ease-in-out infinite; }
+
+    /* ── SLIDE 3: PHOTO COLLAGE ───────────────────────── */
+    .photo-collage {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 0 auto 32px;
+      max-width: 300px;
+    }
+    .photo-collage .col-img {
+      aspect-ratio: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .photo-collage .col-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .3s;
+    }
+    .photo-collage .col-img:hover img { transform: scale(1.06); }
+    /* Second tile is circular (feature person) */
+    .photo-collage .col-img:nth-child(2) {
+      border-radius: 50%;
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 2px var(--accent2), var(--glow);
+    }
+
+    /* ── SLIDE 4: MOCK CHAT ───────────────────────────── */
+    .mock-chat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      text-align: left;
+      margin: 0 auto 32px;
+      max-width: 320px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .mock-chat-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .mock-chat-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1.5px solid var(--border2);
+    }
+    .mock-chat-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .mock-chat-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .mock-chat-status { font-size: 11px; color: var(--green); margin-top: 1px; }
+
+    .mock-bubble {
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 8px;
+      max-width: 80%;
+      word-break: break-word;
+    }
+    .mock-bubble.received {
+      background: var(--card-b);
+      color: var(--text2);
+      border-bottom-left-radius: 4px;
+    }
+    .mock-bubble.sent {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+    }
+    .mock-ai-tip {
+      background: rgba(var(--accent-rgb), .12);
+      border: 1px solid rgba(var(--accent-rgb), .25);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--accent3);
+      margin-top: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    /* ── SLIDE 5: CTA ─────────────────────────────────── */
+    .ob-cta-emoji {
+      font-size: 80px;
+      margin-bottom: 24px;
+      display: block;
+      line-height: 1;
+    }
+
+    /* ── PREV BUTTON HIDDEN ON FIRST SLIDE ────────────── */
+    .ob-nav .btn-ghost[data-action="prev-slide"][aria-hidden="true"] {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 480px) {
+      .slides-container { padding: 0 16px; }
+      .onboarding-slide { width: calc(100% - 32px); }
+      .ob-nav { padding: 20px 16px 32px; }
+      .photo-collage { max-width: 240px; }
+    }
+    @media (max-height: 640px) {
+      .node-graph { width: 150px; height: 150px; margin-bottom: 20px; }
+      .photo-collage { max-width: 220px; margin-bottom: 20px; }
+      .mock-chat { margin-bottom: 20px; padding: 12px; }
+      .ob-welcome-emoji, .ob-cta-emoji { font-size: 48px; margin-bottom: 16px; }
+    }
+  </style>
+</head>
+<body data-page="onboarding">
+
+  <!-- Ambient background -->
+  <div class="amb-bg">
+    <div class="orb3"></div>
+  </div>
+
+  <div class="onboarding-wrap">
+    <div class="slides-container" id="ob-slides-container">
+
+      <!-- ═══════════════════════════════════════════════
+           SLIDE 1 — Welcome
+      ════════════════════════════════════════════════ -->
+      <div class="onboarding-slide active" id="slide-1" role="tabpanel" aria-label="Slide 1 of 5">
+        <span class="ob-welcome-emoji animate-scale-in" aria-hidden="true">💜</span>
+        <h1
+          style="font-size:clamp(2.5rem,8vw,4rem); font-weight:800; margin-bottom:16px; line-height:1.05; font-family:'Space Grotesk',sans-serif; letter-spacing:-1.5px;"
+          class="animate-fade-up"
+        >
+          Welcome to<br><span class="grad-text">AURA</span>
+        </h1>
+        <p
+          style="font-size:clamp(1rem,2vw,1.15rem); color:var(--muted2); line-height:1.7;"
+          class="animate-fade-up delay-200"
+        >
+          The AI-powered dating app that finds matches who truly resonate with your soul.
+        </p>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           SLIDE 2 — AURA BRAIN™
+      ════════════════════════════════════════════════ -->
+      <div class="onboarding-slide" id="slide-2" role="tabpanel" aria-label="Slide 2 of 5">
+        <div class="node-graph animate-scale-in" aria-hidden="true">
+          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Animated orbit rings -->
+            <circle class="orbit-ring-1" cx="100" cy="100" r="30"
+              stroke="var(--accent2)" stroke-width="1" opacity=".2"
+              fill="none" stroke-dasharray="4 4"/>
+            <circle class="orbit-ring-2" cx="100" cy="100" r="55"
+              stroke="var(--accent)" stroke-width="1" opacity=".1"
+              fill="none" stroke-dasharray="2 6"/>
+            <!-- Connection lines -->
+            <line x1="100" y1="100" x2="40"  y2="60"  stroke="var(--accent2)" stroke-width="1" opacity=".35"/>
+            <line x1="100" y1="100" x2="160" y2="60"  stroke="var(--cyan)"    stroke-width="1" opacity=".35"/>
+            <line x1="100" y1="100" x2="40"  y2="140" stroke="var(--pink)"    stroke-width="1" opacity=".35"/>
+            <line x1="100" y1="100" x2="160" y2="140" stroke="var(--accent3)" stroke-width="1" opacity=".35"/>
+            <line x1="100" y1="100" x2="100" y2="30"  stroke="var(--green)"   stroke-width="1" opacity=".35"/>
+            <line x1="100" y1="100" x2="100" y2="170" stroke="var(--gold)"    stroke-width="1" opacity=".35"/>
+            <!-- Satellite nodes -->
+            <circle cx="40"  cy="60"  r="4" fill="var(--pink)"    opacity=".85"/>
+            <circle cx="160" cy="60"  r="4" fill="var(--cyan)"    opacity=".85"/>
+            <circle cx="40"  cy="140" r="4" fill="var(--accent3)" opacity=".75"/>
+            <circle cx="160" cy="140" r="4" fill="var(--pink)"    opacity=".75"/>
+            <circle cx="100" cy="30"  r="3" fill="var(--green)"   opacity=".75"/>
+            <circle cx="100" cy="170" r="3" fill="var(--gold)"    opacity=".75"/>
+            <!-- Centre node -->
+            <circle class="node-center" cx="100" cy="100" r="6" fill="var(--accent2)" opacity=".95"/>
+          </svg>
+        </div>
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent3); margin-bottom:12px;">
+          Introducing
+        </div>
+        <h2 style="font-size:clamp(1.8rem,6vw,3rem); font-weight:800; margin-bottom:16px; font-family:'Space Grotesk',sans-serif;" class="grad-text">
+          AURA BRAIN™
+        </h2>
+        <p style="font-size:clamp(0.9rem,1.8vw,1.05rem); color:var(--muted2); line-height:1.7;">
+          Our AI analyzes <strong style="color:var(--text);">47 compatibility signals</strong> — from personality vectors to communication style — to find your perfect match.
+        </p>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           SLIDE 3 — Real matches
+      ════════════════════════════════════════════════ -->
+      <div class="onboarding-slide" id="slide-3" role="tabpanel" aria-label="Slide 3 of 5">
+        <div class="photo-collage animate-scale-in">
+          <div class="col-img"><img src="https://randomuser.me/api/portraits/women/1.jpg" loading="lazy" alt="Match" /></div>
+          <div class="col-img"><img src="https://randomuser.me/api/portraits/men/1.jpg"   loading="lazy" alt="Match" /></div>
+          <div class="col-img"><img src="https://randomuser.me/api/portraits/women/2.jpg" loading="lazy" alt="Match" /></div>
+          <div class="col-img"><img src="https://randomuser.me/api/portraits/men/2.jpg"   loading="lazy" alt="Match" /></div>
+          <div class="col-img"><img src="https://randomuser.me/api/portraits/women/3.jpg" loading="lazy" alt="Match" /></div>
+          <div class="col-img"><img src="https://randomuser.me/api/portraits/men/3.jpg"   loading="lazy" alt="Match" /></div>
+        </div>
+        <h2 style="font-size:clamp(1.8rem,5vw,2.8rem); font-weight:800; margin-bottom:16px; font-family:'Space Grotesk',sans-serif;">
+          Matches that<br><span class="grad-text">make sense</span>
+        </h2>
+        <p style="font-size:clamp(0.9rem,1.8vw,1.05rem); color:var(--muted2); line-height:1.7;">
+          Every suggestion is backed by real AI chemistry analysis — not just photos and bios.
+        </p>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           SLIDE 4 — AI Chat Demo
+      ════════════════════════════════════════════════ -->
+      <div class="onboarding-slide" id="slide-4" role="tabpanel" aria-label="Slide 4 of 5">
+        <div class="mock-chat animate-scale-in" aria-label="Example conversation">
+          <div class="mock-chat-header">
+            <div class="mock-chat-avatar">
+              <img src="https://randomuser.me/api/portraits/women/4.jpg" loading="lazy" alt="Sofia" />
+            </div>
+            <div>
+              <div class="mock-chat-name">Sofia</div>
+              <div class="mock-chat-status">● Online</div>
+            </div>
+          </div>
+          <div class="mock-bubble received">Hey! I see you love hiking too 🏔</div>
+          <div class="mock-bubble sent">Yes! Zion last spring was incredible!</div>
+          <div class="mock-bubble received">Oh wow, I was literally there in April! 😮</div>
+          <div class="mock-ai-tip">
+            <span aria-hidden="true">💡</span>
+            <span>AURA suggests: Ask about their favorite trail</span>
+          </div>
+        </div>
+        <h2 style="font-size:clamp(1.8rem,5vw,2.8rem); font-weight:800; margin-bottom:16px; font-family:'Space Grotesk',sans-serif;">
+          AI helps you<br><span class="grad-text">connect deeper</span>
+        </h2>
+        <p style="font-size:clamp(0.9rem,1.8vw,1.05rem); color:var(--muted2); line-height:1.7;">
+          Real-time conversation coaching powered by AURA BRAIN™.
+        </p>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           SLIDE 5 — CTA
+      ════════════════════════════════════════════════ -->
+      <div class="onboarding-slide" id="slide-5" role="tabpanel" aria-label="Slide 5 of 5">
+        <span class="ob-cta-emoji animate-scale-in" aria-hidden="true">✨</span>
+        <h2
+          style="font-size:clamp(2rem,6vw,3.5rem); font-weight:800; margin-bottom:16px; font-family:'Space Grotesk',sans-serif; letter-spacing:-1px;"
+          class="animate-fade-up"
+        >
+          Ready to find<br><span class="grad-text">your person?</span>
+        </h2>
+        <p
+          style="font-size:clamp(0.9rem,1.8vw,1.05rem); color:var(--muted2); line-height:1.7; margin-bottom:32px;"
+          class="animate-fade-up delay-100"
+        >
+          Join 2.4 million people who found meaningful connections through AURA.
+        </p>
+        <div class="animate-fade-up delay-200">
+          <a href="signup.html" class="btn btn-primary btn-lg w-100" style="margin-bottom:12px; justify-content:center;">
+            Create Free Account
+          </a>
+          <a href="login.html" class="btn btn-ghost btn-lg w-100" style="justify-content:center;">
+            I already have an account
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /slides-container -->
+
+    <!-- ── BOTTOM NAVIGATION ───────────────────────────── -->
+    <nav class="ob-nav" aria-label="Onboarding navigation">
+      <button
+        class="btn btn-ghost btn-sm"
+        data-action="prev-slide"
+        aria-label="Previous slide"
+        aria-hidden="true"
+      >← Back</button>
+
+      <div class="onboarding-dots" role="tablist" aria-label="Slide indicators">
+        <button class="onboarding-dot active" role="tab" aria-selected="true"  aria-label="Go to slide 1"></button>
+        <button class="onboarding-dot"         role="tab" aria-selected="false" aria-label="Go to slide 2"></button>
+        <button class="onboarding-dot"         role="tab" aria-selected="false" aria-label="Go to slide 3"></button>
+        <button class="onboarding-dot"         role="tab" aria-selected="false" aria-label="Go to slide 4"></button>
+        <button class="onboarding-dot"         role="tab" aria-selected="false" aria-label="Go to slide 5"></button>
+      </div>
+
+      <button
+        class="btn btn-primary btn-sm"
+        data-action="next-slide"
+        aria-label="Next slide"
+      >Next →</button>
+    </nav>
+
+  </div><!-- /onboarding-wrap -->
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
