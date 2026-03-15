@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achievements – AURA AI Dating</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    /* ── XP PROGRESS BAR ── */
+    .xp-bar-track {
+      width: 100%;
+      height: 8px;
+      background: var(--card-b);
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 8px 0 4px;
+    }
+    .xp-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      animation: xpGrow .9s cubic-bezier(.4,0,.2,1) forwards;
+    }
+    @keyframes xpGrow {
+      from { width: 0%; }
+      to   { width: 78%; } /* 2340/3000 = 78% */
+    }
+
+    /* ── CATEGORY FILTER BUTTONS ── */
+    .cat-filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 20px;
+    }
+    .cat-btn {
+      padding: 7px 14px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted2);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .cat-btn:hover { background: var(--card-b); color: var(--text); border-color: var(--border2); }
+    .cat-btn.active {
+      background: linear-gradient(135deg, rgba(var(--accent-rgb),.25), rgba(var(--accent-rgb),.12));
+      color: var(--accent3);
+      border-color: rgba(var(--accent-rgb),.4);
+    }
+
+    /* ── STAT PILL (left panel) ── */
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius3);
+      margin-bottom: 6px;
+    }
+    .stat-pill-label {
+      font-size: 13px;
+      color: var(--muted2);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .stat-pill-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* ── TOPBAR BADGES ── */
+    .topbar-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .topbar-badge.earned {
+      background: rgba(var(--accent-rgb),.15);
+      color: var(--accent3);
+      border: 1px solid rgba(var(--accent-rgb),.3);
+    }
+    .topbar-badge.active {
+      background: rgba(var(--pink-rgb),.12);
+      color: var(--pink);
+      border: 1px solid rgba(var(--pink-rgb),.3);
+    }
+
+    /* ── CHALLENGE CARDS ── */
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+    @media (max-width: 900px) { .challenge-grid { grid-template-columns: 1fr; } }
+
+    .challenge-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      backdrop-filter: blur(12px);
+      transition: all .25s cubic-bezier(.4,0,.2,1);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .challenge-card:hover {
+      border-color: var(--border2);
+      background: var(--card-b);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    .challenge-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+    .challenge-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .challenge-progress-label {
+      font-size: 12px;
+      color: var(--muted2);
+    }
+    .challenge-bar-track {
+      height: 6px;
+      background: var(--card-b);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .challenge-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width .8s cubic-bezier(.4,0,.2,1);
+    }
+    .challenge-xp {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ── BADGE GRID ── */
+    .section-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 1100px) { .badges-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px)  { .badges-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .badge-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 12px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      transition: all .25s cubic-bezier(.4,0,.2,1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-item:hover {
+      border-color: var(--border2);
+      background: var(--card-b);
+      box-shadow: var(--glow);
+      transform: translateY(-2px);
+    }
+    .badge-icon-wrap {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      background: linear-gradient(135deg, rgba(var(--accent-rgb),.3), rgba(var(--pink-rgb),.2));
+      border: 2px solid rgba(var(--accent-rgb),.25);
+      flex-shrink: 0;
+    }
+    .badge-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+      line-height: 1.3;
+    }
+    .badge-xp {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .badge-date {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* ── LOCKED BADGES ── */
+    .locked-badges-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 1100px) { .locked-badges-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px)  { .locked-badges-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .badge-item.locked {
+      opacity: 0.45;
+      filter: grayscale(0.5);
+      position: relative;
+    }
+    .badge-item.locked .badge-icon-wrap {
+      position: relative;
+    }
+    .badge-item.locked .badge-icon-wrap::after {
+      content: '🔒';
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      font-size: 14px;
+      line-height: 1;
+    }
+    .badge-unlock-hint {
+      font-size: 10px;
+      color: var(--muted2);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    /* ── LEADERBOARD ── */
+    .lb-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .lb-row:last-child { border-bottom: none; }
+    .lb-rank {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--muted);
+      min-width: 20px;
+      text-align: center;
+    }
+    .lb-rank.gold   { color: var(--gold); }
+    .lb-rank.silver { color: var(--muted2); }
+    .lb-rank.bronze { color: #CD7F32; }
+    .lb-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      color: #fff;
+      font-weight: 700;
+    }
+    .lb-name {
+      flex: 1;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .lb-xp {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent3);
+    }
+
+    /* ── LEVEL UP REWARDS ── */
+    .level-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .level-row:last-child { border-bottom: none; }
+    .level-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(var(--accent-rgb),.2), rgba(var(--pink-rgb),.15));
+      border: 1px solid rgba(var(--accent-rgb),.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--accent3);
+      flex-shrink: 0;
+    }
+    .level-info-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .level-info-desc {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-top: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .challenge-grid { grid-template-columns: 1fr; }
+      .badges-grid { grid-template-columns: repeat(2, 1fr); }
+      .locked-badges-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body data-page="achievements">
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <aside class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html"      class="nav-item" data-tip="Discover">🔥</a>
+    <a href="matches.html"       class="nav-item" data-tip="Matches">💜</a>
+    <a href="chat.html"          class="nav-item" data-tip="Chat">💬</a>
+    <a href="search.html"        class="nav-item" data-tip="Search">🔍</a>
+    <a href="events.html"        class="nav-item" data-tip="Events">🎉</a>
+    <a href="analytics.html"     class="nav-item" data-tip="Analytics">📊</a>
+    <a href="achievements.html"  class="nav-item active" data-tip="Achievements">🏆</a>
+    <div class="nav-divider"></div>
+    <a href="notifications.html" class="nav-item" data-tip="Notifications">🔔</a>
+    <div class="nav-divider"></div>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">
+      <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="My profile">
+    </a>
+  </aside>
+
+  <main class="app-layout">
+
+    <!-- ── LEFT PANEL ── -->
+    <div class="panel-left">
+      <div class="panel-header">
+        <span class="panel-title">Your Progress</span>
+      </div>
+
+      <!-- Level + XP -->
+      <div style="background:linear-gradient(135deg,rgba(var(--accent-rgb),.15),rgba(var(--pink-rgb),.08));border:1px solid rgba(var(--accent-rgb),.3);border-radius:var(--radius);padding:16px;margin-bottom:14px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--accent3);margin-bottom:6px;">Current Level</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:800;color:var(--accent2);line-height:1;">Level 7</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:3px;font-weight:600;">Expert Connector</div>
+        <div class="xp-bar-track">
+          <div class="xp-bar-fill"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted2);">
+          <span>2,340 XP</span>
+          <span>3,000 XP</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted2);margin-top:6px;">660 XP to Level 8</div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="stat-pill">
+        <span class="stat-pill-label">🔥 Streak</span>
+        <span class="stat-pill-value" style="color:var(--gold);">12 days</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill-label">💎 Hearts</span>
+        <span class="stat-pill-value" style="color:var(--cyan);">480</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill-label">🏅 Badges Earned</span>
+        <span class="stat-pill-value" style="color:var(--accent2);">12</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill-label">🎯 Challenges Done</span>
+        <span class="stat-pill-value">8</span>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="cat-filter-row">
+        <button class="cat-btn active" data-filter="all">All</button>
+        <button class="cat-btn" data-filter="earned">Earned</button>
+        <button class="cat-btn" data-filter="locked">Locked</button>
+        <button class="cat-btn" data-filter="challenges">Challenges</button>
+      </div>
+    </div>
+
+    <!-- ── CENTER PANEL ── -->
+    <div class="panel-center">
+
+      <div class="topbar">
+        <h1 class="page-title">Achievements</h1>
+        <div class="topbar-actions">
+          <span class="topbar-badge earned">✅ 12 Earned</span>
+          <span class="topbar-badge active">⚡ 3 Active</span>
+        </div>
+      </div>
+
+      <!-- Active Challenges -->
+      <div class="section-heading">Active Challenges</div>
+      <div class="challenge-grid">
+
+        <div class="challenge-card">
+          <div class="challenge-icon">🎯</div>
+          <div class="challenge-title">Send a Voice Note</div>
+          <div class="challenge-progress-label">0 / 1 complete</div>
+          <div class="challenge-bar-track">
+            <div class="challenge-bar-fill" style="width:0%;"></div>
+          </div>
+          <div class="challenge-xp">⚡ 50 XP reward</div>
+          <button class="btn btn-ghost btn-sm" style="margin-top:4px;">Start Challenge</button>
+        </div>
+
+        <div class="challenge-card" style="border-color:rgba(var(--accent-rgb),.3);">
+          <div class="challenge-icon">💬</div>
+          <div class="challenge-title">Start 3 Conversations</div>
+          <div class="challenge-progress-label">2 / 3 complete</div>
+          <div class="challenge-bar-track">
+            <div class="challenge-bar-fill" style="width:66%;"></div>
+          </div>
+          <div class="challenge-xp">⚡ 150 XP reward</div>
+          <button class="btn btn-primary btn-sm" style="margin-top:4px;">Keep Going</button>
+        </div>
+
+        <div class="challenge-card">
+          <div class="challenge-icon">📅</div>
+          <div class="challenge-title">Plan a Virtual Date</div>
+          <div class="challenge-progress-label">0 / 1 complete</div>
+          <div class="challenge-bar-track">
+            <div class="challenge-bar-fill" style="width:0%;"></div>
+          </div>
+          <div class="challenge-xp">⚡ 200 XP reward</div>
+          <button class="btn btn-ghost btn-sm" style="margin-top:4px;">Start Challenge</button>
+        </div>
+
+      </div>
+
+      <!-- Earned Badges -->
+      <div class="section-heading">Earned Badges</div>
+      <div class="badges-grid">
+
+        <div class="badge-item">
+          <div class="badge-icon-wrap" style="background:linear-gradient(135deg,rgba(var(--accent-rgb),.35),rgba(var(--pink-rgb),.2));">🚀</div>
+          <div class="badge-name">First Match</div>
+          <div class="badge-xp">+50 XP</div>
+          <div class="badge-date">Mar 1, 2026</div>
+        </div>
+
+        <div class="badge-item">
+          <div class="badge-icon-wrap" style="background:linear-gradient(135deg,rgba(var(--cyan),.2),rgba(var(--accent-rgb),.2));">💬</div>
+          <div class="badge-name">Conversation Starter</div>
+          <div class="badge-xp">+100 XP</div>
+          <div class="badge-date">Mar 3, 2026</div>
+        </div>
+
+        <div class="badge-item">
+          <div class="badge-icon-wrap" style="background:linear-gradient(135deg,rgba(249,115,22,.3),rgba(245,158,11,.2));">🔥</div>
+          <div class="badge-name">7-Day Streak</div>
+          <div class="badge-xp">+200 XP</div>
+          <div class="badge-date">Mar 8, 2026</div>
+        </div>
+
+        <div class="badge-item">
+          <div class="badge-icon-wrap" style="background:linear-gradient(135deg,rgba(var(--pink-rgb),.3),rgba(var(--accent-rgb),.2));">✨</div>
+          <div class="badge-name">Deep Diver</div>
+          <div class="badge-xp">+150 XP</div>
+          <div class="badge-date">Mar 10, 2026</div>
+        </div>
+
+        <div class="badge-item">
+          <div class="badge-icon-wrap" style="background:linear-gradient(135deg,rgba(16,185,129,.3),rgba(6,182,212,.2));">📸</div>
+          <div class="badge-name">Profile Complete</div>
+          <div class="badge-xp">+100 XP</div>
+          <div class="badge-date">Feb 28, 2026</div>
+        </div>
+
+        <div class="badge-item">
+          <div class="badge-icon-wrap" style="background:linear-gradient(135deg,rgba(var(--accent-rgb),.3),rgba(var(--cyan),.15));">🎯</div>
+          <div class="badge-name">Brave Ask</div>
+          <div class="badge-xp">+200 XP</div>
+          <div class="badge-date">Mar 12, 2026</div>
+        </div>
+
+        <div class="badge-item">
+          <div class="badge-icon-wrap" style="background:linear-gradient(135deg,rgba(var(--pink-rgb),.3),rgba(245,158,11,.2));">💝</div>
+          <div class="badge-name">Thoughtful Responder</div>
+          <div class="badge-xp">+150 XP</div>
+          <div class="badge-date">Mar 6, 2026</div>
+        </div>
+
+        <div class="badge-item" style="border-color:rgba(var(--accent-rgb),.35);background:rgba(var(--accent-rgb),.07);">
+          <div class="badge-icon-wrap" style="background:linear-gradient(135deg,rgba(245,158,11,.35),rgba(var(--pink-rgb),.2));">🌟</div>
+          <div class="badge-name">Weekly Top Match</div>
+          <div class="badge-xp">+300 XP</div>
+          <div class="badge-date">Mar 15, 2026</div>
+        </div>
+
+      </div>
+
+      <!-- Locked Badges -->
+      <div class="section-heading" style="color:var(--muted2);">Locked Badges</div>
+      <div class="locked-badges-grid">
+
+        <div class="badge-item locked">
+          <div class="badge-icon-wrap">💎</div>
+          <div class="badge-name">Power Swiper</div>
+          <div class="badge-unlock-hint">Reach a 30-day streak</div>
+        </div>
+
+        <div class="badge-item locked">
+          <div class="badge-icon-wrap">🏆</div>
+          <div class="badge-name">Date Planner</div>
+          <div class="badge-unlock-hint">Plan 3 real dates</div>
+        </div>
+
+        <div class="badge-item locked">
+          <div class="badge-icon-wrap">👑</div>
+          <div class="badge-name">Super Connector</div>
+          <div class="badge-unlock-hint">20 active conversations</div>
+        </div>
+
+        <div class="badge-item locked">
+          <div class="badge-icon-wrap">🌈</div>
+          <div class="badge-name">Community Champion</div>
+          <div class="badge-unlock-hint">Post 5 advice forum replies</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── RIGHT PANEL ── -->
+    <div class="panel-right">
+
+      <!-- Leaderboard -->
+      <div class="g-card" style="padding:16px;">
+        <div class="g-title">🏆 Leaderboard</div>
+        <div style="font-size:11px;color:var(--muted2);margin-bottom:12px;">Top users this week</div>
+
+        <div class="lb-row">
+          <span class="lb-rank gold">1</span>
+          <div class="lb-avatar" style="background:linear-gradient(135deg,var(--gold),#F97316);">P</div>
+          <span class="lb-name">Purple Fox</span>
+          <span class="lb-xp">4,820 XP</span>
+        </div>
+        <div class="lb-row">
+          <span class="lb-rank silver">2</span>
+          <div class="lb-avatar" style="background:linear-gradient(135deg,var(--cyan),var(--accent));">B</div>
+          <span class="lb-name">Blue Star</span>
+          <span class="lb-xp">4,310 XP</span>
+        </div>
+        <div class="lb-row">
+          <span class="lb-rank bronze">3</span>
+          <div class="lb-avatar" style="background:linear-gradient(135deg,var(--pink),var(--accent2));">C</div>
+          <span class="lb-name">Cosmic Dreamer</span>
+          <span class="lb-xp">3,950 XP</span>
+        </div>
+        <div class="lb-row">
+          <span class="lb-rank">4</span>
+          <div class="lb-avatar" style="background:linear-gradient(135deg,var(--green),var(--cyan));">S</div>
+          <span class="lb-name">Silver Moon</span>
+          <span class="lb-xp">3,620 XP</span>
+        </div>
+        <div class="lb-row" style="background:rgba(var(--accent-rgb),.06);border-radius:var(--radius3);padding:9px 8px;border-color:rgba(var(--accent-rgb),.25);border:1px solid;">
+          <span class="lb-rank" style="color:var(--accent3);">7</span>
+          <div class="lb-avatar" style="background:linear-gradient(135deg,var(--accent),var(--accent2));">Y</div>
+          <span class="lb-name" style="color:var(--accent3);">You</span>
+          <span class="lb-xp">2,340 XP</span>
+        </div>
+      </div>
+
+      <!-- Daily Reward -->
+      <div class="g-card" style="padding:16px;border-color:rgba(var(--accent-rgb),.3);background:rgba(var(--accent-rgb),.07);">
+        <div class="g-title">🎁 Daily Reward</div>
+        <div style="text-align:center;padding:8px 0;">
+          <div style="font-size:40px;margin-bottom:6px;">💎</div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;color:var(--cyan);">+25 Hearts</div>
+          <div style="font-size:12px;color:var(--muted2);margin-top:4px;">Today's reward</div>
+          <div style="font-size:12px;color:var(--gold);font-weight:600;margin-top:4px;">🔥 12-day streak bonus!</div>
+        </div>
+        <button class="btn btn-primary btn-lg w-100" style="margin-top:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));">
+          Claim Today's Reward
+        </button>
+        <div style="font-size:11px;color:var(--muted2);text-align:center;margin-top:6px;">Resets in 14h 32m</div>
+      </div>
+
+      <!-- Level Up Rewards -->
+      <div class="g-card" style="padding:16px;">
+        <div class="g-title">⬆️ Level Up Rewards</div>
+        <div style="font-size:11px;color:var(--muted2);margin-bottom:12px;">What you unlock next</div>
+
+        <div class="level-row">
+          <div class="level-num">8</div>
+          <div>
+            <div class="level-info-title">Advanced Filters</div>
+            <div class="level-info-desc">Unlock 3 extra search filters + priority matching queue</div>
+          </div>
+        </div>
+        <div class="level-row">
+          <div class="level-num">9</div>
+          <div>
+            <div class="level-info-title">AI Deep Analysis</div>
+            <div class="level-info-desc">Full AI personality compatibility breakdown on every match</div>
+          </div>
+        </div>
+        <div class="level-row">
+          <div class="level-num" style="color:var(--gold);border-color:rgba(245,158,11,.4);">10</div>
+          <div>
+            <div class="level-info-title" style="color:var(--gold);">Elite Badge + AURA+ Trial</div>
+            <div class="level-info-desc">Exclusive gold badge, 7-day AURA+ free trial, unlimited boosts</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="theme-switcher"></div>
+    </div>
+
+  </main>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

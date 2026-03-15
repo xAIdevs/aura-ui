@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -137,7 +137,7 @@
     .main-layout {
       margin-left: 72px;
       display: grid;
-      grid-template-columns: 300px 1fr 280px;
+      grid-template-columns: 320px 1fr 280px;
       height: 100vh;
       position: relative; z-index: 1;
     }
@@ -332,7 +332,7 @@
 
     /* ── CENTER PANEL ────────────────────────────── */
     .center-panel {
-      padding: 24px 28px;
+      padding: 14px 20px;
       display: flex; flex-direction: column;
       overflow-y: auto; height: 100vh;
       align-items: center;
@@ -344,7 +344,7 @@
       display: flex; align-items: center;
       justify-content: space-between;
       width: 100%; max-width: 440px;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
     .center-topbar .page-title {
       font-family: 'Space Grotesk', sans-serif;
@@ -373,7 +373,7 @@
       border-radius: 16px;
       padding: 14px 16px;
       display: flex; align-items: flex-start; gap: 12px;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
       position: relative; overflow: hidden;
     }
     .ai-insight-banner::before {
@@ -409,8 +409,19 @@
     }
     .ai-banner-dismiss:hover { color: var(--text); }
 
+    /* AI Picks scroll nav buttons */
+    .picks-nav-btn {
+      width: 26px; height: 26px; border-radius: 8px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      color: var(--muted2); font-size: 16px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .2s; line-height: 1; padding: 0;
+    }
+    .picks-nav-btn:hover { border-color: var(--border2); color: var(--accent3); background: rgba(255,255,255,.1); }
+
     /* ── CARD STACK ──────────────────────────────── */
-    .card-stack { position:relative; width:340px; height:480px; margin:0 auto; }
+    .card-stack { position:relative; width:380px; height:460px; margin:0 auto; }
 
     .profile-card {
       position:absolute; inset:0;
@@ -443,11 +454,9 @@
       box-shadow: 0 0 40px rgba(6,182,212,.3) !important;
     }
 
-    /* Card photo area */
+    /* Card photo area — fills entire card */
     .card-photo {
-      width: 100%; aspect-ratio: 4/5;
-      position: relative;
-      display: flex; align-items: center; justify-content: center;
+      position: absolute; inset: 0;
     }
     .card-photo-bg {
       position: absolute; inset: 0;
@@ -581,7 +590,7 @@
     .action-row {
       display: flex; align-items: center;
       justify-content: center; gap: 14px;
-      margin-top: 22px;
+      margin-top: 12px;
     }
     .action-item {
       display: flex; flex-direction: column;
@@ -595,8 +604,8 @@
     /* Profiles left indicator */
     .profiles-left {
       display: flex; flex-direction: column;
-      align-items: center; gap: 8px;
-      margin-top: 18px;
+      align-items: center; gap: 6px;
+      margin-top: 8px;
     }
     .profiles-left-text {
       font-size: 12px; color: var(--muted);
@@ -784,9 +793,7 @@
     .tip-body p { font-size: 11px; color: var(--muted2); line-height: 1.5; }
 
     /* Theme switcher placeholder */
-    #theme-switcher {
-      margin-top: auto; padding-top: 8px;
-    }
+    #theme-switcher { display: none; }
 
     /* ── MATCH MODAL ─────────────────────────────── */
     .modal-overlay {
@@ -804,7 +811,7 @@
       background: var(--bg2);
       border: 1px solid var(--border2);
       border-radius: var(--radius2);
-      padding: 40px 36px;
+      padding: 24px 28px;
       max-width: 420px; width: 90%;
       text-align: center;
       position: relative;
@@ -898,7 +905,7 @@
       background: var(--bg2);
       border: 1px solid rgba(245,158,11,.25);
       border-radius: var(--radius2);
-      padding: 36px 32px;
+      padding: 24px 24px;
       max-width: 380px; width: 90%;
       text-align: center;
       position: relative; overflow: hidden;
@@ -1013,11 +1020,85 @@
     }
     .btn-apply-filter:hover { opacity: .9; }
 
+    /* Nearby scroll wrapper */
+    .nearby-list {
+      overflow-y: auto;
+      max-height: 380px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .nearby-list::-webkit-scrollbar { width: 3px; }
+    .nearby-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
     /* Scrollbar */
     .right-panel::-webkit-scrollbar, .left-panel::-webkit-scrollbar { width: 4px; }
     .right-panel::-webkit-scrollbar-thumb, .left-panel::-webkit-scrollbar-thumb {
       background: rgba(255,255,255,.07); border-radius: 2px;
     }
+
+    /* ── PHOTO CAROUSEL ─────────────────────────────── */
+    .card-photo-bg { overflow: hidden; }
+    .photo-track { display: flex; height: 100%; transition: transform .3s cubic-bezier(.25,.46,.45,.94); }
+    .photo-slide { min-width: 100%; height: 100%; flex-shrink: 0; }
+    .photo-slide img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; display: block; }
+    .photo-tap-l, .photo-tap-r { position: absolute; top: 0; bottom: 0; width: 35%; z-index: 12; cursor: pointer; }
+    .photo-tap-l { left: 0; }
+    .photo-tap-r { right: 0; }
+
+    /* ── BUTTON ANIMATIONS ──────────────────────────── */
+    /* Heart explosion particles */
+    .heart-burst { position: fixed; pointer-events: none; z-index: 9999; font-size: 18px; animation: heartFly .72s ease-out forwards; }
+    @keyframes heartFly { 0%{transform:translate(0,0) scale(.5);opacity:1} 100%{transform:translate(var(--htx),var(--hty)) scale(1.2);opacity:0} }
+    /* Like button pop */
+    @keyframes likeHeartPop { 0%{transform:scale(1)} 25%{transform:scale(1.42)} 60%{transform:scale(0.88)} 100%{transform:scale(1)} }
+    .action-btn-circle.like-btn.pop { animation: likeHeartPop .44s ease; }
+    /* Super like glow */
+    @keyframes superGlowPulse { 0%{box-shadow:0 8px 24px rgba(6,182,212,.15)} 50%{box-shadow:0 8px 42px rgba(6,182,212,.75),0 0 28px rgba(6,182,212,.45);transform:scale(1.16)} 100%{box-shadow:0 8px 24px rgba(6,182,212,.15);transform:scale(1)} }
+    .action-btn-circle.super-btn.glow { animation: superGlowPulse .6s ease; }
+    /* Bigger like button */
+    .action-btn-circle.like-btn { width: 72px !important; height: 72px !important; font-size: 30px !important; }
+
+    /* ── VOICE BIO CHIP ──────────────────────────────── */
+    .voice-bio-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.9); font-size: 10px; font-weight: 600; backdrop-filter: blur(8px); cursor: pointer; transition: all .2s; }
+    .voice-bio-chip:hover { background: rgba(255,255,255,.24); }
+    .voice-pulse { width: 5px; height: 5px; border-radius: 50%; background: #EF4444; animation: vPulse 1.4s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes vPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.5);opacity:.6} }
+    .card-info-row { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+    .card-info-btn { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); backdrop-filter: blur(8px); color: #fff; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+    .card-info-btn:hover { background: rgba(255,255,255,.28); }
+
+    /* ── AI INSIGHTS (RIGHT PANEL) ──────────────────── */
+    .compat-score-hero { text-align: center; padding: 6px 0 14px; }
+    .compat-score-num { font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 700; background: linear-gradient(135deg, var(--accent), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+    .compat-score-sub { font-size: 11px; color: var(--muted2); margin-top: 3px; }
+    .ai-sub-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--muted2); margin: 12px 0 7px; display: flex; align-items: center; gap: 5px; }
+    .ai-sub-title::before { content: ''; display: inline-block; width: 3px; height: 10px; background: linear-gradient(var(--accent), var(--pink)); border-radius: 2px; }
+    .sig-row2 { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+    .sig-lbl2 { font-size: 11px; color: var(--text2); min-width: 68px; }
+    .sig-bar2 { flex: 1; height: 4px; background: var(--card-b); border-radius: 2px; overflow: hidden; }
+    .sig-fill2 { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--pink)); width: 0%; transition: width 1s ease; }
+    .sig-pct2 { font-size: 10px; color: var(--accent3); font-weight: 700; min-width: 26px; text-align: right; }
+    .interest-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+    .interest-chip { padding: 3px 9px; border-radius: 99px; font-size: 10px; color: var(--accent3); background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.25); }
+    .starter-item2 { padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,.03); border: 1px solid var(--border); font-size: 11px; color: var(--text2); cursor: pointer; transition: all .2s; display: flex; gap: 7px; align-items: flex-start; line-height: 1.4; margin-bottom: 5px; }
+    .starter-item2:hover { background: rgba(255,255,255,.06); border-color: var(--border2); color: var(--text); }
+    .flag-item2 { display: flex; align-items: flex-start; gap: 6px; padding: 7px 10px; border-radius: 10px; background: rgba(245,158,11,.06); border: 1px solid rgba(245,158,11,.2); font-size: 11px; color: var(--text2); line-height: 1.4; margin-bottom: 5px; }
+
+    /* ── PROFILE DETAIL IN RIGHT PANEL ──────────────── */
+    .profile-detail-panel { display: none; }
+    .profile-detail-panel.visible { display: block; }
+    .fp-photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 12px; }
+    .fp-photo-main { grid-column: span 2; height: 160px; border-radius: 12px; overflow: hidden; }
+    .fp-photo-thumb { height: 86px; border-radius: 10px; overflow: hidden; }
+    .fp-photo-grid img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .fp-name { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
+    .fp-meta { font-size: 11px; color: var(--muted2); margin: 3px 0 10px; line-height: 1.6; }
+    .fp-bio { font-size: 12px; color: var(--text2); line-height: 1.65; margin-bottom: 12px; border-left: 2px solid var(--accent); padding-left: 10px; }
+    .fp-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+    .fp-chip { padding: 4px 10px; border-radius: 99px; font-size: 10px; color: var(--text2); background: rgba(255,255,255,.05); border: 1px solid var(--border); }
+    .fp-action-row { display: flex; gap: 7px; margin-top: 8px; }
+    .fp-back-btn { font-size: 11px; color: var(--accent3); font-weight: 600; cursor: pointer; margin-bottom: 12px; display: inline-flex; align-items: center; gap: 4px; }
+    .fp-back-btn:hover { text-decoration: underline; }
   </style>
 </head>
 
@@ -1041,167 +1122,11 @@
 
     <!-- ── LEFT PANEL ─────────────────────────────── -->
     <aside class="left-panel">
-      <div class="left-header">
+      <div class="left-header" style="position:relative;">
         <h2>Discover</h2>
-        <button class="btn-icon-sm" id="btn-filter-open" title="Filters">⚙️</button>
-      </div>
-
-      <!-- Search bar -->
-      <div class="search-bar">
-        <span>🔍</span>
-        <input type="text" placeholder="Search profiles…" aria-label="Search profiles" />
-      </div>
-
-      <!-- AI Picks -->
-      <div class="section-label">AI Picks for You</div>
-      <div class="ai-picks-scroll">
-        <!-- Card 1 -->
-        <div class="pick-card" tabindex="0" aria-label="Sofia, 26 – 94% match">
-          <div class="pick-avatar" style="overflow:hidden;">
-            <img src="https://randomuser.me/api/portraits/women/4.jpg" class="photo-avatar" loading="lazy" alt="Sofia, 26" style="width:100%;height:100%;object-fit:cover;display:block;" />
-            <div class="pick-match-badge">✦ 94%</div>
-          </div>
-          <div class="pick-name">Sofia, 26</div>
-        </div>
-        <!-- Card 2 -->
-        <div class="pick-card" tabindex="0" aria-label="Mia, 24 – 91% match">
-          <div class="pick-avatar" style="overflow:hidden;">
-            <img src="https://randomuser.me/api/portraits/women/5.jpg" class="photo-avatar" loading="lazy" alt="Mia, 24" style="width:100%;height:100%;object-fit:cover;display:block;" />
-            <div class="pick-match-badge">✦ 91%</div>
-          </div>
-          <div class="pick-name">Mia, 24</div>
-        </div>
-        <!-- Card 3 -->
-        <div class="pick-card" tabindex="0" aria-label="Luna, 27 – 89% match">
-          <div class="pick-avatar" style="overflow:hidden;">
-            <img src="https://randomuser.me/api/portraits/women/6.jpg" class="photo-avatar" loading="lazy" alt="Luna, 27" style="width:100%;height:100%;object-fit:cover;display:block;" />
-            <div class="pick-match-badge">✦ 89%</div>
-          </div>
-          <div class="pick-name">Luna, 27</div>
-        </div>
-        <!-- Card 4 -->
-        <div class="pick-card" tabindex="0" aria-label="Zoe, 25 – 87% match">
-          <div class="pick-avatar" style="overflow:hidden;">
-            <img src="https://randomuser.me/api/portraits/women/7.jpg" class="photo-avatar" loading="lazy" alt="Zoe, 25" style="width:100%;height:100%;object-fit:cover;display:block;" />
-            <div class="pick-match-badge">✦ 87%</div>
-          </div>
-          <div class="pick-name">Zoe, 25</div>
-        </div>
-      </div>
-
-      <!-- Nearby divider -->
-      <div class="section-label" style="margin-bottom:8px;">Nearby</div>
-      <div class="section-divider"></div>
-
-      <!-- Nearby list -->
-      <div class="nearby-item" tabindex="0">
-        <div class="nearby-avatar" style="overflow:hidden;">
-          <img src="https://randomuser.me/api/portraits/women/1.jpg" class="photo-avatar" loading="lazy" alt="Ava" style="width:100%;height:100%;object-fit:cover;display:block;" />
-          <div class="online-dot"></div>
-        </div>
-        <div class="nearby-info">
-          <div class="nearby-name">Ava&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">28</span></div>
-          <div class="nearby-dist">📍 0.8 mi away</div>
-          <div class="nearby-tags">
-            <span class="tag-pill">🎨 Artist</span>
-            <span class="tag-pill">🧘 Yoga</span>
-            <span class="tag-pill">✈️ Travel</span>
-          </div>
-        </div>
-        <div class="nearby-right">
-          <div class="nearby-match">✦ 88%</div>
-          <button class="quick-like-btn" aria-label="Like Ava">♥</button>
-        </div>
-      </div>
-
-      <div class="nearby-item" tabindex="0">
-        <div class="nearby-avatar" style="overflow:hidden;">
-          <img src="https://randomuser.me/api/portraits/women/2.jpg" class="photo-avatar" loading="lazy" alt="Chloe" style="width:100%;height:100%;object-fit:cover;display:block;" />
-        </div>
-        <div class="nearby-info">
-          <div class="nearby-name">Chloe&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">23</span></div>
-          <div class="nearby-dist">📍 1.2 mi away</div>
-          <div class="nearby-tags">
-            <span class="tag-pill">🎵 Music</span>
-            <span class="tag-pill">📸 Photography</span>
-          </div>
-        </div>
-        <div class="nearby-right">
-          <div class="nearby-match">✦ 85%</div>
-          <button class="quick-like-btn" aria-label="Like Chloe">♥</button>
-        </div>
-      </div>
-
-      <div class="nearby-item" tabindex="0">
-        <div class="nearby-avatar" style="overflow:hidden;">
-          <img src="https://randomuser.me/api/portraits/women/3.jpg" class="photo-avatar" loading="lazy" alt="Riley" style="width:100%;height:100%;object-fit:cover;display:block;" />
-          <div class="online-dot"></div>
-        </div>
-        <div class="nearby-info">
-          <div class="nearby-name">Riley&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">26</span></div>
-          <div class="nearby-dist">📍 1.5 mi away</div>
-          <div class="nearby-tags">
-            <span class="tag-pill">🏄 Surf</span>
-            <span class="tag-pill">🍕 Foodie</span>
-            <span class="tag-pill">🎭 Theatre</span>
-          </div>
-        </div>
-        <div class="nearby-right">
-          <div class="nearby-match">✦ 82%</div>
-          <button class="quick-like-btn" aria-label="Like Riley">♥</button>
-        </div>
-      </div>
-
-      <div class="nearby-item" tabindex="0">
-        <div class="nearby-avatar" style="overflow:hidden;">
-          <img src="https://randomuser.me/api/portraits/women/8.jpg" class="photo-avatar" loading="lazy" alt="Emma" style="width:100%;height:100%;object-fit:cover;display:block;" />
-        </div>
-        <div class="nearby-info">
-          <div class="nearby-name">Emma&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">29</span></div>
-          <div class="nearby-dist">📍 2.1 mi away</div>
-          <div class="nearby-tags">
-            <span class="tag-pill">💼 UX Design</span>
-            <span class="tag-pill">📚 Books</span>
-          </div>
-        </div>
-        <div class="nearby-right">
-          <div class="nearby-match">✦ 79%</div>
-          <button class="quick-like-btn" aria-label="Like Emma">♥</button>
-        </div>
-      </div>
-
-      <div class="nearby-item" tabindex="0">
-        <div class="nearby-avatar" style="overflow:hidden;">
-          <img src="https://randomuser.me/api/portraits/women/6.jpg" class="photo-avatar" loading="lazy" alt="Nora" style="width:100%;height:100%;object-fit:cover;display:block;" />
-          <div class="online-dot"></div>
-        </div>
-        <div class="nearby-info">
-          <div class="nearby-name">Nora&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">25</span></div>
-          <div class="nearby-dist">📍 2.8 mi away</div>
-          <div class="nearby-tags">
-            <span class="tag-pill">🎬 Film</span>
-            <span class="tag-pill">🌱 Vegan</span>
-            <span class="tag-pill">🎸 Guitar</span>
-          </div>
-        </div>
-        <div class="nearby-right">
-          <div class="nearby-match">✦ 76%</div>
-          <button class="quick-like-btn" aria-label="Like Nora">♥</button>
-        </div>
-      </div>
-    </aside>
-
-    <!-- ── CENTER PANEL ──────────────────────────── -->
-    <main class="center-panel">
-      <!-- Topbar -->
-      <div class="center-topbar" style="position:relative;">
-        <div class="page-title">Today's Picks</div>
-        <div class="topbar-icons">
-          <button class="btn-icon-md" id="btn-center-filter" title="Filters" aria-label="Filters">⚙️</button>
-          <button class="btn-icon-md" title="Settings" aria-label="Settings">🎚️</button>
-        </div>
+        <button class="btn-icon-sm" id="btn-filter-open" title="Filters" aria-label="Filters">⚙️</button>
         <!-- Filter popover -->
-        <div class="filter-popover" id="filter-popover">
+        <div class="filter-popover" id="filter-popover" style="top:44px;right:0;left:auto;">
           <h4>Filter Profiles</h4>
           <div class="filter-row">
             <label>Age range</label>
@@ -1224,6 +1149,160 @@
         </div>
       </div>
 
+      <!-- AI Picks with nav -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div class="section-label" style="margin:0;">AI Picks for You</div>
+        <div style="display:flex;gap:4px;">
+          <button class="picks-nav-btn" id="picks-prev" aria-label="Previous picks">‹</button>
+          <button class="picks-nav-btn" id="picks-next" aria-label="Next picks">›</button>
+        </div>
+      </div>
+      <div class="ai-picks-scroll">
+        <!-- Card 1 -->
+        <div class="pick-card" tabindex="0" aria-label="Sofia, 26 – 94% match">
+          <div class="pick-avatar" style="overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="Sofia, 26" style="width:100%;height:100%;object-fit:cover;display:block;" />
+            <div class="pick-match-badge">✦ 94%</div>
+          </div>
+          <div class="pick-name">Sofia, 26</div>
+        </div>
+        <!-- Card 2 -->
+        <div class="pick-card" tabindex="0" aria-label="Mia, 24 – 91% match">
+          <div class="pick-avatar" style="overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="Mia, 24" style="width:100%;height:100%;object-fit:cover;display:block;" />
+            <div class="pick-match-badge">✦ 91%</div>
+          </div>
+          <div class="pick-name">Mia, 24</div>
+        </div>
+        <!-- Card 3 -->
+        <div class="pick-card" tabindex="0" aria-label="Luna, 27 – 89% match">
+          <div class="pick-avatar" style="overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e8?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="Luna, 27" style="width:100%;height:100%;object-fit:cover;display:block;" />
+            <div class="pick-match-badge">✦ 89%</div>
+          </div>
+          <div class="pick-name">Luna, 27</div>
+        </div>
+        <!-- Card 4 -->
+        <div class="pick-card" tabindex="0" aria-label="Zoe, 25 – 87% match">
+          <div class="pick-avatar" style="overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="Zoe, 25" style="width:100%;height:100%;object-fit:cover;display:block;" />
+            <div class="pick-match-badge">✦ 87%</div>
+          </div>
+          <div class="pick-name">Zoe, 25</div>
+        </div>
+      </div>
+
+      <!-- Nearby divider -->
+      <div class="section-label" style="margin-bottom:8px;">Nearby</div>
+      <div class="section-divider"></div>
+
+      <!-- Nearby list (scrollable) -->
+      <div class="nearby-list">
+      <div class="nearby-item" tabindex="0">
+        <div class="nearby-avatar" style="overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="Ava" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          <div class="online-dot"></div>
+        </div>
+        <div class="nearby-info">
+          <div class="nearby-name">Ava&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">28</span></div>
+          <div class="nearby-dist">📍 0.8 mi away</div>
+          <div class="nearby-tags">
+            <span class="tag-pill">🎨 Artist</span>
+            <span class="tag-pill">🧘 Yoga</span>
+            <span class="tag-pill">✈️ Travel</span>
+          </div>
+        </div>
+        <div class="nearby-right">
+          <div class="nearby-match">✦ 88%</div>
+          <button class="quick-like-btn" aria-label="Like Ava">♥</button>
+        </div>
+      </div>
+
+      <div class="nearby-item" tabindex="0">
+        <div class="nearby-avatar" style="overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="Chloe" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+        <div class="nearby-info">
+          <div class="nearby-name">Chloe&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">23</span></div>
+          <div class="nearby-dist">📍 1.2 mi away</div>
+          <div class="nearby-tags">
+            <span class="tag-pill">🎵 Music</span>
+            <span class="tag-pill">📸 Photography</span>
+          </div>
+        </div>
+        <div class="nearby-right">
+          <div class="nearby-match">✦ 85%</div>
+          <button class="quick-like-btn" aria-label="Like Chloe">♥</button>
+        </div>
+      </div>
+
+      <div class="nearby-item" tabindex="0">
+        <div class="nearby-avatar" style="overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="Riley" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          <div class="online-dot"></div>
+        </div>
+        <div class="nearby-info">
+          <div class="nearby-name">Riley&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">26</span></div>
+          <div class="nearby-dist">📍 1.5 mi away</div>
+          <div class="nearby-tags">
+            <span class="tag-pill">🏄 Surf</span>
+            <span class="tag-pill">🍕 Foodie</span>
+            <span class="tag-pill">🎭 Theatre</span>
+          </div>
+        </div>
+        <div class="nearby-right">
+          <div class="nearby-match">✦ 82%</div>
+          <button class="quick-like-btn" aria-label="Like Riley">♥</button>
+        </div>
+      </div>
+
+      <div class="nearby-item" tabindex="0">
+        <div class="nearby-avatar" style="overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="Emma" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+        <div class="nearby-info">
+          <div class="nearby-name">Emma&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">29</span></div>
+          <div class="nearby-dist">📍 2.1 mi away</div>
+          <div class="nearby-tags">
+            <span class="tag-pill">💼 UX Design</span>
+            <span class="tag-pill">📚 Books</span>
+          </div>
+        </div>
+        <div class="nearby-right">
+          <div class="nearby-match">✦ 79%</div>
+          <button class="quick-like-btn" aria-label="Like Emma">♥</button>
+        </div>
+      </div>
+
+      <div class="nearby-item" tabindex="0">
+        <div class="nearby-avatar" style="overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e8?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="Nora" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          <div class="online-dot"></div>
+        </div>
+        <div class="nearby-info">
+          <div class="nearby-name">Nora&nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400;">25</span></div>
+          <div class="nearby-dist">📍 2.8 mi away</div>
+          <div class="nearby-tags">
+            <span class="tag-pill">🎬 Film</span>
+            <span class="tag-pill">🌱 Vegan</span>
+            <span class="tag-pill">🎸 Guitar</span>
+          </div>
+        </div>
+        <div class="nearby-right">
+          <div class="nearby-match">✦ 76%</div>
+          <button class="quick-like-btn" aria-label="Like Nora">♥</button>
+        </div>
+      </div>
+      </div><!-- /.nearby-list -->
+    </aside>
+
+    <!-- ── CENTER PANEL ──────────────────────────── -->
+    <main class="center-panel">
+      <!-- Topbar -->
+      <div class="center-topbar">
+        <div class="page-title">Today's Picks</div>
+      </div>
+
       <!-- AI Daily Insight banner -->
       <div class="ai-insight-banner" id="ai-banner">
         <div class="ai-banner-icon">🧠</div>
@@ -1237,37 +1316,24 @@
       <!-- Card Stack -->
       <div class="card-stack" id="card-stack">
 
-        <!-- Card 3 (bottom) -->
-        <div class="profile-card" aria-hidden="true">
-          <div class="card-photo">
-            <div class="card-photo-bg">
-              <img src="https://randomuser.me/api/portraits/women/3.jpg" class="photo-avatar" loading="lazy" alt="Profile photo" style="width:100%;height:100%;object-fit:cover;display:block;" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 2 (middle) -->
-        <div class="profile-card" aria-hidden="true">
-          <div class="card-photo">
-            <div class="card-photo-bg">
-              <img src="https://randomuser.me/api/portraits/women/2.jpg" class="photo-avatar" loading="lazy" alt="Profile photo" style="width:100%;height:100%;object-fit:cover;display:block;" />
-            </div>
-            <!-- AI Match badge -->
-            <div class="card-match-badge">✦ 88%</div>
-          </div>
-        </div>
-
-        <!-- Card 1 (top – fully interactive) -->
+        <!-- Card 1 (top – fully interactive, nth-child(1)=z-index:3) -->
         <div class="profile-card" id="top-card" role="article" aria-label="Sophia's profile card">
           <div class="card-photo">
-            <!-- Photo bg -->
-            <div class="card-photo-bg">
-              <img src="https://randomuser.me/api/portraits/women/1.jpg" class="photo-avatar" loading="lazy" alt="Sophia, 26" style="width:100%;height:100%;object-fit:cover;display:block;" />
+            <!-- Photo carousel -->
+            <div class="card-photo-bg" style="position:absolute;inset:0;">
+              <div class="photo-track" id="top-photo-track">
+                <div class="photo-slide"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=750&fit=crop&crop=face&auto=format&q=90"  loading="lazy" alt="Sophia" draggable="false"></div>
+                <div class="photo-slide"><img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Sophia" draggable="false"></div>
+                <div class="photo-slide"><img src="https://images.unsplash.com/photo-1498551172505-8137406b6a61?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Sophia" draggable="false"></div>
+                <div class="photo-slide"><img src="https://images.unsplash.com/photo-1546961342-ea5f62d1fa3b?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Sophia" draggable="false"></div>
+              </div>
+              <!-- Tap zones to change photo -->
+              <div class="photo-tap-l" id="photo-tap-l"></div>
+              <div class="photo-tap-r" id="photo-tap-r"></div>
             </div>
-            <!-- Photo pills -->
-            <div class="card-pills">
+            <!-- Photo pills (4 photos) -->
+            <div class="card-pills" id="top-card-pills">
               <span class="active"></span>
-              <span></span>
               <span></span>
               <span></span>
               <span></span>
@@ -1280,16 +1346,47 @@
             <div class="super-indicator" id="super-ind">SUPER LIKE ⭐</div>
             <!-- Card overlay -->
             <div class="card-overlay">
-              <div class="card-name-row">Sophia <span class="card-age">26</span></div>
-              <div class="card-dist">📍 0.4 mi away</div>
+              <div class="card-name-row">Sophia <span class="card-age">26</span>
+                <span style="width:16px;height:16px;background:rgba(16,185,129,.2);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:#10B981;border:1.5px solid #10B981;">✓</span>
+              </div>
+              <div class="card-dist">📍 0.4 mi away &nbsp;·&nbsp; 💼 Graphic Designer</div>
               <div class="card-tags">
-                <span class="card-tag">🎨 Graphic Designer</span>
-                <span class="card-tag">🌍 Traveler</span>
+                <span class="card-tag">🎨 Design</span>
+                <span class="card-tag">🌍 Travel</span>
                 <span class="card-tag">🎸 Music</span>
+                <span class="card-tag">☕ Coffee</span>
+              </div>
+              <div class="card-info-row">
+                <button class="voice-bio-chip" id="voice-bio-btn" onclick="event.stopPropagation();playVoiceBio()">
+                  <div class="voice-pulse"></div>Voice Bio · 30s
+                </button>
+                <button class="card-info-btn" id="show-profile-btn" onclick="event.stopPropagation();showProfileDetail()" aria-label="View full profile">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+                </button>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Card 2 (middle, nth-child(2)=z-index:2) -->
+        <div class="profile-card" aria-hidden="true">
+          <div class="card-photo">
+            <div class="card-photo-bg">
+              <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="Profile photo" style="width:100%;height:100%;object-fit:cover;display:block;" />
+            </div>
+            <div class="card-match-badge">✦ 88%</div>
+          </div>
+        </div>
+
+        <!-- Card 3 (bottom, nth-child(3)=z-index:1) -->
+        <div class="profile-card" aria-hidden="true">
+          <div class="card-photo">
+            <div class="card-photo-bg">
+              <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="Profile photo" style="width:100%;height:100%;object-fit:cover;display:block;" />
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- Action buttons -->
@@ -1340,25 +1437,83 @@
     <!-- ── RIGHT PANEL ──────────────────────────── -->
     <aside class="right-panel">
 
-      <!-- AI Insights — Match score trend -->
-      <div class="insight-card">
-        <div class="insight-title">AI Insights</div>
-        <!-- Bar chart (CSS-only) -->
-        <div class="bar-chart" aria-label="Weekly match score trend">
-          <div class="bar-wrap"><div class="bar" style="height:35%"></div><div class="bar-day">M</div></div>
-          <div class="bar-wrap"><div class="bar" style="height:55%"></div><div class="bar-day">T</div></div>
-          <div class="bar-wrap"><div class="bar" style="height:42%"></div><div class="bar-day">W</div></div>
-          <div class="bar-wrap"><div class="bar" style="height:70%"></div><div class="bar-day">T</div></div>
-          <div class="bar-wrap"><div class="bar" style="height:60%"></div><div class="bar-day">F</div></div>
-          <div class="bar-wrap"><div class="bar" style="height:88%"></div><div class="bar-day">S</div></div>
-          <div class="bar-wrap"><div class="bar today" style="height:100%"></div><div class="bar-day" style="color:var(--accent3);">S</div></div>
+      <!-- AI Insights — current match insights -->
+      <div class="insight-card" id="ai-insights-card">
+        <div class="insight-title">AI Match Insight</div>
+
+        <!-- Compatibility score -->
+        <div class="compat-score-hero">
+          <div class="compat-score-num" id="ai-compat-num">92%</div>
+          <div class="compat-score-sub" id="ai-compat-sub">Compatibility with Sophia</div>
         </div>
-        <div class="vibe-label">Your vibe this week: Creative &amp; Adventurous ✨</div>
-        <div class="vibe-tags">
-          <span class="vibe-tag purple">Creative</span>
-          <span class="vibe-tag pink">Adventurous</span>
-          <span class="vibe-tag cyan">Open-minded</span>
-          <span class="vibe-tag gold">Ambitious</span>
+
+        <!-- Signal bars -->
+        <div class="ai-sub-title">Compatibility Signals</div>
+        <div id="ai-signals">
+          <div class="sig-row2"><span class="sig-lbl2">Creativity</span><div class="sig-bar2"><div class="sig-fill2" style="width:94%"></div></div><span class="sig-pct2">94%</span></div>
+          <div class="sig-row2"><span class="sig-lbl2">Adventure</span><div class="sig-bar2"><div class="sig-fill2" style="width:88%"></div></div><span class="sig-pct2">88%</span></div>
+          <div class="sig-row2"><span class="sig-lbl2">Values</span><div class="sig-bar2"><div class="sig-fill2" style="width:91%"></div></div><span class="sig-pct2">91%</span></div>
+          <div class="sig-row2"><span class="sig-lbl2">Humor</span><div class="sig-bar2"><div class="sig-fill2" style="width:76%"></div></div><span class="sig-pct2">76%</span></div>
+          <div class="sig-row2"><span class="sig-lbl2">Lifestyle</span><div class="sig-bar2"><div class="sig-fill2" style="width:85%"></div></div><span class="sig-pct2">85%</span></div>
+        </div>
+
+        <!-- Shared interests -->
+        <div class="ai-sub-title">You Both Like</div>
+        <div class="interest-chips" id="ai-shared">
+          <span class="interest-chip">✓ Travel</span>
+          <span class="interest-chip">✓ Design</span>
+          <span class="interest-chip">✓ Jazz</span>
+          <span class="interest-chip">✓ Hiking</span>
+        </div>
+
+        <!-- Conversation starters -->
+        <div class="ai-sub-title">Suggested Openers</div>
+        <div id="ai-starters">
+          <div class="starter-item2"><span>💬</span><span>Ask about her design work at Spotify 🎵</span></div>
+          <div class="starter-item2"><span>✈️</span><span>She hiked Yosemite — your trail story?</span></div>
+          <div class="starter-item2"><span>🎵</span><span>Both into jazz. Favorite album this year?</span></div>
+        </div>
+
+        <!-- Red flags -->
+        <div class="ai-sub-title">Things to Note</div>
+        <div id="ai-flags">
+          <div class="flag-item2"><span>⚠️</span><span>Prefers slow communication</span></div>
+          <div class="flag-item2"><span>⚠️</span><span>Very schedule-oriented</span></div>
+        </div>
+      </div>
+
+      <!-- Profile detail (shown when clicking ℹ on card) -->
+      <div class="insight-card profile-detail-panel" id="profile-detail-panel">
+        <div class="fp-back-btn" id="fp-back-btn">← Back to AI Insights</div>
+        <div class="fp-photo-grid">
+          <div class="fp-photo-main"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=750&fit=crop&crop=face&auto=format&q=90"  alt="Sophia" loading="lazy"></div>
+          <div class="fp-photo-thumb"><img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=600&h=750&fit=crop&crop=face&auto=format&q=90" alt="Sophia" loading="lazy"></div>
+          <div class="fp-photo-thumb"><img src="https://images.unsplash.com/photo-1498551172505-8137406b6a61?w=600&h=750&fit=crop&crop=face&auto=format&q=90" alt="Sophia" loading="lazy"></div>
+        </div>
+        <div class="fp-name">Sophia, 26 ✓</div>
+        <div class="fp-meta">📍 Brooklyn, 0.4 mi away · 💼 Graphic Designer · <span style="color:#10B981;font-weight:600">● Online</span></div>
+        <p class="fp-bio">"Building beautiful things between coffee breaks. Lover of good typography, honest convos, and hiking at golden hour."</p>
+        <div class="ai-sub-title">Interests</div>
+        <div class="fp-chips">
+          <span class="fp-chip">🎨 Design</span><span class="fp-chip">🌍 Travel</span>
+          <span class="fp-chip">🎸 Music</span><span class="fp-chip">☕ Coffee</span>
+          <span class="fp-chip">🏔️ Hiking</span><span class="fp-chip">🎵 Jazz</span>
+        </div>
+        <div class="ai-sub-title">Voice Bio (30s)</div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;cursor:pointer;margin-bottom:12px" onclick="playVoiceBio()">
+          <div style="width:34px;height:34px;border-radius:50%;background:rgba(124,58,237,.15);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🎙️</div>
+          <div><div style="font-size:12px;font-weight:600;color:var(--text)">Sophia's 30s Intro</div><div style="font-size:10px;color:var(--muted2)">Tap to play</div></div>
+          <div style="display:flex;gap:2px;align-items:center;margin-left:auto">
+            <span style="width:2px;height:9px;background:var(--accent);border-radius:2px;opacity:.7"></span>
+            <span style="width:2px;height:15px;background:var(--accent);border-radius:2px;opacity:.7"></span>
+            <span style="width:2px;height:11px;background:var(--accent);border-radius:2px;opacity:.7"></span>
+            <span style="width:2px;height:18px;background:var(--accent);border-radius:2px;opacity:.7"></span>
+            <span style="width:2px;height:12px;background:var(--accent);border-radius:2px;opacity:.7"></span>
+          </div>
+        </div>
+        <div class="fp-action-row">
+          <button class="btn-upgrade" onclick="document.getElementById('btn-like').click()" style="flex:1;padding:10px;font-size:13px">❤ Like</button>
+          <a href="chat.html" style="flex:1"><button style="width:100%;padding:10px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text2);font-size:13px;font-weight:700;cursor:pointer">💬 Message</button></a>
         </div>
       </div>
 
@@ -1366,10 +1521,10 @@
       <div class="insight-card">
         <div class="insight-title">Who Liked You</div>
         <div class="liked-blur-row">
-          <div class="blur-avatar" style="overflow:hidden;"><img src="https://randomuser.me/api/portraits/women/4.jpg" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
-          <div class="blur-avatar" style="overflow:hidden;"><img src="https://randomuser.me/api/portraits/men/1.jpg" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
-          <div class="blur-avatar" style="overflow:hidden;"><img src="https://randomuser.me/api/portraits/women/5.jpg" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
-          <div class="blur-avatar" style="overflow:hidden;"><img src="https://randomuser.me/api/portraits/men/2.jpg" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
+          <div class="blur-avatar" style="overflow:hidden;"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
+          <div class="blur-avatar" style="overflow:hidden;"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
+          <div class="blur-avatar" style="overflow:hidden;"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
+          <div class="blur-avatar" style="overflow:hidden;"><img src="https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
         </div>
         <div class="premium-teaser"><strong>12 people</strong> liked your profile this week. Upgrade to see who!</div>
         <button class="btn-upgrade" onclick="window.location='my-account.html#premium'">⚡ Upgrade to Premium</button>
@@ -1514,183 +1669,174 @@
     (function () {
 
       /* Dismiss AI banner */
-      const banner = document.getElementById('ai-banner');
-      document.getElementById('dismiss-banner').addEventListener('click', function () {
-        banner.style.transition = 'opacity .3s, max-height .35s, margin .35s';
-        banner.style.opacity = '0';
-        banner.style.maxHeight = '0';
-        banner.style.padding = '0';
-        banner.style.marginBottom = '0';
-        banner.style.overflow = 'hidden';
-      });
+      var banner = document.getElementById('ai-banner');
+      if (banner) {
+        document.getElementById('dismiss-banner').addEventListener('click', function () {
+          banner.style.transition = 'opacity .3s, max-height .35s, margin .35s, padding .35s';
+          banner.style.opacity = '0'; banner.style.maxHeight = '0';
+          banner.style.padding = '0'; banner.style.marginBottom = '0'; banner.style.overflow = 'hidden';
+        });
+      }
 
       /* Filter popover toggle */
-      const filterPopover = document.getElementById('filter-popover');
-      document.getElementById('btn-center-filter').addEventListener('click', function (e) {
-        e.stopPropagation();
-        filterPopover.classList.toggle('open');
+      var filterPopover = document.getElementById('filter-popover');
+      document.getElementById('btn-filter-open').addEventListener('click', function (e) {
+        e.stopPropagation(); filterPopover.classList.toggle('open');
       });
-      document.getElementById('btn-filter-open').addEventListener('click', function () {
-        filterPopover.classList.toggle('open');
-      });
-      document.addEventListener('click', function () {
-        filterPopover.classList.remove('open');
-      });
-      filterPopover.addEventListener('click', function (e) { e.stopPropagation(); });
+      document.addEventListener('click', function () { if (filterPopover) filterPopover.classList.remove('open'); });
+      if (filterPopover) filterPopover.addEventListener('click', function (e) { e.stopPropagation(); });
 
       /* Filter tag toggle */
       document.querySelectorAll('.filter-tag').forEach(function (tag) {
         tag.addEventListener('click', function () { this.classList.toggle('active'); });
       });
 
+      /* AI Picks scroll buttons */
+      var picksScroll = document.querySelector('.ai-picks-scroll');
+      var picksPrev = document.getElementById('picks-prev');
+      var picksNext = document.getElementById('picks-next');
+      if (picksPrev && picksNext && picksScroll) {
+        var pickW = 90; /* card width + gap */
+        picksPrev.addEventListener('click', function() { picksScroll.scrollBy({ left: -pickW, behavior: 'smooth' }); });
+        picksNext.addEventListener('click', function() { picksScroll.scrollBy({ left:  pickW, behavior: 'smooth' }); });
+      }
+
       /* Quick like buttons */
       document.querySelectorAll('.quick-like-btn').forEach(function (btn) {
         btn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          this.classList.toggle('liked');
-          this.textContent = this.classList.contains('liked') ? '♥' : '♥';
+          e.stopPropagation(); this.classList.toggle('liked');
         });
       });
 
       /* Boost option selection */
       document.querySelectorAll('.boost-option').forEach(function (opt) {
         opt.addEventListener('click', function () {
-          document.querySelectorAll('.boost-option').forEach(function (o) {
-            o.classList.remove('selected');
-            o.setAttribute('aria-checked', 'false');
-          });
-          this.classList.add('selected');
-          this.setAttribute('aria-checked', 'true');
+          document.querySelectorAll('.boost-option').forEach(function (o) { o.classList.remove('selected'); o.setAttribute('aria-checked','false'); });
+          this.classList.add('selected'); this.setAttribute('aria-checked','true');
         });
       });
 
       /* Open/close modals */
-      const matchModal = document.getElementById('modal-match');
-      const boostModal = document.getElementById('modal-boost');
-
-      function openModal(el) {
-        el.classList.add('open');
-        document.body.style.overflow = 'hidden';
-      }
-      function closeModal(el) {
-        el.classList.remove('open');
-        document.body.style.overflow = '';
-      }
+      var matchModal = document.getElementById('modal-match');
+      var boostModal = document.getElementById('modal-boost');
+      function openModal(el)  { el.classList.add('open');    document.body.style.overflow = 'hidden'; }
+      function closeModal(el) { el.classList.remove('open'); document.body.style.overflow = ''; }
 
       document.getElementById('close-match-modal').addEventListener('click', function () { closeModal(matchModal); });
       document.getElementById('close-boost-modal').addEventListener('click', function () { closeModal(boostModal); });
       document.getElementById('confirm-boost').addEventListener('click', function () { closeModal(boostModal); });
       document.getElementById('btn-boost').addEventListener('click', function () { openModal(boostModal); });
       document.getElementById('btn-get-boosts-right').addEventListener('click', function () { openModal(boostModal); });
-
-      /* Close modals on overlay click */
       matchModal.addEventListener('click', function (e) { if (e.target === matchModal) closeModal(matchModal); });
       boostModal.addEventListener('click', function (e) { if (e.target === boostModal) closeModal(boostModal); });
 
-      /* ── Card Swipe ──────────────────────────────── */
-      var card = document.getElementById('top-card');
-      var likeInd = document.getElementById('like-ind');
-      var passInd = document.getElementById('pass-ind');
-      var superInd = document.getElementById('super-ind');
-      var isDragging = false;
-      var startX = 0, startY = 0, currentX = 0, currentY = 0;
+      /* ── PHOTO CAROUSEL ───────────────────────────── */
+      var photoIdx = 0;
+      var photoTrack = document.getElementById('top-photo-track');
+      var pills = document.querySelectorAll('#top-card-pills span');
+      var totalPhotos = photoTrack ? photoTrack.children.length : 1;
 
-      function getThreshold() { return 80; }
+      function goToPhoto(idx) {
+        photoIdx = Math.max(0, Math.min(idx, totalPhotos - 1));
+        if (photoTrack) photoTrack.style.transform = 'translateX(-' + (photoIdx * 100) + '%)';
+        pills.forEach(function (p, i) { p.classList.toggle('active', i === photoIdx); });
+      }
+
+      var tapL = document.getElementById('photo-tap-l');
+      var tapR = document.getElementById('photo-tap-r');
+      if (tapL) tapL.addEventListener('click', function (e) { e.stopPropagation(); goToPhoto(photoIdx - 1); });
+      if (tapR) tapR.addEventListener('click', function (e) { e.stopPropagation(); goToPhoto(photoIdx + 1); });
+
+      /* ── CARD SWIPE ───────────────────────────────── */
+      var card = document.getElementById('top-card');
+      var likeInd  = document.getElementById('like-ind');
+      var passInd  = document.getElementById('pass-ind');
+      var superInd = document.getElementById('super-ind');
+      var isDragging = false, startX = 0, startY = 0, currentX = 0, currentY = 0;
+      var THRESH = 85;
 
       function onPointerDown(e) {
+        if (e.target.closest('#photo-tap-l,#photo-tap-r,#voice-bio-btn,#show-profile-btn,#fp-back-btn')) return;
         isDragging = true;
-        startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-        startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+        startX = e.clientX; startY = e.clientY;
         card.style.transition = 'none';
       }
-
       function onPointerMove(e) {
         if (!isDragging) return;
-        var x = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-        var y = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
-        currentX = x - startX;
-        currentY = y - startY;
-        var rot = currentX * 0.07;
-        card.style.transform = 'rotate(' + rot + 'deg) translate(' + currentX + 'px,' + currentY + 'px)';
-        var ratio = Math.abs(currentX) / getThreshold();
-        if (currentX > 20) {
-          likeInd.style.opacity = Math.min(ratio, 1);
-          passInd.style.opacity = 0;
-          superInd.style.opacity = 0;
-          card.style.boxShadow = '0 0 40px rgba(16,185,129,' + Math.min(ratio * 0.5, 0.4) + ')';
-        } else if (currentX < -20) {
-          passInd.style.opacity = Math.min(ratio, 1);
-          likeInd.style.opacity = 0;
-          superInd.style.opacity = 0;
-          card.style.boxShadow = '0 0 40px rgba(239,68,68,' + Math.min(ratio * 0.5, 0.4) + ')';
-        } else if (currentY < -40) {
-          superInd.style.opacity = Math.min(Math.abs(currentY) / getThreshold(), 1);
-          likeInd.style.opacity = 0;
-          passInd.style.opacity = 0;
-          card.style.boxShadow = '0 0 40px rgba(6,182,212,' + Math.min(Math.abs(currentY) / getThreshold() * 0.5, 0.4) + ')';
-        } else {
-          likeInd.style.opacity = 0;
-          passInd.style.opacity = 0;
-          superInd.style.opacity = 0;
-          card.style.boxShadow = '';
-        }
+        currentX = e.clientX - startX; currentY = e.clientY - startY;
+        var tilt = currentX * 0.075;
+        card.style.transform = 'rotate(' + tilt + 'deg) translate(' + currentX + 'px,' + (currentY * 0.3) + 'px)';
+        var rx = Math.abs(currentX) / THRESH;
+        if (currentX > 20)      { likeInd.style.opacity  = Math.min(rx,1); passInd.style.opacity=0; superInd.style.opacity=0; card.style.boxShadow='0 0 40px rgba(16,185,129,'+Math.min(rx*.5,.4)+')'; }
+        else if (currentX < -20){ passInd.style.opacity  = Math.min(rx,1); likeInd.style.opacity=0; superInd.style.opacity=0; card.style.boxShadow='0 0 40px rgba(239,68,68,'+Math.min(rx*.5,.4)+')'; }
+        else if (currentY < -40){ var ry=Math.abs(currentY)/THRESH; superInd.style.opacity=Math.min(ry,1); likeInd.style.opacity=0; passInd.style.opacity=0; card.style.boxShadow='0 0 40px rgba(6,182,212,'+Math.min(ry*.5,.4)+')'; }
+        else                     { likeInd.style.opacity=0; passInd.style.opacity=0; superInd.style.opacity=0; card.style.boxShadow=''; }
       }
-
       function onPointerUp() {
-        if (!isDragging) return;
-        isDragging = false;
-        likeInd.style.opacity = 0;
-        passInd.style.opacity = 0;
-        superInd.style.opacity = 0;
-        card.style.boxShadow = '';
-
-        var thresh = getThreshold();
-        if (currentX > thresh) {
-          swipeCard('right');
-        } else if (currentX < -thresh) {
-          swipeCard('left');
-        } else if (currentY < -thresh) {
-          swipeCard('up');
-        } else {
-          card.style.transition = 'transform .4s cubic-bezier(.34,1.56,.64,1), box-shadow .3s';
-          card.style.transform = 'rotate(0deg) translate(0,0)';
+        if (!isDragging) return; isDragging = false;
+        likeInd.style.opacity=0; passInd.style.opacity=0; superInd.style.opacity=0; card.style.boxShadow='';
+        if      (currentX >  THRESH) swipeCard('right');
+        else if (currentX < -THRESH) swipeCard('left');
+        else if (currentY < -THRESH) swipeCard('up');
+        else {
+          card.style.transition = 'transform .5s cubic-bezier(.34,1.56,.64,1), box-shadow .3s';
+          card.style.transform  = 'rotate(0deg) translate(0,0)';
         }
         currentX = 0; currentY = 0;
       }
 
-      function swipeCard(dir) {
-        card.style.transition = 'transform .4s ease, opacity .4s';
-        if (dir === 'right') {
-          card.style.transform = 'rotate(20deg) translate(200%, 0)';
-          card.style.opacity = '0';
-          if (Math.random() > 0.55) setTimeout(function () { openModal(matchModal); }, 500);
-        } else if (dir === 'left') {
-          card.style.transform = 'rotate(-20deg) translate(-200%, 0)';
-          card.style.opacity = '0';
-        } else if (dir === 'up') {
-          card.style.transform = 'translateY(-150%)';
-          card.style.opacity = '0';
-        }
-        setTimeout(function () {
-          card.style.transition = 'none';
-          card.style.transform = 'rotate(0deg)';
-          card.style.opacity = '1';
-        }, 600);
-      }
-
-      /* Mouse events */
       card.addEventListener('mousedown', onPointerDown);
       window.addEventListener('mousemove', onPointerMove);
       window.addEventListener('mouseup', onPointerUp);
-      /* Touch events */
-      card.addEventListener('touchstart', onPointerDown, { passive: true });
-      window.addEventListener('touchmove', onPointerMove, { passive: true });
-      window.addEventListener('touchend', onPointerUp);
+      card.addEventListener('touchstart', function(e){ startX=e.touches[0].clientX; startY=e.touches[0].clientY; isDragging=true; card.style.transition='none'; }, {passive:true});
+      window.addEventListener('touchmove',  function(e){ if(!isDragging)return; currentX=e.touches[0].clientX-startX; currentY=e.touches[0].clientY-startY; var tilt=currentX*.075; card.style.transform='rotate('+tilt+'deg) translate('+currentX+'px,'+(currentY*.3)+'px)'; }, {passive:true});
+      window.addEventListener('touchend',   onPointerUp);
 
-      /* Button actions */
-      document.getElementById('btn-like').addEventListener('click', function () { swipeCard('right'); });
-      document.getElementById('btn-pass').addEventListener('click', function () { swipeCard('left'); });
-      document.getElementById('btn-super').addEventListener('click', function () { swipeCard('up'); });
+      /* ── SWIPE ACTIONS ────────────────────────────── */
+      function swipeCard(dir) {
+        card.style.transition = 'transform .42s cubic-bezier(.25,.46,.45,.94), opacity .42s';
+        if (dir === 'right') {
+          card.style.transform = 'rotate(22deg) translate(200%, 0)';
+          card.style.opacity = '0';
+          heartExplosion();
+          document.getElementById('btn-like').classList.add('pop');
+          setTimeout(function () { document.getElementById('btn-like').classList.remove('pop'); }, 450);
+          if (Math.random() > 0.55) setTimeout(function () { openModal(matchModal); }, 520);
+        } else if (dir === 'left') {
+          card.style.transform = 'rotate(-22deg) translate(-200%, 0)';
+          card.style.opacity = '0';
+        } else if (dir === 'up') {
+          card.style.transform = 'translateY(-150%) scale(.9)';
+          card.style.opacity = '0';
+          var superBtn = document.getElementById('btn-super');
+          superBtn.classList.add('glow');
+          setTimeout(function () { superBtn.classList.remove('glow'); }, 650);
+        }
+        setTimeout(function () {
+          card.style.transition = 'none';
+          card.style.transform  = 'rotate(0deg)';
+          card.style.opacity    = '1';
+          goToPhoto(0); /* reset photo carousel */
+        }, 620);
+      }
+
+      /* ── HEART EXPLOSION ──────────────────────────── */
+      function heartExplosion() {
+        var btn = document.getElementById('btn-like');
+        if (!btn) return;
+        var r = btn.getBoundingClientRect(), ox = r.left + r.width/2, oy = r.top + r.height/2;
+        for (var i = 0; i < 8; i++) {
+          var h = document.createElement('div'); h.className = 'heart-burst'; h.textContent = '❤️';
+          var a = (i/8)*360, d = 50 + Math.random()*45, rad = a*Math.PI/180;
+          h.style.cssText = 'left:'+ox+'px;top:'+oy+'px;--htx:'+Math.cos(rad)*d+'px;--hty:'+Math.sin(rad)*d+'px;animation-delay:'+(Math.random()*.06)+'s;';
+          document.body.appendChild(h); setTimeout(function(el){ el.remove(); }, 800, h);
+        }
+      }
+
+      /* Button click handlers */
+      document.getElementById('btn-like') .addEventListener('click', function () { swipeCard('right'); });
+      document.getElementById('btn-pass') .addEventListener('click', function () { swipeCard('left');  });
+      document.getElementById('btn-super').addEventListener('click', function () { swipeCard('up');    });
 
       /* Keyboard shortcuts */
       document.addEventListener('keydown', function (e) {
@@ -1698,29 +1844,28 @@
         if (e.key === 'ArrowRight') swipeCard('right');
         if (e.key === 'ArrowLeft')  swipeCard('left');
         if (e.key === 'ArrowUp')    swipeCard('up');
-        if (e.key === 'Escape') {
-          closeModal(matchModal);
-          closeModal(boostModal);
-          filterPopover.classList.remove('open');
-        }
-      });
-
-      /* Photo pill cycling on card click (non-drag) */
-      var currentPill = 0;
-      var pills = card.querySelectorAll('.card-pills span');
-      card.addEventListener('click', function (e) {
-        if (Math.abs(currentX) > 5) return;
-        var cardRect = card.getBoundingClientRect();
-        var clickX = e.clientX - cardRect.left;
-        if (clickX > cardRect.width / 2) {
-          currentPill = Math.min(currentPill + 1, pills.length - 1);
-        } else {
-          currentPill = Math.max(currentPill - 1, 0);
-        }
-        pills.forEach(function (p, i) { p.classList.toggle('active', i === currentPill); });
+        if (e.key === 'Escape')     { closeModal(matchModal); closeModal(boostModal); filterPopover.classList.remove('open'); }
       });
 
     }());
+
+    /* ── PROFILE DETAIL TOGGLE ────────────────────── */
+    function showProfileDetail() {
+      document.getElementById('ai-insights-card')   .style.display = 'none';
+      document.getElementById('profile-detail-panel').classList.add('visible');
+      document.getElementById('profile-detail-panel').style.display = 'block';
+    }
+    document.getElementById('fp-back-btn').addEventListener('click', function () {
+      document.getElementById('ai-insights-card')   .style.display = 'block';
+      document.getElementById('profile-detail-panel').classList.remove('visible');
+      document.getElementById('profile-detail-panel').style.display = 'none';
+    });
+
+    /* ── VOICE BIO ────────────────────────────────── */
+    function playVoiceBio() {
+      var chip = document.getElementById('voice-bio-btn');
+      if (chip) { chip.innerHTML = '🎙️ Playing…'; setTimeout(function(){ chip.innerHTML = '<div class="voice-pulse"></div>Voice Bio · 30s'; }, 3000); }
+    }
   </script>
 </body>
 </html>

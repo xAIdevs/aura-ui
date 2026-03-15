@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Preferences – AURA AI Dating</title>
+  <meta name="description" content="Set your relationship preferences and let AURA AI find truly compatible matches." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    /* ── SECTION NAV LINKS ────────────────────────────── */
+    .pref-nav-link {
+      display: block;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted2);
+      text-decoration: none;
+      transition: all .2s;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    .pref-nav-link:hover  { background: var(--card-b); color: var(--text); }
+    .pref-nav-link.active { background: rgba(var(--accent-rgb),.15); color: var(--accent3); font-weight: 600; }
+
+    /* ── PREF SECTIONS ────────────────────────────────── */
+    .pref-section {
+      margin-bottom: 40px;
+      scroll-margin-top: 80px;
+    }
+    .pref-section-heading {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .pref-section-sub {
+      font-size: 13px;
+      color: var(--muted2);
+      margin-bottom: 20px;
+    }
+
+    /* ── RANGE SLIDER STYLING ─────────────────────────── */
+    .range-slider-wrap {
+      position: relative;
+      padding: 8px 0;
+      margin-bottom: 12px;
+    }
+    .range-track {
+      position: relative;
+      height: 6px;
+      background: var(--card-c);
+      border-radius: 99px;
+      margin: 0 0 8px;
+    }
+    .range-fill {
+      position: absolute;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 99px;
+      left: 12%;
+      right: 35%;
+      transition: left .15s, right .15s;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: transparent;
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent2);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.3), var(--glow3);
+      cursor: pointer;
+      transition: box-shadow .2s, transform .2s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover,
+    input[type="range"]:focus::-webkit-slider-thumb {
+      box-shadow: 0 0 0 5px rgba(var(--accent-rgb),.4), var(--glow3);
+      transform: scale(1.1);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent2);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.3);
+      cursor: pointer;
+    }
+    .dual-range-wrap {
+      position: relative;
+      height: 30px;
+      margin-bottom: 6px;
+    }
+    .dual-range-wrap input[type="range"] {
+      position: absolute;
+      left: 0; right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .dual-range-wrap input[type="range"]::-webkit-slider-thumb { pointer-events: all; }
+    .dual-range-wrap input[type="range"]::-moz-range-thumb { pointer-events: all; }
+    .dual-range-track {
+      position: absolute;
+      left: 0; right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 6px;
+      background: var(--card-c);
+      border-radius: 99px;
+      pointer-events: none;
+    }
+    .dual-range-fill {
+      position: absolute;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 99px;
+      transition: left .05s, width .05s;
+    }
+    .age-value-display {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .age-value-display span { color: var(--accent2); }
+    .age-value-display .sep { color: var(--muted); font-size: 16px; font-weight: 400; }
+    .age-inputs-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .age-input-wrap label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      margin-bottom: 6px;
+    }
+    .age-input-wrap input[type="number"] {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius3);
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 700;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      -moz-appearance: textfield;
+    }
+    .age-input-wrap input[type="number"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.2);
+    }
+    .age-input-wrap input[type="number"]::-webkit-outer-spin-button,
+    .age-input-wrap input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .age-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+    /* ── DISTANCE SLIDER ──────────────────────────────── */
+    .distance-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .distance-value-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(var(--accent-rgb),.15);
+      border: 1px solid var(--border2);
+      border-radius: 99px;
+      padding: 6px 14px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-bottom: 10px;
+    }
+
+    /* ── PILL SELECTOR (activity filter, family prefs) ── */
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pill-option {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted2);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+    }
+    .pill-option:hover { border-color: var(--border2); color: var(--text); background: var(--card-b); }
+    .pill-option.selected {
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb),.15);
+      color: var(--accent3);
+      font-weight: 600;
+    }
+    .pill-option input { display: none; }
+
+    /* ── GENDER / INTEREST CARDS ──────────────────────── */
+    .gender-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+    }
+    .gender-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+      text-align: center;
+    }
+    .gender-card:hover { border-color: var(--border2); background: var(--card-b); transform: translateY(-1px); }
+    .gender-card.selected {
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb),.12);
+      box-shadow: 0 0 0 2px rgba(var(--accent-rgb),.25);
+    }
+    .gender-card .gc-icon { font-size: 28px; }
+    .gender-card .gc-label { font-size: 12px; font-weight: 600; color: var(--text2); }
+    .gender-card.selected .gc-label { color: var(--accent3); }
+    .gender-card input { display: none; }
+    .gender-custom-row {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .gender-custom-row input[type="text"] {
+      flex: 1;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius3);
+      color: var(--text);
+      font-size: 13px;
+      padding: 9px 14px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .gender-custom-row input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.15);
+    }
+    .privacy-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(var(--accent-rgb),.07);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius3);
+      font-size: 12px;
+      color: var(--muted2);
+      margin-top: 14px;
+    }
+    .privacy-note .icon { font-size: 14px; flex-shrink: 0; }
+
+    /* ── GOAL CARDS ───────────────────────────────────── */
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .goal-card {
+      padding: 18px 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+    }
+    .goal-card:hover { border-color: var(--border2); background: var(--card-b); transform: translateY(-2px); box-shadow: var(--shadow); }
+    .goal-card.selected {
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb),.12);
+      box-shadow: 0 0 0 2px rgba(var(--accent-rgb),.2), var(--glow);
+    }
+    .goal-card input { display: none; }
+    .goal-icon { font-size: 26px; margin-bottom: 8px; }
+    .goal-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .goal-desc { font-size: 12px; color: var(--muted2); line-height: 1.5; }
+    .goal-card.selected .goal-name { color: var(--accent3); }
+
+    /* ── NLPE CARD ────────────────────────────────────── */
+    .nlpe-card {
+      position: relative;
+      padding: 24px;
+      border-radius: var(--radius2);
+      border: 2px solid transparent;
+      background:
+        linear-gradient(var(--bg2), var(--bg2)) padding-box,
+        linear-gradient(135deg, var(--accent), var(--accent2), var(--pink)) border-box;
+      overflow: visible;
+    }
+    .nlpe-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 99px;
+      margin-bottom: 14px;
+    }
+    .nlpe-textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius3);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.7;
+      padding: 14px 16px;
+      resize: vertical;
+      min-height: 160px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .nlpe-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.15);
+    }
+    .nlpe-char-counter {
+      text-align: right;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+      margin-bottom: 12px;
+    }
+    .nlpe-analysis-note {
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .nlpe-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(245,158,11,.12);
+      border: 1px solid rgba(245,158,11,.3);
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .nlpe-status-badge.saved {
+      background: rgba(16,185,129,.12);
+      border-color: rgba(16,185,129,.3);
+      color: var(--green);
+    }
+    .nlpe-insights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .nlpe-insight-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(var(--accent-rgb),.1);
+      border: 1px solid rgba(var(--accent-rgb),.25);
+      color: var(--accent3);
+    }
+    .nlpe-insight-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted2);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+    }
+
+    /* ── TAG CLOUDS ───────────────────────────────────── */
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 14px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted2);
+    }
+    .tag-chip:hover { border-color: var(--border2); color: var(--text); background: var(--card-b); }
+    /* Must-have: green */
+    .tag-cloud.must-have .tag-chip.selected {
+      background: rgba(16,185,129,.12);
+      border-color: rgba(16,185,129,.4);
+      color: var(--green);
+    }
+    /* Dealbreaker: red */
+    .tag-cloud.dealbreaker .tag-chip.selected {
+      background: rgba(239,68,68,.12);
+      border-color: rgba(239,68,68,.4);
+      color: var(--red);
+    }
+    /* Nice-to-have: gold */
+    .tag-cloud.nice-to-have .tag-chip.selected {
+      background: rgba(245,158,11,.12);
+      border-color: rgba(245,158,11,.4);
+      color: var(--gold);
+    }
+    .tag-add-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .tag-add-row input[type="text"] {
+      flex: 1;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius3);
+      color: var(--text);
+      font-size: 13px;
+      padding: 9px 14px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .tag-add-row input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.15);
+    }
+    .tag-add-row input[type="text"]::placeholder { color: var(--muted); }
+
+    /* ── TOGGLE CHECKBOX ──────────────────────────────── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-radius: var(--radius3);
+      background: var(--card);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color .2s;
+      user-select: none;
+      margin-top: 12px;
+    }
+    .toggle-row:hover { border-color: var(--border2); }
+    .toggle-row input { display: none; }
+    .toggle-label { font-size: 14px; font-weight: 500; color: var(--text); }
+    .toggle-switch {
+      width: 44px;
+      height: 24px;
+      border-radius: 99px;
+      background: var(--card-c);
+      border: 1px solid var(--border);
+      position: relative;
+      flex-shrink: 0;
+      transition: background .2s, border-color .2s;
+    }
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--muted2);
+      transition: left .2s, background .2s;
+    }
+    .toggle-row.active .toggle-switch {
+      background: rgba(var(--accent-rgb),.3);
+      border-color: var(--accent);
+    }
+    .toggle-row.active .toggle-switch::after {
+      left: calc(100% - 19px);
+      background: var(--accent2);
+    }
+
+    /* ── HEIGHT RANGE CARD ────────────────────────────── */
+    .height-display {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .height-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent2);
+    }
+    .height-sep { font-size: 14px; color: var(--muted); }
+
+    /* ── EDUCATION / RELIGION PILLS ───────────────────── */
+    .edu-pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* ── RADIO GROUP (family) ─────────────────────────── */
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius3);
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+    }
+    .radio-option:hover { border-color: var(--border2); background: var(--card-b); }
+    .radio-option.selected {
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb),.1);
+    }
+    .radio-option input { display: none; }
+    .radio-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      transition: all .2s;
+      position: relative;
+    }
+    .radio-option.selected .radio-dot {
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb),.2);
+    }
+    .radio-option.selected .radio-dot::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      background: var(--accent2);
+      border-radius: 50%;
+    }
+    .radio-text { font-size: 14px; font-weight: 500; color: var(--text2); }
+    .radio-option.selected .radio-text { color: var(--text); font-weight: 600; }
+
+    /* ── SECTION DIVIDER ──────────────────────────────── */
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    /* ── SAVE BUTTON STICKY BAR ───────────────────────── */
+    .panel-left-footer {
+      position: sticky;
+      bottom: 0;
+      padding: 16px 0 0;
+      margin-top: auto;
+      background: linear-gradient(to top, var(--bg2) 70%, transparent);
+    }
+
+    /* ── RIGHT PANEL WIDGETS ──────────────────────────── */
+    .ai-summary-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .ai-summary-item:last-child { border-bottom: none; }
+    .ai-summary-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .ai-summary-text { font-size: 12px; color: var(--text2); line-height: 1.5; }
+    .ai-summary-text strong { color: var(--text); font-weight: 600; }
+
+    .match-avatars {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .match-avatar-img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--bg2);
+      overflow: hidden;
+      margin-left: -8px;
+    }
+    .match-avatar-img:first-child { margin-left: 0; }
+    .match-avatar-img img { width: 100%; height: 100%; object-fit: cover; }
+    .match-count-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--bg2);
+      background: rgba(var(--accent-rgb),.2);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: -8px;
+    }
+
+    .tip-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .tip-item:last-child { border-bottom: none; }
+    .tip-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(var(--accent-rgb),.15);
+      color: var(--accent3);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .tip-text { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 768px) {
+      .gender-grid { grid-template-columns: repeat(3, 1fr); }
+      .goal-grid { grid-template-columns: repeat(2, 1fr); }
+      .age-inputs-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .gender-grid { grid-template-columns: repeat(2, 1fr); }
+      .goal-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body data-page="preferences-setup">
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html"         class="nav-item" data-tip="Discover">🔥</a>
+    <a href="matches.html"          class="nav-item" data-tip="Matches">💜</a>
+    <a href="chat.html"             class="nav-item" data-tip="Chat">💬</a>
+    <a href="search.html"           class="nav-item" data-tip="Search">🔍</a>
+    <a href="events.html"           class="nav-item" data-tip="Events">🎉</a>
+    <div class="nav-divider"></div>
+    <a href="preferences-setup.html" class="nav-item active" data-tip="My Preferences">🎯</a>
+    <div class="nav-divider"></div>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">
+      <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="My profile">
+    </a>
+  </aside>
+
+  <main class="app-layout">
+
+    <!-- ── LEFT PANEL ────────────────────────────────────── -->
+    <div class="panel-left">
+      <div class="panel-header">
+        <span class="panel-title">My Preferences</span>
+      </div>
+
+      <nav style="display:flex;flex-direction:column;gap:2px;">
+        <a href="#section-basics"    class="pref-nav-link active">🔍 Discovery Basics</a>
+        <a href="#section-gender"    class="pref-nav-link">👥 I'm Interested In</a>
+        <a href="#section-goals"     class="pref-nav-link">💕 Relationship Goals</a>
+        <a href="#section-nlpe"      class="pref-nav-link">🤖 NLPE — Tell AI</a>
+        <a href="#section-musthave"  class="pref-nav-link">✅ Must Have</a>
+        <a href="#section-dealbreak" class="pref-nav-link">❌ Dealbreakers</a>
+        <a href="#section-nicehave"  class="pref-nav-link">💡 Nice to Have</a>
+        <a href="#section-physical"  class="pref-nav-link">📏 Physical Preferences</a>
+        <a href="#section-background" class="pref-nav-link">🎓 Background Prefs</a>
+        <a href="#section-family"    class="pref-nav-link">👶 Family Preferences</a>
+      </nav>
+
+      <div class="panel-left-footer">
+        <button class="btn btn-primary w-100" id="save-prefs-btn">
+          💾 Save Preferences
+        </button>
+      </div>
+    </div>
+
+    <!-- ── CENTER PANEL ──────────────────────────────────── -->
+    <div class="panel-center">
+
+      <!-- Topbar -->
+      <div class="topbar">
+        <div>
+          <h1 class="page-title">My Preferences</h1>
+          <div style="font-size:13px;color:var(--muted2);margin-top:2px;">Help AURA understand exactly who you're looking for</div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost btn-sm">↺ Reset</button>
+          <button class="btn btn-primary btn-sm" id="save-prefs-btn-top">Save</button>
+        </div>
+      </div>
+
+      <!-- ── SECTION 1: Discovery Basics ── -->
+      <div class="pref-section" id="section-basics">
+        <div class="g-card" style="padding:24px;">
+          <h2 class="pref-section-heading">Who should AURA show you?</h2>
+          <p class="pref-section-sub">Set the baseline filters for your discovery feed</p>
+
+          <!-- Age Range -->
+          <div style="margin-bottom:28px;">
+            <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.7px;">Age Range</div>
+            <div class="age-value-display">
+              <span id="age-min-display">22</span>
+              <span class="sep">—</span>
+              <span id="age-max-display">35</span>
+              <span style="font-size:13px;font-weight:400;color:var(--muted2);">years old</span>
+            </div>
+            <div class="dual-range-wrap" id="age-dual-wrap">
+              <div class="dual-range-track">
+                <div class="dual-range-fill" id="age-range-fill"></div>
+              </div>
+              <input type="range" id="age-min-range" min="18" max="99" value="22" aria-label="Minimum age">
+              <input type="range" id="age-max-range" min="18" max="99" value="35" aria-label="Maximum age">
+            </div>
+            <div class="age-inputs-row">
+              <div class="age-input-wrap">
+                <label for="age-min-input">Min Age</label>
+                <input type="number" id="age-min-input" min="18" max="99" value="22" aria-label="Minimum age number">
+                <div class="age-hint">(min 18)</div>
+              </div>
+              <div class="age-input-wrap">
+                <label for="age-max-input">Max Age</label>
+                <input type="number" id="age-max-input" min="18" max="99" value="35" aria-label="Maximum age number">
+              </div>
+            </div>
+          </div>
+
+          <!-- Distance -->
+          <div style="margin-bottom:28px;">
+            <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.7px;">Distance</div>
+            <div class="distance-value-badge">📍 <span id="distance-display">Within 25 km</span></div>
+            <input type="range" id="distance-range" min="0" max="5" value="2"
+                   style="width:100%;" aria-label="Maximum distance">
+            <div class="distance-labels">
+              <span>5 km</span>
+              <span>15 km</span>
+              <span>25 km</span>
+              <span>50 km</span>
+              <span>100 km</span>
+              <span>Worldwide</span>
+            </div>
+            <label class="toggle-row" id="long-distance-toggle">
+              <input type="checkbox" id="long-distance-cb">
+              <span class="toggle-label">Open to long distance</span>
+              <div class="toggle-switch"></div>
+            </label>
+          </div>
+
+          <!-- Activity Filter -->
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.7px;">Show profiles active in the last:</div>
+            <div class="pill-group" role="group" aria-label="Activity filter">
+              <label class="pill-option selected"><input type="radio" name="activity" value="24h" checked> 24h</label>
+              <label class="pill-option"><input type="radio" name="activity" value="3days"> 3 days</label>
+              <label class="pill-option"><input type="radio" name="activity" value="1week"> 1 week</label>
+              <label class="pill-option"><input type="radio" name="activity" value="1month"> 1 month</label>
+              <label class="pill-option"><input type="radio" name="activity" value="all"> All time</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 2: I'm Interested In ── -->
+      <div class="pref-section" id="section-gender">
+        <div class="g-card" style="padding:24px;">
+          <h2 class="pref-section-heading">Who are you open to connecting with?</h2>
+          <p class="pref-section-sub">Select all that apply — your selection is only used for matching</p>
+          <div class="gender-grid" role="group" aria-label="Gender preferences">
+            <label class="gender-card selected">
+              <input type="checkbox" name="gender_interest" value="men" checked>
+              <span class="gc-icon">👨</span>
+              <span class="gc-label">Men</span>
+            </label>
+            <label class="gender-card selected">
+              <input type="checkbox" name="gender_interest" value="women" checked>
+              <span class="gc-icon">👩</span>
+              <span class="gc-label">Women</span>
+            </label>
+            <label class="gender-card">
+              <input type="checkbox" name="gender_interest" value="nonbinary">
+              <span class="gc-icon">🧑</span>
+              <span class="gc-label">Non-binary people</span>
+            </label>
+            <label class="gender-card">
+              <input type="checkbox" name="gender_interest" value="trans_men">
+              <span class="gc-icon">⚧️</span>
+              <span class="gc-label">Transgender men</span>
+            </label>
+            <label class="gender-card">
+              <input type="checkbox" name="gender_interest" value="trans_women">
+              <span class="gc-icon">⚧️</span>
+              <span class="gc-label">Transgender women</span>
+            </label>
+            <label class="gender-card">
+              <input type="checkbox" name="gender_interest" value="everyone">
+              <span class="gc-icon">🌈</span>
+              <span class="gc-label">Everyone</span>
+            </label>
+          </div>
+          <div class="gender-custom-row">
+            <span style="font-size:13px;color:var(--muted2);">Custom:</span>
+            <input type="text" placeholder="Describe your preference..." aria-label="Custom gender preference">
+            <button class="btn btn-ghost btn-sm">Add</button>
+          </div>
+          <div class="privacy-note">
+            <span class="icon">🔒</span>
+            <span>Your selection is private and only used for matching — never displayed publicly.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 3: Relationship Goals ── -->
+      <div class="pref-section" id="section-goals">
+        <div class="g-card" style="padding:24px;">
+          <h2 class="pref-section-heading">What are you here for?</h2>
+          <p class="pref-section-sub">Select all that apply — you can always update this later</p>
+          <div class="goal-grid" role="group" aria-label="Relationship goals">
+            <label class="goal-card selected">
+              <input type="checkbox" name="rel_goal" value="SERIOUS" checked>
+              <div class="goal-icon">💍</div>
+              <div class="goal-name">Serious</div>
+              <div class="goal-desc">Looking for a committed relationship, maybe forever</div>
+            </label>
+            <label class="goal-card">
+              <input type="checkbox" name="rel_goal" value="CASUAL">
+              <div class="goal-icon">☀️</div>
+              <div class="goal-name">Casual</div>
+              <div class="goal-desc">Keeping it light and fun, no pressure</div>
+            </label>
+            <label class="goal-card">
+              <input type="checkbox" name="rel_goal" value="SITUATIONSHIP">
+              <div class="goal-icon">🌊</div>
+              <div class="goal-name">Situationship</div>
+              <div class="goal-desc">Something real but without the label pressure</div>
+            </label>
+            <label class="goal-card">
+              <input type="checkbox" name="rel_goal" value="FRIENDSHIP">
+              <div class="goal-icon">🤝</div>
+              <div class="goal-name">Friendship</div>
+              <div class="goal-desc">Connections first, let's see where it goes</div>
+            </label>
+            <label class="goal-card">
+              <input type="checkbox" name="rel_goal" value="OPEN">
+              <div class="goal-icon">🔓</div>
+              <div class="goal-name">Open</div>
+              <div class="goal-desc">Exploring ethical non-monogamy</div>
+            </label>
+            <label class="goal-card">
+              <input type="checkbox" name="rel_goal" value="EXPLORING">
+              <div class="goal-icon">🔮</div>
+              <div class="goal-name">Exploring</div>
+              <div class="goal-desc">Open to anything, figuring it out</div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 4: NLPE ── -->
+      <div class="pref-section" id="section-nlpe">
+        <div class="nlpe-card">
+          <div class="nlpe-badge">✨ AURA BRAIN™ Feature</div>
+          <h2 class="pref-section-heading" style="margin-bottom:6px;">Describe your ideal partner in your own words</h2>
+          <p class="pref-section-sub">AURA AI reads your description and converts it into a compatibility vector</p>
+
+          <textarea
+            class="nlpe-textarea"
+            id="nlpe-text"
+            maxlength="1000"
+            rows="10"
+            placeholder="Example: I'm looking for someone who challenges me intellectually but knows how to be silly too. Someone who has their life together but isn't boring about it. I want chemistry that feels effortless — the kind where we can talk for 4 hours and it feels like 20 minutes. Bonus points if they love hiking, hate small talk, and have an opinion about coffee..."
+            aria-label="Natural language preference description"
+          ></textarea>
+          <div class="nlpe-char-counter"><span id="nlpe-char-count">0</span> / 1000 characters</div>
+
+          <p class="nlpe-analysis-note">
+            AURA AI will analyze your description and extract compatibility signals including:
+            <strong>personality traits</strong>, <strong>lifestyle preferences</strong>,
+            <strong>communication style</strong>, <strong>values alignment</strong>, and
+            <strong>relationship dynamics</strong>.
+          </p>
+
+          <div class="nlpe-status-badge" id="nlpe-status">
+            ⏳ AI will parse this when you save
+          </div>
+
+          <div>
+            <div class="nlpe-insight-label">From your description, AI will detect:</div>
+            <div class="nlpe-insights">
+              <span class="nlpe-insight-tag">💬 Deep talker</span>
+              <span class="nlpe-insight-tag">🏃 Active lifestyle</span>
+              <span class="nlpe-insight-tag">🧠 Intellectual</span>
+              <span class="nlpe-insight-tag">😌 Low maintenance</span>
+              <span class="nlpe-insight-tag">🗺️ Adventurous</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 5: Must Have ── -->
+      <div class="pref-section" id="section-musthave">
+        <div class="g-card" style="padding:24px;">
+          <h2 class="pref-section-heading">Non-negotiables — I need someone who is...</h2>
+          <p class="pref-section-sub">These tags filter your matches at the highest priority</p>
+          <div class="tag-cloud must-have" id="musthave-cloud" role="group" aria-label="Must-have tags">
+            <span class="tag-chip" data-tag="emotionally-available">Emotionally available</span>
+            <span class="tag-chip" data-tag="wants-kids">Wants kids</span>
+            <span class="tag-chip" data-tag="has-kids">Has kids</span>
+            <span class="tag-chip" data-tag="career-focused">Career-focused</span>
+            <span class="tag-chip selected" data-tag="fitness-oriented">Fitness-oriented</span>
+            <span class="tag-chip selected" data-tag="non-smoker">Non-smoker</span>
+            <span class="tag-chip" data-tag="sober">Sober</span>
+            <span class="tag-chip" data-tag="vegetarian">Vegetarian/Vegan</span>
+            <span class="tag-chip" data-tag="spiritual">Spiritual</span>
+            <span class="tag-chip" data-tag="dog-lover">Dog lover</span>
+            <span class="tag-chip" data-tag="cat-lover">Cat lover</span>
+            <span class="tag-chip" data-tag="night-owl">Night owl</span>
+            <span class="tag-chip" data-tag="morning-person">Morning person</span>
+            <span class="tag-chip" data-tag="homebody">Homebody</span>
+            <span class="tag-chip" data-tag="traveler">Traveler</span>
+            <span class="tag-chip" data-tag="local">Local</span>
+            <span class="tag-chip" data-tag="ambitious">Ambitious</span>
+            <span class="tag-chip" data-tag="creative">Creative</span>
+            <span class="tag-chip selected" data-tag="educated">Educated</span>
+            <span class="tag-chip" data-tag="financially-stable">Financially stable</span>
+          </div>
+          <div class="tag-add-row">
+            <input type="text" placeholder="Add custom requirement..." id="musthave-custom" aria-label="Add custom must-have tag">
+            <button class="btn btn-sm" style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.4);color:var(--green);" id="musthave-add-btn">+ Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 6: Dealbreakers ── -->
+      <div class="pref-section" id="section-dealbreak">
+        <div class="g-card" style="padding:24px;border-color:rgba(239,68,68,.15);">
+          <h2 class="pref-section-heading">Hard limits — I won't date someone who...</h2>
+          <p class="pref-section-sub">Profiles matching these tags will be automatically filtered out</p>
+          <div class="tag-cloud dealbreaker" id="dealbreaker-cloud" role="group" aria-label="Dealbreaker tags">
+            <span class="tag-chip selected" data-tag="smoker">Smoker</span>
+            <span class="tag-chip" data-tag="heavy-drinker">Heavy drinker</span>
+            <span class="tag-chip" data-tag="has-children">Has children</span>
+            <span class="tag-chip" data-tag="wants-children">Wants children</span>
+            <span class="tag-chip" data-tag="no-job">No job</span>
+            <span class="tag-chip" data-tag="lives-far">Lives far away</span>
+            <span class="tag-chip" data-tag="ghosting">Ghosting pattern</span>
+            <span class="tag-chip" data-tag="inconsistent-texter">Inconsistent texter</span>
+            <span class="tag-chip" data-tag="not-out">Not out (LGBTQ+)</span>
+            <span class="tag-chip" data-tag="religious">Religious</span>
+            <span class="tag-chip" data-tag="very-religious">Very religious</span>
+            <span class="tag-chip" data-tag="politically-opposite">Politically opposite</span>
+            <span class="tag-chip" data-tag="drugs">Drugs</span>
+            <span class="tag-chip" data-tag="party-lifestyle">Party lifestyle</span>
+            <span class="tag-chip" data-tag="no-ambition">No ambition</span>
+          </div>
+          <div class="tag-add-row">
+            <input type="text" placeholder="Add custom dealbreaker..." id="dealbreaker-custom" aria-label="Add custom dealbreaker tag">
+            <button class="btn btn-sm" style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);color:var(--red);" id="dealbreaker-add-btn">+ Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 7: Nice to Have ── -->
+      <div class="pref-section" id="section-nicehave">
+        <div class="g-card" style="padding:24px;">
+          <h2 class="pref-section-heading">Preferences — Would love if they...</h2>
+          <p class="pref-section-sub">These boost compatibility scores but aren't requirements</p>
+          <div class="tag-cloud nice-to-have" id="nicehave-cloud" role="group" aria-label="Nice-to-have tags">
+            <span class="tag-chip selected" data-tag="loves-cooking">Loves cooking</span>
+            <span class="tag-chip selected" data-tag="into-fitness">Into fitness</span>
+            <span class="tag-chip" data-tag="has-dog">Has a dog</span>
+            <span class="tag-chip" data-tag="reads-books">Reads books</span>
+            <span class="tag-chip selected" data-tag="travels-often">Travels often</span>
+            <span class="tag-chip" data-tag="wfh">Works from home</span>
+            <span class="tag-chip" data-tag="introvert">Introvert</span>
+            <span class="tag-chip" data-tag="extrovert">Extrovert</span>
+            <span class="tag-chip" data-tag="good-humor">Good sense of humor</span>
+            <span class="tag-chip" data-tag="creative">Creative</span>
+            <span class="tag-chip" data-tag="artistic">Artistic</span>
+            <span class="tag-chip" data-tag="musical">Musical</span>
+            <span class="tag-chip" data-tag="tech-savvy">Tech-savvy</span>
+            <span class="tag-chip" data-tag="foodie">Foodie</span>
+            <span class="tag-chip" data-tag="film-buff">Film buff</span>
+            <span class="tag-chip" data-tag="coffee-person">Coffee person</span>
+            <span class="tag-chip" data-tag="morning-workouts">Morning workouts</span>
+            <span class="tag-chip" data-tag="hiking">Into hiking</span>
+            <span class="tag-chip" data-tag="meditates">Meditates</span>
+            <span class="tag-chip" data-tag="entrepreneur">Entrepreneur</span>
+          </div>
+          <div class="tag-add-row">
+            <input type="text" placeholder="Add custom preference..." id="nicehave-custom" aria-label="Add custom nice-to-have tag">
+            <button class="btn btn-sm" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);color:var(--gold);" id="nicehave-add-btn">+ Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 8: Physical Preferences ── -->
+      <div class="pref-section" id="section-physical">
+        <div class="g-card" style="padding:24px;">
+          <h2 class="pref-section-heading">Physical preferences <span style="font-size:14px;font-weight:400;color:var(--muted2);">(optional)</span></h2>
+          <p class="pref-section-sub">Height range — set your preference or leave open</p>
+
+          <div class="height-display">
+            <span class="height-val" id="height-min-display">160 cm</span>
+            <span class="height-sep">—</span>
+            <span class="height-val" id="height-max-display">185 cm</span>
+          </div>
+
+          <div style="margin-bottom:10px;">
+            <div style="font-size:12px;color:var(--muted2);margin-bottom:6px;">Minimum height</div>
+            <input type="range" id="height-min-range" min="140" max="220" value="160"
+                   style="width:100%;" aria-label="Minimum height preference">
+          </div>
+          <div style="margin-bottom:16px;">
+            <div style="font-size:12px;color:var(--muted2);margin-bottom:6px;">Maximum height</div>
+            <input type="range" id="height-max-range" min="140" max="220" value="185"
+                   style="width:100%;" aria-label="Maximum height preference">
+          </div>
+
+          <label class="toggle-row" id="height-nopref-toggle">
+            <input type="checkbox" id="height-nopref-cb">
+            <span class="toggle-label">No preference — show all heights</span>
+            <div class="toggle-switch"></div>
+          </label>
+
+          <div class="privacy-note" style="margin-top:16px;">
+            <span class="icon">🔒</span>
+            <span>All preferences are kept private and used only for compatibility scoring — never shown to other users.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 9: Background Preferences ── -->
+      <div class="pref-section" id="section-background">
+        <div class="g-card" style="padding:24px;">
+          <h2 class="pref-section-heading">Background preferences <span style="font-size:14px;font-weight:400;color:var(--muted2);">(optional)</span></h2>
+          <p class="pref-section-sub">Education and religion preferences for compatibility scoring</p>
+
+          <div style="margin-bottom:24px;">
+            <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.7px;">Education Level</div>
+            <div class="edu-pill-group" role="group" aria-label="Education preference">
+              <label class="pill-option"><input type="checkbox" name="edu_pref" value="HIGH_SCHOOL"> High School</label>
+              <label class="pill-option"><input type="checkbox" name="edu_pref" value="SOME_COLLEGE"> Some College</label>
+              <label class="pill-option"><input type="checkbox" name="edu_pref" value="ASSOCIATES"> Associate's</label>
+              <label class="pill-option selected"><input type="checkbox" name="edu_pref" value="BACHELORS" checked> Bachelor's</label>
+              <label class="pill-option selected"><input type="checkbox" name="edu_pref" value="MASTERS" checked> Master's</label>
+              <label class="pill-option"><input type="checkbox" name="edu_pref" value="PHD"> PhD</label>
+              <label class="pill-option"><input type="checkbox" name="edu_pref" value="TRADE_SCHOOL"> Trade School</label>
+              <label class="pill-option selected"><input type="checkbox" name="edu_pref" value="ANY" checked> Any</label>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.7px;">Religion Preference</div>
+            <div class="edu-pill-group" role="group" aria-label="Religion preference">
+              <label class="pill-option selected"><input type="checkbox" name="religion_pref" value="ANY" checked> Any</label>
+              <label class="pill-option"><input type="checkbox" name="religion_pref" value="CHRISTIAN"> Christian</label>
+              <label class="pill-option"><input type="checkbox" name="religion_pref" value="CATHOLIC"> Catholic</label>
+              <label class="pill-option"><input type="checkbox" name="religion_pref" value="JEWISH"> Jewish</label>
+              <label class="pill-option"><input type="checkbox" name="religion_pref" value="MUSLIM"> Muslim</label>
+              <label class="pill-option"><input type="checkbox" name="religion_pref" value="HINDU"> Hindu</label>
+              <label class="pill-option"><input type="checkbox" name="religion_pref" value="BUDDHIST"> Buddhist</label>
+              <label class="pill-option"><input type="checkbox" name="religion_pref" value="SPIRITUAL"> Spiritual</label>
+              <label class="pill-option"><input type="checkbox" name="religion_pref" value="AGNOSTIC"> Agnostic</label>
+              <label class="pill-option"><input type="checkbox" name="religion_pref" value="ATHEIST"> Atheist</label>
+              <label class="pill-option"><input type="checkbox" name="religion_pref" value="NON_RELIGIOUS"> Non-religious preferred</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 10: Family Preferences ── -->
+      <div class="pref-section" id="section-family">
+        <div class="g-card" style="padding:24px;">
+          <h2 class="pref-section-heading">Family considerations</h2>
+          <p class="pref-section-sub">Help AURA find matches aligned with your family goals</p>
+
+          <div style="margin-bottom:24px;">
+            <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;">Are you OK matching with someone who has children?</div>
+            <div class="radio-group" role="radiogroup" aria-label="Has children preference">
+              <label class="radio-option selected">
+                <input type="radio" name="has_children_ok" value="yes" checked>
+                <div class="radio-dot"></div>
+                <span class="radio-text">Yes, I'm open to it</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="has_children_ok" value="no">
+                <div class="radio-dot"></div>
+                <span class="radio-text">No, I prefer they don't have children</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="has_children_ok" value="no_pref">
+                <div class="radio-dot"></div>
+                <span class="radio-text">No preference</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;">Do you want children in the future?</div>
+            <div class="pill-group" role="group" aria-label="Wants children preference">
+              <label class="pill-option"><input type="radio" name="wants_children" value="DEFINITELY"> Definitely want</label>
+              <label class="pill-option selected"><input type="radio" name="wants_children" value="OPEN_TO_IT" checked> Open to it</label>
+              <label class="pill-option"><input type="radio" name="wants_children" value="NOT_SURE"> Not sure</label>
+              <label class="pill-option"><input type="radio" name="wants_children" value="PROBABLY_NOT"> Probably not</label>
+              <label class="pill-option"><input type="radio" name="wants_children" value="DEFINITELY_NOT"> Definitely not</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Save CTA at bottom -->
+      <div style="display:flex;justify-content:center;padding:16px 0 40px;">
+        <button class="btn btn-primary" style="padding:14px 40px;font-size:15px;font-weight:700;" id="save-prefs-btn-bottom">
+          💾 Save All Preferences
+        </button>
+      </div>
+
+    </div><!-- end panel-center -->
+
+    <!-- ── RIGHT PANEL ────────────────────────────────────── -->
+    <div class="panel-right">
+
+      <!-- AI Preference Summary -->
+      <div class="g-card" style="padding:16px;border-color:rgba(var(--accent-rgb),.25);background:rgba(var(--accent-rgb),.05);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div style="font-size:13px;font-weight:700;color:var(--text);">🤖 AI Preference Summary</div>
+          <button class="btn btn-ghost btn-sm" style="font-size:11px;padding:4px 10px;">↺ Re-analyze</button>
+        </div>
+        <div style="font-size:11px;color:var(--muted2);margin-bottom:12px;line-height:1.5;">Based on your NLPE description and tags, AURA detected:</div>
+        <div>
+          <div class="ai-summary-item">
+            <span class="ai-summary-icon">🧠</span>
+            <div class="ai-summary-text"><strong>Personality type:</strong> Intellectual Adventurer — values depth, curiosity, and spontaneity</div>
+          </div>
+          <div class="ai-summary-item">
+            <span class="ai-summary-icon">🌿</span>
+            <div class="ai-summary-text"><strong>Lifestyle:</strong> Active, health-conscious, travel-oriented, career-driven</div>
+          </div>
+          <div class="ai-summary-item">
+            <span class="ai-summary-icon">💬</span>
+            <div class="ai-summary-text"><strong>Communication:</strong> Prefers depth over small talk, values meaningful conversation</div>
+          </div>
+          <div class="ai-summary-item">
+            <span class="ai-summary-icon">❌</span>
+            <div class="ai-summary-text"><strong>Auto-excluded:</strong> Smokers, inconsistent communicators, low ambition</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;">Detected signals</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:11px;padding:3px 10px;border-radius:99px;background:rgba(var(--accent-rgb),.1);border:1px solid rgba(var(--accent-rgb),.2);color:var(--accent3);">Deep talker</span>
+            <span style="font-size:11px;padding:3px 10px;border-radius:99px;background:rgba(var(--accent-rgb),.1);border:1px solid rgba(var(--accent-rgb),.2);color:var(--accent3);">Active</span>
+            <span style="font-size:11px;padding:3px 10px;border-radius:99px;background:rgba(var(--accent-rgb),.1);border:1px solid rgba(var(--accent-rgb),.2);color:var(--accent3);">Intellectual</span>
+            <span style="font-size:11px;padding:3px 10px;border-radius:99px;background:rgba(var(--accent-rgb),.1);border:1px solid rgba(var(--accent-rgb),.2);color:var(--accent3);">Adventurous</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Match Preview -->
+      <div class="g-card" style="padding:16px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">🎯 Match Preview</div>
+        <div style="font-size:11px;color:var(--muted2);margin-bottom:14px;">Based on your current preferences</div>
+        <div class="match-avatars">
+          <div class="match-avatar-img"><img src="https://images.unsplash.com/photo-1498551172505-8137406b6a61?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Compatible match"></div>
+          <div class="match-avatar-img"><img src="https://images.unsplash.com/photo-1516726817505-f5ed825624d8?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Compatible match"></div>
+          <div class="match-avatar-img"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Compatible match"></div>
+          <div class="match-count-badge">+847</div>
+        </div>
+        <div style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px;">850 profiles</div>
+        <div style="font-size:12px;color:var(--muted2);">match your current preferences</div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:12px;color:var(--accent3);font-weight:600;">
+          ↑ Widen your age range for 200+ more
+        </div>
+      </div>
+
+      <!-- Preference Tips -->
+      <div class="g-card" style="padding:16px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px;">💡 Preference Tips</div>
+        <div>
+          <div class="tip-item">
+            <div class="tip-num">1</div>
+            <div class="tip-text">Write at least 3 sentences in the NLPE box — more context gives AURA AI better signals for deep compatibility matching.</div>
+          </div>
+          <div class="tip-item">
+            <div class="tip-num">2</div>
+            <div class="tip-text">Keep dealbreakers to truly non-negotiables — too many can reduce your match pool significantly.</div>
+          </div>
+          <div class="tip-item">
+            <div class="tip-num">3</div>
+            <div class="tip-text">Review your preferences every 3 months — what you're looking for may evolve and AURA should reflect that.</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="theme-switcher"></div>
+    </div><!-- end panel-right -->
+
+  </main><!-- end app-layout -->
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // ── DUAL AGE RANGE SLIDER ────────────────────────────
+    (function() {
+      const minRange  = document.getElementById('age-min-range');
+      const maxRange  = document.getElementById('age-max-range');
+      const minInput  = document.getElementById('age-min-input');
+      const maxInput  = document.getElementById('age-max-input');
+      const minDisp   = document.getElementById('age-min-display');
+      const maxDisp   = document.getElementById('age-max-display');
+      const fill      = document.getElementById('age-range-fill');
+      const RANGE_MIN = 18, RANGE_MAX = 99;
+
+      function updateAgeUI() {
+        let lo = parseInt(minRange.value), hi = parseInt(maxRange.value);
+        if (lo > hi - 1) { lo = hi - 1; minRange.value = lo; }
+        if (hi < lo + 1) { hi = lo + 1; maxRange.value = hi; }
+        minInput.value = lo;
+        maxInput.value = hi;
+        minDisp.textContent = lo;
+        maxDisp.textContent = hi;
+        const span = RANGE_MAX - RANGE_MIN;
+        const leftPct  = ((lo - RANGE_MIN) / span) * 100;
+        const rightPct = ((RANGE_MAX - hi) / span) * 100;
+        fill.style.left  = leftPct + '%';
+        fill.style.right = rightPct + '%';
+      }
+
+      minRange.addEventListener('input', updateAgeUI);
+      maxRange.addEventListener('input', updateAgeUI);
+      minInput.addEventListener('input', function() {
+        let v = Math.max(RANGE_MIN, Math.min(parseInt(this.value)||RANGE_MIN, RANGE_MAX));
+        minRange.value = v; updateAgeUI();
+      });
+      maxInput.addEventListener('input', function() {
+        let v = Math.max(RANGE_MIN, Math.min(parseInt(this.value)||RANGE_MAX, RANGE_MAX));
+        maxRange.value = v; updateAgeUI();
+      });
+      updateAgeUI();
+    })();
+
+    // ── DISTANCE SLIDER ──────────────────────────────────
+    (function() {
+      const steps = ['5 km', '15 km', '25 km', '50 km', '100 km', 'Worldwide'];
+      const distRange = document.getElementById('distance-range');
+      const distDisp  = document.getElementById('distance-display');
+      distRange.addEventListener('input', function() {
+        const idx = parseInt(this.value);
+        distDisp.textContent = idx === 5 ? 'Worldwide' : 'Within ' + steps[idx];
+      });
+    })();
+
+    // ── HEIGHT SLIDERS ────────────────────────────────────
+    (function() {
+      const hMin = document.getElementById('height-min-range');
+      const hMax = document.getElementById('height-max-range');
+      const hMinD = document.getElementById('height-min-display');
+      const hMaxD = document.getElementById('height-max-display');
+      function updateHeight() {
+        let lo = parseInt(hMin.value), hi = parseInt(hMax.value);
+        if (lo > hi) { hMin.value = hi; lo = hi; }
+        hMinD.textContent = lo + ' cm';
+        hMaxD.textContent = hi + ' cm';
+      }
+      hMin.addEventListener('input', updateHeight);
+      hMax.addEventListener('input', updateHeight);
+      updateHeight();
+    })();
+
+    // ── PILL SELECTORS (radio style) ─────────────────────
+    document.querySelectorAll('.pill-group').forEach(function(group) {
+      group.querySelectorAll('.pill-option').forEach(function(pill) {
+        pill.addEventListener('click', function() {
+          const inp = this.querySelector('input');
+          if (!inp) return;
+          if (inp.type === 'radio') {
+            group.querySelectorAll('.pill-option').forEach(function(p) { p.classList.remove('selected'); });
+            this.classList.add('selected');
+          } else {
+            this.classList.toggle('selected');
+            inp.checked = this.classList.contains('selected');
+          }
+        });
+      });
+    });
+
+    // ── GENDER CARDS ──────────────────────────────────────
+    document.querySelectorAll('.gender-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        this.classList.toggle('selected');
+        const inp = this.querySelector('input');
+        if (inp) inp.checked = this.classList.contains('selected');
+      });
+    });
+
+    // ── GOAL CARDS ────────────────────────────────────────
+    document.querySelectorAll('.goal-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        this.classList.toggle('selected');
+        const inp = this.querySelector('input');
+        if (inp) inp.checked = this.classList.contains('selected');
+      });
+    });
+
+    // ── TOGGLE ROWS ───────────────────────────────────────
+    document.querySelectorAll('.toggle-row').forEach(function(row) {
+      row.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const cb = this.querySelector('input[type="checkbox"]');
+        if (cb) cb.checked = this.classList.contains('active');
+      });
+    });
+
+    // ── RADIO OPTIONS ─────────────────────────────────────
+    document.querySelectorAll('.radio-group').forEach(function(group) {
+      group.querySelectorAll('.radio-option').forEach(function(opt) {
+        opt.addEventListener('click', function() {
+          group.querySelectorAll('.radio-option').forEach(function(o) { o.classList.remove('selected'); });
+          this.classList.add('selected');
+          const inp = this.querySelector('input');
+          if (inp) inp.checked = true;
+        });
+      });
+    });
+
+    // ── TAG CLOUDS ────────────────────────────────────────
+    document.querySelectorAll('.tag-chip').forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        this.classList.toggle('selected');
+      });
+    });
+
+    function makeTagAdder(inputId, btnId, cloudId) {
+      const input = document.getElementById(inputId);
+      const btn   = document.getElementById(btnId);
+      const cloud = document.getElementById(cloudId);
+      if (!input || !btn || !cloud) return;
+      function addTag() {
+        const val = input.value.trim();
+        if (!val) return;
+        const chip = document.createElement('span');
+        chip.className = 'tag-chip selected';
+        chip.dataset.tag = val.toLowerCase().replace(/\s+/g, '-');
+        chip.textContent = val;
+        chip.addEventListener('click', function() { this.classList.toggle('selected'); });
+        cloud.appendChild(chip);
+        input.value = '';
+        input.focus();
+      }
+      btn.addEventListener('click', addTag);
+      input.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); addTag(); } });
+    }
+    makeTagAdder('musthave-custom',   'musthave-add-btn',   'musthave-cloud');
+    makeTagAdder('dealbreaker-custom','dealbreaker-add-btn','dealbreaker-cloud');
+    makeTagAdder('nicehave-custom',   'nicehave-add-btn',   'nicehave-cloud');
+
+    // ── NLPE CHAR COUNTER ─────────────────────────────────
+    (function() {
+      const ta    = document.getElementById('nlpe-text');
+      const count = document.getElementById('nlpe-char-count');
+      if (!ta || !count) return;
+      ta.addEventListener('input', function() {
+        count.textContent = this.value.length;
+        if (this.value.length > 900) count.style.color = 'var(--red)';
+        else if (this.value.length > 700) count.style.color = 'var(--gold)';
+        else count.style.color = '';
+      });
+    })();
+
+    // ── SECTION NAV HIGHLIGHT ─────────────────────────────
+    (function() {
+      const links = document.querySelectorAll('.pref-nav-link');
+      const sections = document.querySelectorAll('.pref-section');
+      function onScroll() {
+        const panelCenter = document.querySelector('.panel-center');
+        if (!panelCenter) return;
+        const scrollTop = panelCenter.scrollTop;
+        let active = null;
+        sections.forEach(function(sec) {
+          if (sec.offsetTop - 120 <= scrollTop) active = sec.id;
+        });
+        links.forEach(function(link) {
+          const href = link.getAttribute('href').replace('#', '');
+          link.classList.toggle('active', href === active);
+        });
+      }
+      const panelCenter = document.querySelector('.panel-center');
+      if (panelCenter) panelCenter.addEventListener('scroll', onScroll, { passive: true });
+    })();
+
+    // ── SAVE FEEDBACK ─────────────────────────────────────
+    document.querySelectorAll('#save-prefs-btn, #save-prefs-btn-top, #save-prefs-btn-bottom').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const orig = this.textContent;
+        this.textContent = '✅ Saved!';
+        this.disabled = true;
+        const status = document.getElementById('nlpe-status');
+        if (status) {
+          status.textContent = '✅ AI has parsed your preferences';
+          status.classList.add('saved');
+        }
+        const self = this;
+        setTimeout(function() { self.textContent = orig; self.disabled = false; }, 2000);
+      });
+    });
+
+    // ── EDU PILL CHECKBOXES ───────────────────────────────
+    document.querySelectorAll('.edu-pill-group .pill-option').forEach(function(pill) {
+      pill.addEventListener('click', function() {
+        this.classList.toggle('selected');
+        const inp = this.querySelector('input');
+        if (inp) inp.checked = this.classList.contains('selected');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -176,6 +176,216 @@
   --scheme: dark;
 }
 
+/* === AURORA THEME === */
+[data-theme="aurora"] {
+  --bg:        #040D1A;
+  --bg2:       #071525;
+  --bg3:       #0A1E32;
+  --bg4:       #0E2840;
+  --card:      rgba(0,217,255,.04);
+  --card-b:    rgba(0,217,255,.08);
+  --card-c:    rgba(0,217,255,.12);
+  --accent:    #00D9FF;
+  --accent2:   #22E8FF;
+  --accent3:   #7DF0FF;
+  --accent-rgb: 0,217,255;
+  --pink:      #7B61FF;
+  --pink-rgb:  123,97,255;
+  --cyan:      #00F5CC;
+  --green:     #00E5A0;
+  --red:       #FF4D6A;
+  --gold:      #FFD60A;
+  --white:     #FFFFFF;
+  --text:      #E0F8FF;
+  --text2:     #B0E8F5;
+  --muted:     #1A4A5A;
+  --muted2:    #2A7A96;
+  --border:    rgba(0,217,255,.08);
+  --border2:   rgba(0,217,255,.35);
+  --border3:   rgba(0,217,255,.6);
+  --glow:      0 0 40px rgba(0,217,255,.25);
+  --glow2:     0 0 80px rgba(34,232,255,.15);
+  --glow3:     0 0 20px rgba(0,217,255,.4);
+  --shadow:    0 8px 32px rgba(0,0,0,.5);
+  --shadow2:   0 16px 48px rgba(0,0,0,.6);
+  --radius:    16px;
+  --radius2:   24px;
+  --radius3:   12px;
+  --sidebar-w: 72px;
+  --input-bg:  rgba(0,217,255,.05);
+  --input-border: rgba(0,217,255,.12);
+  --input-focus: rgba(0,217,255,.5);
+  --scheme: dark;
+}
+
+/* === NEON THEME === */
+[data-theme="neon"] {
+  --bg:        #0A0015;
+  --bg2:       #100020;
+  --bg3:       #16002E;
+  --bg4:       #1E003D;
+  --card:      rgba(255,0,144,.04);
+  --card-b:    rgba(255,0,144,.08);
+  --card-c:    rgba(255,0,144,.12);
+  --accent:    #FF0090;
+  --accent2:   #FF33A8;
+  --accent3:   #FF80C8;
+  --accent-rgb: 255,0,144;
+  --pink:      #FF4DFF;
+  --pink-rgb:  255,77,255;
+  --cyan:      #00FFCC;
+  --green:     #39FF14;
+  --red:       #FF2020;
+  --gold:      #FFE600;
+  --white:     #FFFFFF;
+  --text:      #FFE0F5;
+  --text2:     #FFAAD8;
+  --muted:     #4A0030;
+  --muted2:    #8A2060;
+  --border:    rgba(255,0,144,.08);
+  --border2:   rgba(255,0,144,.35);
+  --border3:   rgba(255,0,144,.6);
+  --glow:      0 0 40px rgba(255,0,144,.3);
+  --glow2:     0 0 80px rgba(255,51,168,.2);
+  --glow3:     0 0 20px rgba(255,0,144,.45);
+  --shadow:    0 8px 32px rgba(0,0,0,.5);
+  --shadow2:   0 16px 48px rgba(0,0,0,.6);
+  --radius:    16px;
+  --radius2:   24px;
+  --radius3:   12px;
+  --sidebar-w: 72px;
+  --input-bg:  rgba(255,0,144,.05);
+  --input-border: rgba(255,0,144,.12);
+  --input-focus: rgba(255,0,144,.5);
+  --scheme: dark;
+}
+
+/* === ROSE THEME === */
+[data-theme="rose"] {
+  --bg:        #130810;
+  --bg2:       #1C0F18;
+  --bg3:       #261520;
+  --bg4:       #301B28;
+  --card:      rgba(233,30,140,.04);
+  --card-b:    rgba(233,30,140,.08);
+  --card-c:    rgba(233,30,140,.12);
+  --accent:    #E91E8C;
+  --accent2:   #F43FAA;
+  --accent3:   #F78AC5;
+  --accent-rgb: 233,30,140;
+  --pink:      #FF6B9D;
+  --pink-rgb:  255,107,157;
+  --cyan:      #E040FB;
+  --green:     #76FF7A;
+  --red:       #FF4040;
+  --gold:      #FFAB40;
+  --white:     #FFFFFF;
+  --text:      #FFE6F5;
+  --text2:     #F5B8D8;
+  --muted:     #4A1030;
+  --muted2:    #8A3A60;
+  --border:    rgba(233,30,140,.08);
+  --border2:   rgba(233,30,140,.35);
+  --border3:   rgba(233,30,140,.6);
+  --glow:      0 0 40px rgba(233,30,140,.25);
+  --glow2:     0 0 80px rgba(244,63,170,.15);
+  --glow3:     0 0 20px rgba(233,30,140,.4);
+  --shadow:    0 8px 32px rgba(0,0,0,.4);
+  --shadow2:   0 16px 48px rgba(0,0,0,.5);
+  --radius:    16px;
+  --radius2:   24px;
+  --radius3:   12px;
+  --sidebar-w: 72px;
+  --input-bg:  rgba(233,30,140,.05);
+  --input-border: rgba(233,30,140,.12);
+  --input-focus: rgba(233,30,140,.5);
+  --scheme: dark;
+}
+
+/* === MIDNIGHT THEME === */
+[data-theme="midnight"] {
+  --bg:        #04051A;
+  --bg2:       #080A28;
+  --bg3:       #0C1035;
+  --bg4:       #111540;
+  --card:      rgba(99,102,241,.04);
+  --card-b:    rgba(99,102,241,.08);
+  --card-c:    rgba(99,102,241,.12);
+  --accent:    #6366F1;
+  --accent2:   #818CF8;
+  --accent3:   #A5B4FC;
+  --accent-rgb: 99,102,241;
+  --pink:      #A78BFA;
+  --pink-rgb:  167,139,250;
+  --cyan:      #60A5FA;
+  --green:     #4ADE80;
+  --red:       #F87171;
+  --gold:      #FCD34D;
+  --white:     #FFFFFF;
+  --text:      #EEF2FF;
+  --text2:     #C7D2FE;
+  --muted:     #1E2050;
+  --muted2:    #4050A8;
+  --border:    rgba(99,102,241,.08);
+  --border2:   rgba(99,102,241,.35);
+  --border3:   rgba(99,102,241,.6);
+  --glow:      0 0 40px rgba(99,102,241,.25);
+  --glow2:     0 0 80px rgba(129,140,248,.15);
+  --glow3:     0 0 20px rgba(99,102,241,.4);
+  --shadow:    0 8px 32px rgba(0,0,0,.5);
+  --shadow2:   0 16px 48px rgba(0,0,0,.6);
+  --radius:    16px;
+  --radius2:   24px;
+  --radius3:   12px;
+  --sidebar-w: 72px;
+  --input-bg:  rgba(99,102,241,.05);
+  --input-border: rgba(99,102,241,.12);
+  --input-focus: rgba(99,102,241,.5);
+  --scheme: dark;
+}
+
+/* === FOREST THEME === */
+[data-theme="forest"] {
+  --bg:        #030E0A;
+  --bg2:       #061510;
+  --bg3:       #091E17;
+  --bg4:       #0D271F;
+  --card:      rgba(16,185,129,.04);
+  --card-b:    rgba(16,185,129,.08);
+  --card-c:    rgba(16,185,129,.12);
+  --accent:    #10B981;
+  --accent2:   #34D399;
+  --accent3:   #6EE7B7;
+  --accent-rgb: 16,185,129;
+  --pink:      #FB7185;
+  --pink-rgb:  251,113,133;
+  --cyan:      #22D3EE;
+  --green:     #A3E635;
+  --red:       #F87171;
+  --gold:      #FBBF24;
+  --white:     #FFFFFF;
+  --text:      #E8FFF5;
+  --text2:     #A7F3D0;
+  --muted:     #1A4A38;
+  --muted2:    #2E7A5A;
+  --border:    rgba(16,185,129,.08);
+  --border2:   rgba(16,185,129,.35);
+  --border3:   rgba(16,185,129,.6);
+  --glow:      0 0 40px rgba(16,185,129,.25);
+  --glow2:     0 0 80px rgba(52,211,153,.15);
+  --glow3:     0 0 20px rgba(16,185,129,.4);
+  --shadow:    0 8px 32px rgba(0,0,0,.4);
+  --shadow2:   0 16px 48px rgba(0,0,0,.5);
+  --radius:    16px;
+  --radius2:   24px;
+  --radius3:   12px;
+  --sidebar-w: 72px;
+  --input-bg:  rgba(16,185,129,.05);
+  --input-border: rgba(16,185,129,.12);
+  --input-focus: rgba(16,185,129,.5);
+  --scheme: dark;
+}
+
 /* === BASE STYLES === */
 html { scroll-behavior: smooth; color-scheme: var(--scheme, dark); }
 

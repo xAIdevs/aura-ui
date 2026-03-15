@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Profile – AURA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    body { display:flex; overflow-x:hidden; }
+    .panel-center { padding:0 !important; }
+
+    .profile-section {
+      margin-bottom:40px;
+      padding-bottom:32px;
+      border-bottom:1px solid var(--border);
+    }
+    .section-title {
+      font-family:'Space Grotesk',sans-serif;
+      font-size:20px; font-weight:700;
+      color:var(--text); margin-bottom:4px;
+    }
+    .section-subtitle { font-size:13px; color:var(--muted2); margin-bottom:20px; }
+
+    .pill-select { display:inline-flex; flex-direction:row; flex-wrap:wrap; gap:8px; }
+    .pill-btn {
+      height:34px; padding:0 14px; border-radius:99px;
+      border:1px solid var(--border); background:transparent;
+      color:var(--text2); cursor:pointer;
+      transition:all .2s; font-size:13px;
+    }
+    .pill-btn.active {
+      background:rgba(var(--accent-rgb),.15);
+      border-color:rgba(var(--accent-rgb),.4);
+      color:var(--accent3);
+    }
+    .pill-btn:hover:not(.active) { border-color:var(--border2); color:var(--text); }
+
+    .form-field { margin-bottom:20px; }
+    .form-label {
+      font-size:12px; font-weight:600; color:var(--muted2);
+      text-transform:uppercase; letter-spacing:.6px;
+      margin-bottom:6px; display:block;
+    }
+    .form-input {
+      width:100%; background:var(--input-bg);
+      border:1px solid var(--input-border);
+      border-radius:var(--radius3);
+      padding:10px 14px; color:var(--text);
+      font-size:14px; resize:vertical;
+    }
+    .form-input:focus {
+      outline:none; border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(var(--accent-rgb),.15);
+    }
+    .char-count { font-size:11px; color:var(--muted2); text-align:right; margin-top:4px; }
+
+    .photo-grid {
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr;
+      grid-template-rows:auto auto;
+      gap:8px;
+    }
+    .photo-slot {
+      aspect-ratio:1; border-radius:var(--radius3); overflow:hidden;
+      border:2px dashed var(--border);
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; transition:border-color .2s; position:relative;
+    }
+    .photo-slot.filled { border-style:solid; border-color:var(--border2); }
+    .photo-slot img { width:100%; height:100%; object-fit:cover; }
+    .photo-slot:hover { border-color:var(--accent3); }
+    .photo-primary { grid-row:span 2; }
+    .photo-add-icon { font-size:22px; color:var(--muted); }
+    .primary-badge {
+      position:absolute; bottom:8px; left:8px;
+      background:rgba(var(--accent-rgb),.85);
+      color:#fff; font-size:10px; font-weight:700;
+      padding:3px 8px; border-radius:6px; letter-spacing:.4px;
+    }
+
+    .nav-section-link {
+      display:block; padding:7px 12px; border-radius:8px;
+      font-size:13px; color:var(--muted2); text-decoration:none;
+      transition:all .2s; cursor:pointer; border:none;
+      background:transparent; width:100%; text-align:left;
+    }
+    .nav-section-link.active,
+    .nav-section-link:hover { background:var(--card-b); color:var(--text); }
+
+    .completeness-ring-wrap {
+      position:relative; width:80px; height:80px;
+      margin:0 auto 12px;
+    }
+    .completeness-ring-wrap .ring-pct {
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:16px; font-weight:700; color:var(--text);
+      font-family:'Space Grotesk',sans-serif;
+    }
+
+    .mbti-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+    .mbti-btn {
+      padding:8px 4px; text-align:center; border-radius:8px;
+      border:1px solid var(--border); background:var(--card);
+      color:var(--text2); cursor:pointer; font-size:12px;
+      font-weight:600; transition:all .2s;
+    }
+    .mbti-btn.active {
+      background:rgba(var(--accent-rgb),.15);
+      border-color:rgba(var(--accent-rgb),.4);
+      color:var(--accent3);
+    }
+    .mbti-btn:hover:not(.active) { border-color:var(--border2); color:var(--text); }
+
+    .height-display {
+      font-size:14px; font-weight:600; color:var(--accent3);
+      margin-top:8px;
+    }
+    input[type="range"] {
+      width:100%; accent-color:var(--accent);
+      cursor:pointer; margin-top:8px;
+    }
+
+    .checkbox-grid {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:8px;
+    }
+    .check-item {
+      display:flex; align-items:center; gap:7px;
+      font-size:13px; color:var(--text2); cursor:pointer;
+    }
+    .check-item input[type="checkbox"] { accent-color:var(--accent); cursor:pointer; }
+
+    .goal-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .goal-card {
+      padding:14px 10px; border-radius:var(--radius3);
+      border:1px solid var(--border); background:var(--card);
+      cursor:pointer; text-align:center; transition:all .2s;
+    }
+    .goal-card.active {
+      background:rgba(var(--accent-rgb),.12);
+      border-color:rgba(var(--accent-rgb),.45);
+    }
+    .goal-card:hover:not(.active) { border-color:var(--border2); }
+    .goal-card .goal-icon { font-size:22px; margin-bottom:6px; }
+    .goal-card .goal-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:3px; }
+    .goal-card .goal-desc { font-size:11px; color:var(--muted2); line-height:1.4; }
+
+    .zodiac-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; }
+    .zodiac-btn {
+      padding:10px 4px; border-radius:10px;
+      border:1px solid var(--border); background:var(--card);
+      cursor:pointer; text-align:center; transition:all .2s;
+      color:var(--text2); font-size:11px; font-weight:600;
+    }
+    .zodiac-btn .z-sym { font-size:18px; display:block; margin-bottom:3px; }
+    .zodiac-btn.active {
+      background:rgba(var(--accent-rgb),.15);
+      border-color:rgba(var(--accent-rgb),.45);
+      color:var(--accent3);
+    }
+    .zodiac-btn:hover:not(.active) { border-color:var(--border2); color:var(--text); }
+
+    .love-lang-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+    .ll-card {
+      padding:12px 6px; border-radius:var(--radius3);
+      border:1px solid var(--border); background:var(--card);
+      cursor:pointer; text-align:center; transition:all .2s;
+    }
+    .ll-card.active {
+      background:rgba(var(--accent-rgb),.13);
+      border-color:rgba(var(--accent-rgb),.45);
+    }
+    .ll-card:hover:not(.active) { border-color:var(--border2); }
+    .ll-card .ll-icon { font-size:20px; margin-bottom:5px; }
+    .ll-card .ll-name { font-size:11px; font-weight:600; color:var(--text2); line-height:1.3; }
+    .ll-card.active .ll-name { color:var(--accent3); }
+
+    .political-wrap { position:relative; }
+    .political-labels {
+      display:flex; justify-content:space-between;
+      font-size:10px; color:var(--muted2); margin-top:6px;
+    }
+    .pnts-check {
+      display:flex; align-items:center; gap:8px;
+      font-size:13px; color:var(--text2); margin-top:12px; cursor:pointer;
+    }
+    .pnts-check input { accent-color:var(--accent); }
+
+    .complete-item {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:7px 0; border-bottom:1px solid var(--border); font-size:13px;
+    }
+    .complete-item:last-child { border-bottom:none; }
+    .complete-item .ci-name { color:var(--text2); }
+    .complete-item .ci-pct { color:var(--muted2); font-size:11px; }
+    .complete-status { font-size:14px; }
+
+    .tip-card {
+      background:rgba(var(--accent-rgb),.08);
+      border:1px solid rgba(var(--accent-rgb),.2);
+      border-radius:var(--radius3); padding:12px 14px;
+      font-size:13px; color:var(--text2); margin-top:16px; line-height:1.5;
+    }
+
+    .verify-badge {
+      display:inline-flex; align-items:center; gap:6px;
+      background:rgba(16,185,129,.12); border:1px solid rgba(16,185,129,.3);
+      color:var(--green); font-size:12px; font-weight:700;
+      padding:6px 12px; border-radius:99px; margin-top:8px;
+    }
+
+    .builder-left-avatar {
+      width:72px; height:72px; border-radius:50%; overflow:hidden;
+      border:3px solid var(--border2); margin:0 auto 10px;
+    }
+    .builder-left-avatar img { width:100%; height:100%; object-fit:cover; }
+    .builder-left-name {
+      font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700;
+      text-align:center; color:var(--text);
+    }
+    .builder-left-job { font-size:12px; color:var(--muted2); text-align:center; margin-top:2px; }
+    .builder-left-head {
+      padding:20px 16px 16px; border-bottom:1px solid var(--border);
+      display:flex; flex-direction:column; align-items:center;
+    }
+    .section-nav { padding:12px 8px; display:flex; flex-direction:column; gap:2px; }
+    .builder-actions { padding:16px 12px; margin-top:auto; display:flex; flex-direction:column; gap:8px; }
+
+    .completeness-badge {
+      display:inline-flex; align-items:center; gap:6px;
+      background:rgba(var(--accent-rgb),.12); border:1px solid rgba(var(--accent-rgb),.3);
+      color:var(--accent3); font-size:12px; font-weight:700;
+      padding:5px 12px; border-radius:99px;
+    }
+    .completeness-badge .cb-bar {
+      width:60px; height:4px; background:var(--card-b); border-radius:99px; overflow:hidden;
+    }
+    .completeness-badge .cb-fill {
+      width:73%; height:100%; border-radius:99px;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+    }
+
+    .topbar { padding:16px 24px; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+    .panel-scroll { padding:24px; overflow-y:auto; flex:1; }
+
+    @media(max-width:768px){
+      .goal-grid { grid-template-columns:repeat(2,1fr); }
+      .zodiac-grid { grid-template-columns:repeat(4,1fr); }
+      .love-lang-grid { grid-template-columns:repeat(3,1fr); }
+      .checkbox-grid { grid-template-columns:repeat(2,1fr); }
+      .photo-grid { grid-template-columns:1fr 1fr; }
+      .mbti-grid { grid-template-columns:repeat(4,1fr); }
+    }
+  </style>
+</head>
+<body data-page="profile-builder">
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html"      class="nav-item" data-tip="Discover">🔥</a>
+    <a href="matches.html"       class="nav-item" data-tip="Matches">💜</a>
+    <a href="chat.html"          class="nav-item" data-tip="Chat">💬</a>
+    <a href="search.html"        class="nav-item" data-tip="Search">🔍</a>
+    <a href="events.html"        class="nav-item" data-tip="Events">🎉</a>
+    <div class="nav-divider"></div>
+    <a href="notifications.html" class="nav-item" data-tip="Notifications">🔔</a>
+    <div class="nav-divider"></div>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">
+      <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="My profile">
+    </a>
+  </aside>
+
+  <main class="app-layout">
+
+    <!-- ── LEFT PANEL ── -->
+    <div class="panel-left">
+      <div class="builder-left-head">
+        <div class="completeness-ring-wrap">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+            <circle cx="40" cy="40" r="34" stroke="var(--card-b)" stroke-width="6"/>
+            <circle cx="40" cy="40" r="34" stroke="url(#rgrad)" stroke-width="6"
+              stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="57.7"
+              transform="rotate(-90 40 40)"/>
+            <defs>
+              <linearGradient id="rgrad" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="var(--accent)"/>
+                <stop offset="100%" stop-color="var(--accent2)"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="ring-pct">73%</span>
+        </div>
+        <div class="builder-left-avatar">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Jordan">
+        </div>
+        <div class="builder-left-name">Jordan</div>
+        <div class="builder-left-job">UX Designer</div>
+      </div>
+
+      <nav class="section-nav" aria-label="Profile sections">
+        <button class="nav-section-link active" data-section="section-photos">📸 Photos</button>
+        <button class="nav-section-link" data-section="section-basic">✏️ Basic Info</button>
+        <button class="nav-section-link" data-section="section-background">🌍 Background</button>
+        <button class="nav-section-link" data-section="section-lifestyle">🌿 Lifestyle</button>
+        <button class="nav-section-link" data-section="section-relationship">💞 Relationship</button>
+        <button class="nav-section-link" data-section="section-personality">🧠 Personality</button>
+        <button class="nav-section-link" data-section="section-interests">🎯 Interests</button>
+        <button class="nav-section-link" data-section="section-prompts">💬 Prompts</button>
+        <button class="nav-section-link" data-section="section-vibes">🏷️ Vibe Tags</button>
+      </nav>
+
+      <div class="builder-actions">
+        <button class="btn-primary w-100">Save Changes</button>
+        <button class="btn-ghost w-100">Preview Profile</button>
+      </div>
+    </div>
+
+    <!-- ── CENTER PANEL ── -->
+    <div class="panel-center" style="display:flex;flex-direction:column;min-height:0;">
+      <div class="topbar">
+        <h1 class="page-title">Edit Profile</h1>
+        <div class="completeness-badge">
+          <div class="cb-bar"><div class="cb-fill"></div></div>
+          73% Complete
+        </div>
+      </div>
+
+      <div class="panel-scroll">
+
+        <!-- ── SECTION 1: Photos ── -->
+        <div class="profile-section" id="section-photos">
+          <div class="section-title">Photos</div>
+          <div class="section-subtitle">Add up to 9 photos. Drag to reorder.</div>
+
+          <div class="photo-grid">
+            <div class="photo-slot photo-primary filled" data-slot="0" role="button" aria-label="Primary photo">
+              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Primary photo">
+              <div class="primary-badge">Primary</div>
+            </div>
+            <div class="photo-slot filled" data-slot="1" role="button" aria-label="Photo 2">
+              <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Photo 2">
+            </div>
+            <div class="photo-slot filled" data-slot="2" role="button" aria-label="Photo 3">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Photo 3">
+            </div>
+            <div class="photo-slot filled" data-slot="3" role="button" aria-label="Photo 4">
+              <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e8?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Photo 4">
+            </div>
+            <div class="photo-slot filled" data-slot="4" role="button" aria-label="Photo 5">
+              <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Photo 5">
+            </div>
+            <div class="photo-slot" data-slot="5" role="button" aria-label="Add photo"><span class="photo-add-icon">+</span></div>
+            <div class="photo-slot" data-slot="6" role="button" aria-label="Add photo"><span class="photo-add-icon">+</span></div>
+            <div class="photo-slot" data-slot="7" role="button" aria-label="Add photo"><span class="photo-add-icon">+</span></div>
+            <div class="photo-slot" data-slot="8" role="button" aria-label="Add photo"><span class="photo-add-icon">+</span></div>
+          </div>
+
+          <div class="tip-card">📸 Profiles with 6+ photos get <strong>80% more matches</strong>. Show your personality!</div>
+        </div>
+
+        <!-- ── SECTION 2: Basic Info ── -->
+        <div class="profile-section" id="section-basic">
+          <div class="section-title">Basic Info</div>
+          <div class="section-subtitle">Your name, bio, and key details.</div>
+
+          <div class="form-field">
+            <label class="form-label" for="display-name">Display Name</label>
+            <input id="display-name" class="form-input" type="text" value="Jordan" maxlength="50" />
+            <div class="char-count" id="name-count">6/50</div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="bio-input">Bio</label>
+            <textarea id="bio-input" class="form-input" rows="4" maxlength="500">Overthinker. Coffee-dependent. Probably designing something right now. Looking for someone who appreciates bad puns and good playlists. ENFP energy, Scorpio chaos.</textarea>
+            <div class="char-count" id="bio-count">143/500</div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="height-slider">Height</label>
+            <input id="height-slider" type="range" min="100" max="250" value="172" />
+            <div class="height-display" id="height-display">172 cm / 5'8"</div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Body Type</label>
+            <div class="pill-select" data-group="body_type">
+              <button class="pill-btn" data-val="SLIM">Slim</button>
+              <button class="pill-btn active" data-val="ATHLETIC">Athletic</button>
+              <button class="pill-btn" data-val="AVERAGE">Average</button>
+              <button class="pill-btn" data-val="CURVY">Curvy</button>
+              <button class="pill-btn" data-val="MUSCULAR">Muscular</button>
+              <button class="pill-btn" data-val="PLUS_SIZE">Plus Size</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── SECTION 3: Background ── -->
+        <div class="profile-section" id="section-background">
+          <div class="section-title">Background</div>
+          <div class="section-subtitle">Helps find culturally compatible matches.</div>
+
+          <div class="form-field">
+            <label class="form-label">Ethnicity (select all that apply)</label>
+            <div class="checkbox-grid">
+              <label class="check-item"><input type="checkbox" value="WHITE"> White</label>
+              <label class="check-item"><input type="checkbox" value="BLACK"> Black</label>
+              <label class="check-item"><input type="checkbox" value="HISPANIC"> Hispanic</label>
+              <label class="check-item"><input type="checkbox" value="ASIAN"> Asian</label>
+              <label class="check-item"><input type="checkbox" value="SOUTH_ASIAN"> South Asian</label>
+              <label class="check-item"><input type="checkbox" value="MIDDLE_EASTERN"> Middle Eastern</label>
+              <label class="check-item"><input type="checkbox" value="MIXED_RACE" checked> Mixed Race</label>
+              <label class="check-item"><input type="checkbox" value="OTHER"> Other</label>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Religion</label>
+            <div class="pill-select" data-group="religion">
+              <button class="pill-btn active" data-val="AGNOSTIC">Agnostic</button>
+              <button class="pill-btn" data-val="ATHEIST">Atheist</button>
+              <button class="pill-btn" data-val="CHRISTIAN">Christian</button>
+              <button class="pill-btn" data-val="HINDU">Hindu</button>
+              <button class="pill-btn" data-val="JEWISH">Jewish</button>
+              <button class="pill-btn" data-val="MUSLIM">Muslim</button>
+              <button class="pill-btn" data-val="SPIRITUAL">Spiritual</button>
+              <button class="pill-btn" data-val="OTHER">Other</button>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Education Level</label>
+            <div class="pill-select" data-group="education_level">
+              <button class="pill-btn" data-val="HIGH_SCHOOL">High School</button>
+              <button class="pill-btn active" data-val="BACHELORS">Bachelor's</button>
+              <button class="pill-btn" data-val="MASTERS">Master's</button>
+              <button class="pill-btn" data-val="PHD">PhD</button>
+              <button class="pill-btn" data-val="TRADE_SCHOOL">Trade School</button>
+              <button class="pill-btn" data-val="OTHER">Other</button>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="occupation">Occupation</label>
+            <input id="occupation" class="form-input" type="text" value="UX Designer" />
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="company">Company <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+            <input id="company" class="form-input" type="text" value="Figma" />
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="school">School <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+            <input id="school" class="form-input" type="text" placeholder="University name (optional)" />
+          </div>
+        </div>
+
+        <!-- ── SECTION 4: Lifestyle ── -->
+        <div class="profile-section" id="section-lifestyle">
+          <div class="section-title">Lifestyle</div>
+          <div class="section-subtitle">Day-to-day habits and preferences.</div>
+
+          <div class="form-field">
+            <label class="form-label">Drinking</label>
+            <div class="pill-select" data-group="drinking_habit">
+              <button class="pill-btn" data-val="NEVER">🚫 Never</button>
+              <button class="pill-btn" data-val="RARELY">🥂 Rarely</button>
+              <button class="pill-btn active" data-val="SOCIALLY">🍻 Socially</button>
+              <button class="pill-btn" data-val="OFTEN">🍺 Often</button>
+              <button class="pill-btn" data-val="PNS">🤷 PNS</button>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Smoking</label>
+            <div class="pill-select" data-group="smoking_habit">
+              <button class="pill-btn active" data-val="NEVER">🚫 Never</button>
+              <button class="pill-btn" data-val="RARELY">Rarely</button>
+              <button class="pill-btn" data-val="SOCIALLY">Socially</button>
+              <button class="pill-btn" data-val="REGULARLY">Regularly</button>
+              <button class="pill-btn" data-val="PNS">🤷 PNS</button>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Cannabis</label>
+            <div class="pill-select" data-group="cannabis_habit">
+              <button class="pill-btn" data-val="NEVER">🚫 Never</button>
+              <button class="pill-btn active" data-val="OCCASIONALLY">Occasionally</button>
+              <button class="pill-btn" data-val="SOCIALLY">Socially</button>
+              <button class="pill-btn" data-val="REGULARLY">Regularly</button>
+              <button class="pill-btn" data-val="PNS">🤷 PNS</button>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Exercise</label>
+            <div class="pill-select" data-group="exercise_frequency">
+              <button class="pill-btn" data-val="NEVER">Never</button>
+              <button class="pill-btn" data-val="RARELY">Rarely</button>
+              <button class="pill-btn" data-val="1_2_WEEK">1–2×/wk</button>
+              <button class="pill-btn active" data-val="3_4_WEEK">3–4×/wk</button>
+              <button class="pill-btn" data-val="DAILY">Daily</button>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Diet</label>
+            <div class="pill-select" data-group="diet">
+              <button class="pill-btn" data-val="OMNIVORE">Omnivore</button>
+              <button class="pill-btn" data-val="VEGETARIAN">Vegetarian</button>
+              <button class="pill-btn" data-val="VEGAN">Vegan</button>
+              <button class="pill-btn" data-val="PESCATARIAN">Pescatarian</button>
+              <button class="pill-btn" data-val="HALAL">Halal</button>
+              <button class="pill-btn active" data-val="FLEXITARIAN">Flexitarian</button>
+              <button class="pill-btn" data-val="OTHER">Other</button>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Pets</label>
+            <div class="pill-select" data-group="pets" data-multi="true">
+              <button class="pill-btn" data-val="DOG">🐕 Dog</button>
+              <button class="pill-btn active" data-val="CAT">🐈 Cat</button>
+              <button class="pill-btn" data-val="BIRD">🐦 Bird</button>
+              <button class="pill-btn" data-val="FISH">🐠 Fish</button>
+              <button class="pill-btn" data-val="RABBIT">🐰 Rabbit</button>
+              <button class="pill-btn" data-val="NONE">No pets</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── SECTION 5: Relationship ── -->
+        <div class="profile-section" id="section-relationship">
+          <div class="section-title">Relationship</div>
+          <div class="section-subtitle">What you're looking for right now.</div>
+
+          <div class="form-field">
+            <label class="form-label">Relationship Goal</label>
+            <div class="goal-grid" data-group="relationship_goal">
+              <div class="goal-card" data-val="SERIOUS" role="button" tabindex="0">
+                <div class="goal-icon">💍</div>
+                <div class="goal-name">Serious</div>
+                <div class="goal-desc">Long-term commitment</div>
+              </div>
+              <div class="goal-card" data-val="CASUAL" role="button" tabindex="0">
+                <div class="goal-icon">☀️</div>
+                <div class="goal-name">Casual</div>
+                <div class="goal-desc">Low pressure, fun</div>
+              </div>
+              <div class="goal-card active" data-val="SITUATIONSHIP" role="button" tabindex="0">
+                <div class="goal-icon">🌊</div>
+                <div class="goal-name">Situationship</div>
+                <div class="goal-desc">Let's see where it goes</div>
+              </div>
+              <div class="goal-card" data-val="FRIENDSHIP" role="button" tabindex="0">
+                <div class="goal-icon">🤝</div>
+                <div class="goal-name">Friendship</div>
+                <div class="goal-desc">Meaningful connections</div>
+              </div>
+              <div class="goal-card" data-val="OPEN" role="button" tabindex="0">
+                <div class="goal-icon">🔓</div>
+                <div class="goal-name">Open</div>
+                <div class="goal-desc">Non-monogamous</div>
+              </div>
+              <div class="goal-card" data-val="EXPLORING" role="button" tabindex="0">
+                <div class="goal-icon">🔮</div>
+                <div class="goal-name">Exploring</div>
+                <div class="goal-desc">Not sure yet</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Has Children</label>
+            <div class="pill-select" data-group="has_children">
+              <button class="pill-btn" data-val="YES">Yes</button>
+              <button class="pill-btn active" data-val="NO">No</button>
+              <button class="pill-btn" data-val="PNS">PNS</button>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Wants Children</label>
+            <div class="pill-select" data-group="wants_children">
+              <button class="pill-btn" data-val="DEFINITELY">Definitely</button>
+              <button class="pill-btn active" data-val="OPEN">Open to it</button>
+              <button class="pill-btn" data-val="NOT_SURE">Not sure</button>
+              <button class="pill-btn" data-val="PROBABLY_NOT">Probably not</button>
+              <button class="pill-btn" data-val="DEFINITELY_NOT">Definitely not</button>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Star Sign</label>
+            <div class="zodiac-grid" data-group="star_sign">
+              <button class="zodiac-btn" data-val="ARIES"><span class="z-sym">♈</span>Aries</button>
+              <button class="zodiac-btn" data-val="TAURUS"><span class="z-sym">♉</span>Taurus</button>
+              <button class="zodiac-btn" data-val="GEMINI"><span class="z-sym">♊</span>Gemini</button>
+              <button class="zodiac-btn" data-val="CANCER"><span class="z-sym">♋</span>Cancer</button>
+              <button class="zodiac-btn" data-val="LEO"><span class="z-sym">♌</span>Leo</button>
+              <button class="zodiac-btn" data-val="VIRGO"><span class="z-sym">♍</span>Virgo</button>
+              <button class="zodiac-btn" data-val="LIBRA"><span class="z-sym">♎</span>Libra</button>
+              <button class="zodiac-btn active" data-val="SCORPIO"><span class="z-sym">♏</span>Scorpio</button>
+              <button class="zodiac-btn" data-val="SAGITTARIUS"><span class="z-sym">♐</span>Sagittarius</button>
+              <button class="zodiac-btn" data-val="CAPRICORN"><span class="z-sym">♑</span>Capricorn</button>
+              <button class="zodiac-btn" data-val="AQUARIUS"><span class="z-sym">♒</span>Aquarius</button>
+              <button class="zodiac-btn" data-val="PISCES"><span class="z-sym">♓</span>Pisces</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── SECTION 6: Personality ── -->
+        <div class="profile-section" id="section-personality">
+          <div class="section-title">Personality</div>
+          <div class="section-subtitle">How you connect and communicate.</div>
+
+          <div class="form-field">
+            <label class="form-label">MBTI Type</label>
+            <div class="mbti-grid" data-group="mbti" id="mbti-grid">
+              <button class="mbti-btn" data-val="INTJ">INTJ</button>
+              <button class="mbti-btn" data-val="INTP">INTP</button>
+              <button class="mbti-btn" data-val="ENTJ">ENTJ</button>
+              <button class="mbti-btn" data-val="ENTP">ENTP</button>
+              <button class="mbti-btn" data-val="INFJ">INFJ</button>
+              <button class="mbti-btn" data-val="INFP">INFP</button>
+              <button class="mbti-btn" data-val="ENFJ">ENFJ</button>
+              <button class="mbti-btn active" data-val="ENFP">ENFP</button>
+              <button class="mbti-btn" data-val="ISTJ">ISTJ</button>
+              <button class="mbti-btn" data-val="ISFJ">ISFJ</button>
+              <button class="mbti-btn" data-val="ESTJ">ESTJ</button>
+              <button class="mbti-btn" data-val="ESFJ">ESFJ</button>
+              <button class="mbti-btn" data-val="ISTP">ISTP</button>
+              <button class="mbti-btn" data-val="ISFP">ISFP</button>
+              <button class="mbti-btn" data-val="ESTP">ESTP</button>
+              <button class="mbti-btn" data-val="ESFP">ESFP</button>
+            </div>
+            <div style="margin-top:10px;font-size:13px;">
+              <a href="personality-quiz.html" style="color:var(--accent3);">Not sure? Take our 2-min quiz →</a>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Love Languages <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--muted2)">(pick up to 2)</span></label>
+            <div class="love-lang-grid" data-group="love_languages" data-multi="true" data-max="2">
+              <div class="ll-card active" data-val="QUALITY_TIME" role="button" tabindex="0">
+                <div class="ll-icon">⏱️</div>
+                <div class="ll-name">Quality Time</div>
+              </div>
+              <div class="ll-card active" data-val="WORDS_OF_AFFIRMATION" role="button" tabindex="0">
+                <div class="ll-icon">💬</div>
+                <div class="ll-name">Words of Affirmation</div>
+              </div>
+              <div class="ll-card" data-val="PHYSICAL_TOUCH" role="button" tabindex="0">
+                <div class="ll-icon">🤗</div>
+                <div class="ll-name">Physical Touch</div>
+              </div>
+              <div class="ll-card" data-val="ACTS_OF_SERVICE" role="button" tabindex="0">
+                <div class="ll-icon">🛠️</div>
+                <div class="ll-name">Acts of Service</div>
+              </div>
+              <div class="ll-card" data-val="GIFT_GIVING" role="button" tabindex="0">
+                <div class="ll-icon">🎁</div>
+                <div class="ll-name">Gift Giving</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Attachment Style</label>
+            <div class="pill-select" data-group="attachment_style">
+              <button class="pill-btn active" data-val="SECURE">Secure</button>
+              <button class="pill-btn" data-val="ANXIOUS">Anxious</button>
+              <button class="pill-btn" data-val="AVOIDANT">Avoidant</button>
+              <button class="pill-btn" data-val="DISORGANIZED">Disorganized</button>
+            </div>
+            <div style="margin-top:8px;font-size:13px;">
+              <a href="personality-quiz.html" style="color:var(--accent3);">Discover via full quiz →</a>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Political Views</label>
+            <div class="political-wrap">
+              <input type="range" id="political-slider" min="-2" max="2" step="1" value="-1" style="margin-top:0;" />
+              <div class="political-labels">
+                <span>Very Liberal</span>
+                <span>Liberal</span>
+                <span>Moderate</span>
+                <span>Conservative</span>
+                <span>Very Conservative</span>
+              </div>
+            </div>
+            <label class="pnts-check">
+              <input type="checkbox" id="political-pnts"> Prefer not to say
+            </label>
+          </div>
+        </div>
+
+        <!-- ── SECTION 7: Prompts ── -->
+        <div class="profile-section" id="section-prompts">
+          <div class="section-title">💬 Prompts</div>
+          <div class="section-subtitle">Up to 3 conversation starters shown on your profile. Max 300 characters each.</div>
+
+          <div id="prompts-container">
+            <!-- Prompt 1 -->
+            <div class="prompt-slot g-card" style="padding:16px;margin-bottom:12px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <select class="form-input" style="width:auto;flex:1;margin-right:10px;">
+                  <option selected>A shower thought I recently had…</option>
+                  <option>The key to my heart is…</option>
+                  <option>I'm looking for someone who…</option>
+                  <option>My most controversial opinion is…</option>
+                  <option>My love language in action looks like…</option>
+                  <option>A green flag I look for…</option>
+                  <option>We'll get along if…</option>
+                  <option>I'm fluent in…</option>
+                  <option>My ideal Sunday looks like…</option>
+                  <option>I'm weirdly passionate about…</option>
+                  <option>Two truths and a lie about me…</option>
+                  <option>A life goal of mine is…</option>
+                  <option>First round is on me if…</option>
+                  <option>Change my mind about…</option>
+                  <option>The last thing to make me laugh…</option>
+                </select>
+                <button class="btn-ghost btn-sm remove-prompt" style="padding:6px 10px;font-size:12px;border-radius:8px;">Remove</button>
+              </div>
+              <textarea class="form-input prompt-answer" rows="3" maxlength="300" placeholder="Your answer…">What if maps showed elevation so cities felt like mountains?</textarea>
+              <div class="char-count prompt-count">43 / 300</div>
+            </div>
+
+            <!-- Prompt 2 -->
+            <div class="prompt-slot g-card" style="padding:16px;margin-bottom:12px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <select class="form-input" style="width:auto;flex:1;margin-right:10px;">
+                  <option>A shower thought I recently had…</option>
+                  <option selected>The key to my heart is…</option>
+                  <option>I'm looking for someone who…</option>
+                  <option>My most controversial opinion is…</option>
+                  <option>My love language in action looks like…</option>
+                  <option>A green flag I look for…</option>
+                  <option>We'll get along if…</option>
+                  <option>I'm fluent in…</option>
+                  <option>My ideal Sunday looks like…</option>
+                  <option>I'm weirdly passionate about…</option>
+                  <option>Two truths and a lie about me…</option>
+                  <option>A life goal of mine is…</option>
+                  <option>First round is on me if…</option>
+                  <option>Change my mind about…</option>
+                  <option>The last thing to make me laugh…</option>
+                </select>
+                <button class="btn-ghost btn-sm remove-prompt" style="padding:6px 10px;font-size:12px;border-radius:8px;">Remove</button>
+              </div>
+              <textarea class="form-input prompt-answer" rows="3" maxlength="300" placeholder="Your answer…">Good coffee and the willingness to talk about something real.</textarea>
+              <div class="char-count prompt-count">62 / 300</div>
+            </div>
+
+            <!-- Prompt 3 -->
+            <div class="prompt-slot g-card" style="padding:16px;margin-bottom:12px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <select class="form-input" style="width:auto;flex:1;margin-right:10px;">
+                  <option>A shower thought I recently had…</option>
+                  <option>The key to my heart is…</option>
+                  <option selected>I'm weirdly passionate about…</option>
+                  <option>My most controversial opinion is…</option>
+                  <option>My love language in action looks like…</option>
+                  <option>A green flag I look for…</option>
+                  <option>We'll get along if…</option>
+                  <option>I'm fluent in…</option>
+                  <option>My ideal Sunday looks like…</option>
+                  <option>I'm looking for someone who…</option>
+                  <option>Two truths and a lie about me…</option>
+                  <option>A life goal of mine is…</option>
+                  <option>First round is on me if…</option>
+                  <option>Change my mind about…</option>
+                  <option>The last thing to make me laugh…</option>
+                </select>
+                <button class="btn-ghost btn-sm remove-prompt" style="padding:6px 10px;font-size:12px;border-radius:8px;">Remove</button>
+              </div>
+              <textarea class="form-input prompt-answer" rows="3" maxlength="300" placeholder="Your answer…">Sourdough baking — specifically the science of the starter culture.</textarea>
+              <div class="char-count prompt-count">65 / 300</div>
+            </div>
+          </div>
+
+          <button class="btn-ghost btn-sm" id="add-prompt-btn" disabled style="opacity:.4;border-radius:8px;padding:8px 16px;">+ Add Prompt (max 3 reached)</button>
+        </div>
+
+        <!-- ── SECTION 8: Interests ── -->
+        <div class="profile-section" id="section-interests">
+          <div class="section-title">🎯 Interests</div>
+          <div class="section-subtitle">Select your interests — these help AURA find compatible matches. <span id="interest-count" style="color:var(--accent3);">12 selected</span></div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;" id="interest-tabs">
+            <button class="pill-btn active" data-cat="sports" onclick="showCat(this,'sports')">🏃 Sports</button>
+            <button class="pill-btn" data-cat="music" onclick="showCat(this,'music')">🎵 Music</button>
+            <button class="pill-btn" data-cat="food" onclick="showCat(this,'food')">🍕 Food</button>
+            <button class="pill-btn" data-cat="travel" onclick="showCat(this,'travel')">✈️ Travel</button>
+            <button class="pill-btn" data-cat="arts" onclick="showCat(this,'arts')">🎨 Arts</button>
+            <button class="pill-btn" data-cat="tech" onclick="showCat(this,'tech')">💻 Tech</button>
+            <button class="pill-btn" data-cat="wellness" onclick="showCat(this,'wellness')">🧘 Wellness</button>
+            <button class="pill-btn" data-cat="gaming" onclick="showCat(this,'gaming')">🎮 Gaming</button>
+          </div>
+
+          <div id="interests-sports" class="interest-group" style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="pill-btn active interest-tag">Bouldering</button>
+            <button class="pill-btn interest-tag">Running</button>
+            <button class="pill-btn active interest-tag">Hiking</button>
+            <button class="pill-btn interest-tag">Swimming</button>
+            <button class="pill-btn interest-tag">Cycling</button>
+            <button class="pill-btn interest-tag">Yoga</button>
+            <button class="pill-btn interest-tag">Tennis</button>
+            <button class="pill-btn interest-tag">Basketball</button>
+            <button class="pill-btn interest-tag">Football</button>
+            <button class="pill-btn interest-tag">Skiing</button>
+            <button class="pill-btn interest-tag">Surfing</button>
+            <button class="pill-btn interest-tag">Martial Arts</button>
+          </div>
+          <div id="interests-music" class="interest-group" style="display:none;gap:8px;flex-wrap:wrap;">
+            <button class="pill-btn active interest-tag">Jazz</button>
+            <button class="pill-btn interest-tag">Indie</button>
+            <button class="pill-btn interest-tag">Hip-Hop</button>
+            <button class="pill-btn interest-tag">Classical</button>
+            <button class="pill-btn interest-tag">Pop</button>
+            <button class="pill-btn interest-tag">Rock</button>
+            <button class="pill-btn interest-tag">Electronic</button>
+            <button class="pill-btn active interest-tag">Live Concerts</button>
+            <button class="pill-btn interest-tag">R&amp;B</button>
+            <button class="pill-btn interest-tag">Folk</button>
+            <button class="pill-btn interest-tag">Metal</button>
+            <button class="pill-btn interest-tag">K-Pop</button>
+          </div>
+          <div id="interests-food" class="interest-group" style="display:none;gap:8px;flex-wrap:wrap;">
+            <button class="pill-btn active interest-tag">Sourdough Baking</button>
+            <button class="pill-btn interest-tag">Coffee Culture</button>
+            <button class="pill-btn active interest-tag">Food Photography</button>
+            <button class="pill-btn interest-tag">Wine Tasting</button>
+            <button class="pill-btn interest-tag">Sushi</button>
+            <button class="pill-btn interest-tag">Street Food</button>
+            <button class="pill-btn interest-tag">Vegan Cooking</button>
+            <button class="pill-btn interest-tag">BBQ</button>
+            <button class="pill-btn interest-tag">Cocktails</button>
+            <button class="pill-btn interest-tag">Farmer's Markets</button>
+          </div>
+          <div id="interests-travel" class="interest-group" style="display:none;gap:8px;flex-wrap:wrap;">
+            <button class="pill-btn active interest-tag">Solo Travel</button>
+            <button class="pill-btn interest-tag">Road Trips</button>
+            <button class="pill-btn interest-tag">Backpacking</button>
+            <button class="pill-btn interest-tag">Luxury Travel</button>
+            <button class="pill-btn interest-tag">Cultural Travel</button>
+            <button class="pill-btn interest-tag">Beach</button>
+            <button class="pill-btn interest-tag">Mountain</button>
+            <button class="pill-btn interest-tag">City Breaks</button>
+          </div>
+          <div id="interests-arts" class="interest-group" style="display:none;gap:8px;flex-wrap:wrap;">
+            <button class="pill-btn active interest-tag">Graphic Novels</button>
+            <button class="pill-btn interest-tag">Photography</button>
+            <button class="pill-btn interest-tag">Painting</button>
+            <button class="pill-btn interest-tag">Film</button>
+            <button class="pill-btn interest-tag">Theatre</button>
+            <button class="pill-btn interest-tag">Poetry</button>
+            <button class="pill-btn active interest-tag">Design</button>
+            <button class="pill-btn interest-tag">Ceramics</button>
+            <button class="pill-btn interest-tag">Street Art</button>
+          </div>
+          <div id="interests-tech" class="interest-group" style="display:none;gap:8px;flex-wrap:wrap;">
+            <button class="pill-btn active interest-tag">UX/UI Design</button>
+            <button class="pill-btn interest-tag">AI &amp; ML</button>
+            <button class="pill-btn interest-tag">Startups</button>
+            <button class="pill-btn interest-tag">Coding</button>
+            <button class="pill-btn interest-tag">Crypto</button>
+            <button class="pill-btn interest-tag">Robotics</button>
+            <button class="pill-btn interest-tag">VR/AR</button>
+            <button class="pill-btn interest-tag">3D Printing</button>
+          </div>
+          <div id="interests-wellness" class="interest-group" style="display:none;gap:8px;flex-wrap:wrap;">
+            <button class="pill-btn active interest-tag">Meditation</button>
+            <button class="pill-btn interest-tag">Breathwork</button>
+            <button class="pill-btn interest-tag">Journaling</button>
+            <button class="pill-btn interest-tag">Therapy</button>
+            <button class="pill-btn interest-tag">Cold Plunge</button>
+            <button class="pill-btn interest-tag">Pilates</button>
+            <button class="pill-btn interest-tag">Sound Healing</button>
+            <button class="pill-btn interest-tag">Nutrition</button>
+          </div>
+          <div id="interests-gaming" class="interest-group" style="display:none;gap:8px;flex-wrap:wrap;">
+            <button class="pill-btn active interest-tag">Indie Games</button>
+            <button class="pill-btn interest-tag">RPG</button>
+            <button class="pill-btn interest-tag">Strategy</button>
+            <button class="pill-btn interest-tag">FPS</button>
+            <button class="pill-btn interest-tag">Board Games</button>
+            <button class="pill-btn interest-tag">Tabletop RPG</button>
+            <button class="pill-btn interest-tag">Card Games</button>
+            <button class="pill-btn interest-tag">Esports</button>
+          </div>
+        </div>
+
+        <!-- ── SECTION 9: Vibe Tags ── -->
+        <div class="profile-section" id="section-vibes" style="border-bottom:none;">
+          <div class="section-title">🏷️ Vibe Tags</div>
+          <div class="section-subtitle">Pick up to 8 tags that capture your energy. <span id="vibe-count" style="color:var(--accent3);">5 / 8 selected</span></div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted2);margin-bottom:10px;">✨ Aesthetic</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="pill-btn active vibe-tag">dark academia</button>
+              <button class="pill-btn vibe-tag">cottagecore</button>
+              <button class="pill-btn vibe-tag">clean girl</button>
+              <button class="pill-btn vibe-tag">old money</button>
+              <button class="pill-btn vibe-tag">streetwear</button>
+              <button class="pill-btn vibe-tag">minimalist</button>
+              <button class="pill-btn vibe-tag">Y2K</button>
+              <button class="pill-btn vibe-tag">art hoe</button>
+              <button class="pill-btn vibe-tag">indie</button>
+              <button class="pill-btn vibe-tag">celestial</button>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted2);margin-bottom:10px;">🧬 Personality</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="pill-btn active vibe-tag">golden retriever energy</button>
+              <button class="pill-btn vibe-tag">main character energy</button>
+              <button class="pill-btn active vibe-tag">overthinker</button>
+              <button class="pill-btn vibe-tag">empath</button>
+              <button class="pill-btn vibe-tag">chaotic good</button>
+              <button class="pill-btn active vibe-tag">bookworm</button>
+              <button class="pill-btn vibe-tag">hopeless romantic</button>
+              <button class="pill-btn vibe-tag">sarcastic</button>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted2);margin-bottom:10px;">🌿 Lifestyle</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="pill-btn vibe-tag">gym person</button>
+              <button class="pill-btn active vibe-tag">night owl</button>
+              <button class="pill-btn vibe-tag">morning person</button>
+              <button class="pill-btn vibe-tag">homebody</button>
+              <button class="pill-btn vibe-tag">adventure seeker</button>
+              <button class="pill-btn active vibe-tag">coffee addict</button>
+              <button class="pill-btn vibe-tag">plant parent</button>
+              <button class="pill-btn vibe-tag">foodie</button>
+              <button class="pill-btn vibe-tag">sober curious</button>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted2);margin-bottom:10px;">⚡ Dynamic</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="pill-btn vibe-tag">protector</button>
+              <button class="pill-btn vibe-tag">nurturer</button>
+              <button class="pill-btn vibe-tag">explorer</button>
+              <button class="pill-btn vibe-tag">builder</button>
+              <button class="pill-btn vibe-tag">dreamer</button>
+              <button class="pill-btn vibe-tag">creative soul</button>
+              <button class="pill-btn vibe-tag">sapiosexual</button>
+              <button class="pill-btn vibe-tag">soft life</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.panel-scroll -->
+    </div><!-- /.panel-center -->
+
+    <!-- ── RIGHT PANEL ── -->
+    <div class="panel-right">
+
+      <div class="g-card" style="padding:16px;margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;">Profile Completeness</div>
+        <div class="complete-item">
+          <span class="ci-name">Photos</span>
+          <span class="ci-pct">56%</span>
+          <span class="complete-status">⚠️</span>
+        </div>
+        <div class="complete-item">
+          <span class="ci-name">Basic Info</span>
+          <span class="ci-pct">100%</span>
+          <span class="complete-status">✅</span>
+        </div>
+        <div class="complete-item">
+          <span class="ci-name">Background</span>
+          <span class="ci-pct">100%</span>
+          <span class="complete-status">✅</span>
+        </div>
+        <div class="complete-item">
+          <span class="ci-name">Lifestyle</span>
+          <span class="ci-pct">100%</span>
+          <span class="complete-status">✅</span>
+        </div>
+        <div class="complete-item">
+          <span class="ci-name">Relationship</span>
+          <span class="ci-pct">100%</span>
+          <span class="complete-status">✅</span>
+        </div>
+        <div class="complete-item">
+          <span class="ci-name">Personality</span>
+          <span class="ci-pct">80%</span>
+          <span class="complete-status">⚠️</span>
+        </div>
+        <div class="complete-item">
+          <span class="ci-name">Interests</span>
+          <span class="ci-pct">0%</span>
+          <span class="complete-status">⚠️</span>
+        </div>
+        <div class="complete-item">
+          <span class="ci-name">Prompts</span>
+          <span class="ci-pct">33%</span>
+          <span class="complete-status">⚠️</span>
+        </div>
+        <div class="complete-item">
+          <span class="ci-name">Vibe Tags</span>
+          <span class="ci-pct">63%</span>
+          <span class="complete-status">⚠️</span>
+        </div>
+      </div>
+
+      <div class="g-card" style="padding:16px;margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">✨ AI Photo Tips</div>
+        <div style="font-size:12px;color:var(--muted2);line-height:1.6;">
+          Your primary photo is great! Add a candid outdoor shot — profiles with natural-light photos get <strong style="color:var(--accent3);">2.3× more swipes</strong>.
+        </div>
+      </div>
+
+      <div class="g-card" style="padding:16px;margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;">Verification</div>
+        <div style="font-size:12px;color:var(--muted2);margin-bottom:8px;">Verified profiles get priority placement.</div>
+        <div class="verify-badge">✓ Photo Verified</div>
+      </div>
+
+      <div class="g-card" style="padding:16px;">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">🔗 Related Pages</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <a href="preferences-setup.html" style="font-size:12px;color:var(--accent3);">⚙️ Dating Preferences →</a>
+          <a href="personality-quiz.html"  style="font-size:12px;color:var(--accent3);">🧠 Full Personality Quiz →</a>
+          <a href="privacy-settings.html"  style="font-size:12px;color:var(--accent3);">🔒 Privacy Settings →</a>
+        </div>
+      </div>
+
+      <div id="theme-switcher"></div>
+    </div><!-- /.panel-right -->
+
+  </main>
+
+  <script>
+    // ── Bio char counter ──
+    const bioInput = document.getElementById('bio-input');
+    const bioCount = document.getElementById('bio-count');
+    if (bioInput && bioCount) {
+      bioInput.addEventListener('input', () => {
+        bioCount.textContent = bioInput.value.length + '/500';
+      });
+    }
+
+    // ── Height slider ──
+    const heightSlider = document.getElementById('height-slider');
+    const heightDisplay = document.getElementById('height-display');
+    function cmToFeet(cm) {
+      const totalInches = Math.round(cm / 2.54);
+      return Math.floor(totalInches / 12) + "'" + (totalInches % 12) + '"';
+    }
+    if (heightSlider && heightDisplay) {
+      heightSlider.addEventListener('input', () => {
+        const cm = heightSlider.value;
+        heightDisplay.textContent = cm + ' cm / ' + cmToFeet(cm);
+      });
+    }
+
+    // ── Single-select pill groups ──
+    document.querySelectorAll('.pill-select:not([data-multi])').forEach(group => {
+      group.addEventListener('click', e => {
+        const btn = e.target.closest('.pill-btn');
+        if (!btn) return;
+        group.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // ── Multi-select pill groups ──
+    document.querySelectorAll('.pill-select[data-multi]').forEach(group => {
+      const max = parseInt(group.dataset.max) || Infinity;
+      group.addEventListener('click', e => {
+        const btn = e.target.closest('.pill-btn');
+        if (!btn) return;
+        const active = group.querySelectorAll('.pill-btn.active');
+        if (btn.classList.contains('active')) {
+          btn.classList.remove('active');
+        } else if (active.length < max) {
+          btn.classList.add('active');
+        }
+      });
+    });
+
+    // ── MBTI single select ──
+    const mbtiGrid = document.getElementById('mbti-grid');
+    if (mbtiGrid) {
+      mbtiGrid.addEventListener('click', e => {
+        const btn = e.target.closest('.mbti-btn');
+        if (!btn) return;
+        mbtiGrid.querySelectorAll('.mbti-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    }
+
+    // ── Zodiac single select ──
+    document.querySelectorAll('.zodiac-grid').forEach(grid => {
+      grid.addEventListener('click', e => {
+        const btn = e.target.closest('.zodiac-btn');
+        if (!btn) return;
+        grid.querySelectorAll('.zodiac-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // ── Relationship goal cards ──
+    document.querySelectorAll('.goal-grid').forEach(grid => {
+      grid.addEventListener('click', e => {
+        const card = e.target.closest('.goal-card');
+        if (!card) return;
+        grid.querySelectorAll('.goal-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      });
+    });
+
+    // ── Love language multi-select (max 2) ──
+    document.querySelectorAll('.love-lang-grid').forEach(grid => {
+      const max = parseInt(grid.dataset.max) || 2;
+      grid.addEventListener('click', e => {
+        const card = e.target.closest('.ll-card');
+        if (!card) return;
+        if (card.classList.contains('active')) {
+          card.classList.remove('active');
+        } else if (grid.querySelectorAll('.ll-card.active').length < max) {
+          card.classList.add('active');
+        }
+      });
+    });
+
+    // ── Interest category tabs ──
+    function showCat(btn, cat) {
+      document.querySelectorAll('#interest-tabs .pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.interest-group').forEach(g => g.style.display = 'none');
+      const group = document.getElementById('interests-' + cat);
+      if (group) group.style.display = 'flex';
+    }
+
+    // ── Interest tag toggle ──
+    document.querySelectorAll('.interest-tag').forEach(tag => {
+      tag.addEventListener('click', () => {
+        tag.classList.toggle('active');
+        const count = document.querySelectorAll('.interest-tag.active').length;
+        const el = document.getElementById('interest-count');
+        if (el) el.textContent = count + ' selected';
+      });
+    });
+
+    // ── Vibe tag toggle (max 8) ──
+    document.querySelectorAll('.vibe-tag').forEach(tag => {
+      tag.addEventListener('click', () => {
+        const selected = document.querySelectorAll('.vibe-tag.active').length;
+        if (!tag.classList.contains('active') && selected >= 8) return;
+        tag.classList.toggle('active');
+        const count = document.querySelectorAll('.vibe-tag.active').length;
+        const el = document.getElementById('vibe-count');
+        if (el) el.textContent = count + ' / 8 selected';
+      });
+    });
+
+    // ── Prompt char counters ──
+    document.querySelectorAll('.prompt-answer').forEach(ta => {
+      const counter = ta.nextElementSibling;
+      if (counter) {
+        ta.addEventListener('input', () => {
+          counter.textContent = ta.value.length + ' / 300';
+        });
+      }
+    });
+
+    // ── Remove prompt button ──
+    function bindRemovePrompts() {
+      document.querySelectorAll('.remove-prompt').forEach(btn => {
+        btn.onclick = () => {
+          btn.closest('.prompt-slot').remove();
+          const remaining = document.querySelectorAll('.prompt-slot').length;
+          const addBtn = document.getElementById('add-prompt-btn');
+          if (addBtn && remaining < 3) {
+            addBtn.disabled = false;
+            addBtn.style.opacity = '1';
+            addBtn.textContent = '+ Add Prompt';
+          }
+        };
+      });
+    }
+    bindRemovePrompts();
+
+    // ── Section nav: scroll to section ──
+    const sectionLinks = document.querySelectorAll('.nav-section-link[data-section]');
+    const panelScroll  = document.querySelector('.panel-scroll');
+
+    sectionLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        const target = document.getElementById(link.dataset.section);
+        if (!target || !panelScroll) return;
+        // Scroll the panel-scroll container, not the page
+        const offset = target.offsetTop - panelScroll.offsetTop;
+        panelScroll.scrollTo({ top: offset - 16, behavior: 'smooth' });
+        sectionLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
+    // ── Scroll spy ──
+    const sections = document.querySelectorAll('.profile-section[id]');
+    if (panelScroll) {
+      panelScroll.addEventListener('scroll', () => {
+        let current = sections[0] ? sections[0].id : '';
+        sections.forEach(sec => {
+          if (sec.offsetTop - panelScroll.scrollTop <= 100) current = sec.id;
+        });
+        sectionLinks.forEach(l => {
+          l.classList.toggle('active', l.dataset.section === current);
+        });
+      }, { passive: true });
+    }
+  </script>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

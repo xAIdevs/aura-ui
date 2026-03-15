@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURA – Terms of Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ambient */
+    body::before { content:''; position:fixed; top:-200px; left:-200px; width:600px; height:600px; background:radial-gradient(circle,rgba(124,58,237,.08),transparent 70%); pointer-events:none; z-index:0; }
+
+    /* NAV */
+    .doc-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(var(--bg-rgb,10,10,15),.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+    }
+    .nav-brand { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700; letter-spacing:-1px; background:linear-gradient(135deg,var(--accent2),var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-decoration:none; }
+    .nav-back { display:flex; align-items:center; gap:7px; color:var(--muted2); font-size:13px; font-weight:600; text-decoration:none; transition:color .2s; }
+    .nav-back:hover { color:var(--text); }
+
+    /* HERO */
+    .doc-hero {
+      position: relative; z-index: 1;
+      padding: 56px 24px 40px;
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .doc-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 5px 16px;
+      background: rgba(124,58,237,.1);
+      border: 1px solid rgba(124,58,237,.25);
+      border-radius: 20px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      color: var(--accent3);
+      margin-bottom: 20px;
+    }
+    .doc-title { font-family:'Space Grotesk',sans-serif; font-size: clamp(2rem,5vw,3rem); font-weight:800; letter-spacing:-1.5px; line-height:1.1; margin-bottom:14px; }
+    .doc-meta { font-size:13px; color:var(--muted2); margin-bottom:32px; }
+    .doc-meta strong { color:var(--accent3); }
+
+    /* TOC */
+    .doc-toc {
+      position: relative; z-index: 1;
+      max-width: 760px; margin: 0 auto 48px;
+      padding: 0 24px;
+    }
+    .toc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px 28px;
+    }
+    .toc-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted2); margin-bottom:14px; }
+    .toc-list { list-style:none; columns:2; gap:12px; }
+    @media (max-width:600px) { .toc-list { columns:1; } }
+    .toc-list li { margin-bottom:8px; }
+    .toc-list a { color:var(--muted2); text-decoration:none; font-size:13px; font-weight:500; transition:color .2s; display:flex; align-items:center; gap:6px; }
+    .toc-list a::before { content:'§'; color:var(--accent3); font-size:11px; }
+    .toc-list a:hover { color:var(--accent3); }
+
+    /* CONTENT */
+    .doc-body {
+      position: relative; z-index: 1;
+      max-width: 760px; margin: 0 auto;
+      padding: 0 24px 100px;
+    }
+    .doc-section { margin-bottom: 52px; }
+    .doc-section-num {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.2px; color: var(--accent3); margin-bottom: 8px;
+    }
+    .doc-section h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.2rem,3vw,1.5rem);
+      font-weight: 700; letter-spacing: -.5px;
+      color: var(--text); margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .doc-section p { font-size:15px; color:var(--text-2,var(--muted2)); line-height:1.75; margin-bottom:14px; }
+    .doc-section ul, .doc-section ol { padding-left: 20px; margin-bottom: 14px; }
+    .doc-section li { font-size:15px; color:var(--text-2,var(--muted2)); line-height:1.75; margin-bottom:8px; }
+    .doc-section strong { color: var(--text); font-weight: 600; }
+    .doc-section a { color: var(--accent3); text-decoration: none; }
+    .doc-section a:hover { text-decoration: underline; }
+
+    .highlight-box {
+      background: rgba(124,58,237,.08);
+      border: 1px solid rgba(124,58,237,.2);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+    .highlight-box p { color: var(--text); font-size:14px; margin-bottom:0; }
+
+    .warning-box {
+      background: rgba(245,158,11,.08);
+      border: 1px solid rgba(245,158,11,.2);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+    .warning-box p { color: var(--text); font-size:14px; margin-bottom:0; }
+
+    /* FOOTER */
+    .doc-footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      max-width: 760px; margin: 0 auto;
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+    }
+    .doc-footer-links { display:flex; gap:16px; flex-wrap:wrap; }
+    .doc-footer-links a { font-size:13px; color:var(--muted2); text-decoration:none; transition:color .2s; }
+    .doc-footer-links a:hover { color:var(--accent3); }
+    .doc-footer-copy { font-size:13px; color:var(--muted2); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="doc-nav">
+  <a href="index.html" class="nav-brand">AURA</a>
+  <a href="javascript:history.back()" class="nav-back">← Back</a>
+</nav>
+
+<!-- HERO -->
+<div class="doc-hero">
+  <div class="doc-badge">⚖️ Legal</div>
+  <h1 class="doc-title">Terms of Service</h1>
+  <p class="doc-meta">Last updated: <strong>March 15, 2026</strong> · Effective: March 15, 2026</p>
+  <div class="highlight-box">
+    <p>
+      <strong>Welcome to AURA.</strong> By creating an account or using any AURA service, you agree to be bound by these Terms. Please read them carefully. If you do not agree, do not use our services.
+    </p>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="doc-toc">
+  <div class="toc-card">
+    <div class="toc-title">Table of Contents</div>
+    <ul class="toc-list">
+      <li><a href="#s1">Acceptance of Terms</a></li>
+      <li><a href="#s2">Eligibility</a></li>
+      <li><a href="#s3">Account Registration</a></li>
+      <li><a href="#s4">Subscription & Billing</a></li>
+      <li><a href="#s5">User Conduct</a></li>
+      <li><a href="#s6">Prohibited Content</a></li>
+      <li><a href="#s7">AI Features & Data</a></li>
+      <li><a href="#s8">Safety & Reporting</a></li>
+      <li><a href="#s9">Intellectual Property</a></li>
+      <li><a href="#s10">Disclaimers</a></li>
+      <li><a href="#s11">Limitation of Liability</a></li>
+      <li><a href="#s12">Termination</a></li>
+      <li><a href="#s13">Governing Law</a></li>
+      <li><a href="#s14">Contact Us</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="doc-body">
+
+  <div class="doc-section" id="s1">
+    <div class="doc-section-num">Section 01</div>
+    <h2>Acceptance of Terms</h2>
+    <p>These Terms of Service ("Terms") constitute a legally binding agreement between you ("User," "you," or "your") and AURA Technologies Pvt. Ltd. ("AURA," "we," "us," or "our") governing your access to and use of the AURA mobile application, website, and all associated services (collectively, the "Service").</p>
+    <p>By accessing or using our Service — including by creating an account, swiping on profiles, using AI match features, or subscribing to AURA Premium — you acknowledge that you have read, understood, and agree to be bound by these Terms and our <a href="privacy.html">Privacy Policy</a>.</p>
+    <p>We may update these Terms at any time. We will notify you of material changes through the app or by email. Your continued use of the Service after such notice constitutes your acceptance of the revised Terms.</p>
+  </div>
+
+  <div class="doc-section" id="s2">
+    <div class="doc-section-num">Section 02</div>
+    <h2>Eligibility</h2>
+    <p>To use AURA, you must:</p>
+    <ul>
+      <li>Be at least <strong>18 years of age</strong></li>
+      <li>Have the legal capacity to enter into a binding agreement</li>
+      <li>Not be prohibited from receiving services under applicable laws</li>
+      <li>Not have a prior account that was terminated for violations of these Terms</li>
+    </ul>
+    <div class="warning-box">
+      <p>⚠️ <strong>AURA is strictly for adults (18+).</strong> If we discover a user is under 18, we will immediately terminate their account and delete all associated data. We take the safety of minors extremely seriously.</p>
+    </div>
+    <p>By using AURA, you represent and warrant that you meet all eligibility requirements. We reserve the right to verify your age at any time.</p>
+  </div>
+
+  <div class="doc-section" id="s3">
+    <div class="doc-section-num">Section 03</div>
+    <h2>Account Registration</h2>
+    <p>To access most features of AURA, you must create an account. When registering, you agree to:</p>
+    <ul>
+      <li>Provide accurate, current, and complete information</li>
+      <li>Use a phone number or email address that belongs to you</li>
+      <li>Maintain and promptly update your account information</li>
+      <li>Keep your login credentials confidential and secure</li>
+      <li>Accept responsibility for all activity that occurs under your account</li>
+      <li>Notify us immediately of any unauthorized use of your account</li>
+    </ul>
+    <p>You may not create an account using another person's identity, maintain multiple accounts, or share your account with others. AURA accounts are personal and non-transferable.</p>
+    <p>You may link your account to third-party services (such as Google). By doing so, you grant AURA permission to access and use information from those accounts in accordance with our Privacy Policy.</p>
+  </div>
+
+  <div class="doc-section" id="s4">
+    <div class="doc-section-num">Section 04</div>
+    <h2>Subscription & Billing</h2>
+    <p>AURA offers both free and paid subscription tiers:</p>
+    <ul>
+      <li><strong>AURA Free</strong> — Basic matching, limited daily swipes, standard AI insights</li>
+      <li><strong>AURA+ ($14.99/month)</strong> — Unlimited swipes, advanced compatibility reports, read receipts, priority matching</li>
+      <li><strong>AURA Pro ($29.99/month)</strong> — All AURA+ features plus background verification, video dates, AI coaching, incognito mode</li>
+    </ul>
+    <p>All subscriptions auto-renew unless cancelled at least 24 hours before the end of the current period. You can manage or cancel your subscription through your account settings or via your app store (iOS/Google Play).</p>
+    <p><strong>Refund Policy:</strong> Subscription fees are generally non-refundable. However, if you experience a technical issue that prevents access to paid features, contact our support team within 7 days for review. We comply with all applicable consumer protection laws regarding refunds.</p>
+    <p>We reserve the right to change subscription pricing with 30 days' advance notice. Continued use after a price change constitutes acceptance of the new pricing.</p>
+  </div>
+
+  <div class="doc-section" id="s5">
+    <div class="doc-section-num">Section 05</div>
+    <h2>User Conduct</h2>
+    <p>AURA is a community built on respect. You agree to use the Service in a manner that is lawful, safe, and considerate of other users. You will not:</p>
+    <ul>
+      <li>Harass, abuse, stalk, threaten, or intimidate other users</li>
+      <li>Impersonate any person or entity, or misrepresent your identity or affiliation</li>
+      <li>Use the Service to solicit money or financial favors from other users</li>
+      <li>Send unsolicited advertising, spam, or promotional messages</li>
+      <li>Use automated scripts, bots, or scrapers to access or interact with the Service</li>
+      <li>Reverse-engineer, decompile, or otherwise attempt to extract source code</li>
+      <li>Interfere with or disrupt the integrity or performance of the Service</li>
+      <li>Attempt to gain unauthorized access to any accounts or systems</li>
+    </ul>
+    <p>We actively moderate user behavior and may take action, including temporary suspension or permanent termination, for violations of this section.</p>
+  </div>
+
+  <div class="doc-section" id="s6">
+    <div class="doc-section-num">Section 06</div>
+    <h2>Prohibited Content</h2>
+    <p>You may not post, share, or transmit content that:</p>
+    <ul>
+      <li>Is sexually explicit, obscene, or pornographic</li>
+      <li>Depicts or encourages violence, self-harm, or harmful activities</li>
+      <li>Is hateful or discriminatory based on race, ethnicity, religion, gender, sexual orientation, disability, or national origin</li>
+      <li>Contains another person's private information without their explicit consent</li>
+      <li>Infringes on third-party intellectual property rights</li>
+      <li>Is false, misleading, or fraudulent</li>
+      <li>Includes photos of anyone other than yourself as your profile photos</li>
+      <li>Contains malware, viruses, or any code designed to disrupt, damage, or gain unauthorized access to systems</li>
+    </ul>
+    <p>AURA uses a combination of AI moderation and human review to detect and remove prohibited content. Violations may result in immediate account termination and, where appropriate, reporting to law enforcement.</p>
+  </div>
+
+  <div class="doc-section" id="s7">
+    <div class="doc-section-num">Section 07</div>
+    <h2>AI Features & Data</h2>
+    <p>AURA's core product is built around the <strong>AURA BRAIN™</strong>, our proprietary AI compatibility engine. By using AURA, you understand and consent to:</p>
+    <ul>
+      <li>Your profile data, behavior, and interaction patterns being analyzed to generate compatibility scores and match recommendations</li>
+      <li>AI-generated insights, suggestions, and summaries about you and your potential matches</li>
+      <li>Your data being used to improve AURA's AI models in aggregated, anonymized form</li>
+    </ul>
+    <p>AI-generated compatibility scores are probabilistic assessments based on behavioral signals, not guarantees of relationship success. AURA is not responsible for the outcomes of in-person meetings or relationships formed through the platform.</p>
+    <p>You may opt out of certain AI-powered features in your privacy settings, though this may limit your experience.</p>
+  </div>
+
+  <div class="doc-section" id="s8">
+    <div class="doc-section-num">Section 08</div>
+    <h2>Safety & Reporting</h2>
+    <p>Your safety is our highest priority. AURA provides tools to help you stay safe:</p>
+    <ul>
+      <li><strong>Block & Report</strong> — Report any user you believe is violating these Terms or acting dangerously</li>
+      <li><strong>Photo Verification</strong> — Verify your photos to build trust with matches</li>
+      <li><strong>Safe Meeting Guide</strong> — Resources on meeting strangers safely</li>
+      <li><strong>Emergency SOS</strong> — Quick access to emergency contacts during dates</li>
+    </ul>
+    <p>We investigate all reports seriously. While we cannot monitor every interaction, we respond to reports within 24 hours and take proportionate action based on our findings.</p>
+    <p>You agree to report any illegal activity or content you encounter on AURA. Failure to report known illegal activity involving minors may itself be a legal violation.</p>
+  </div>
+
+  <div class="doc-section" id="s9">
+    <div class="doc-section-num">Section 09</div>
+    <h2>Intellectual Property</h2>
+    <p>The AURA name, logo, AURA BRAIN™ brand, app design, and all associated content and technology are owned by AURA Technologies and protected by applicable copyright, trademark, and other intellectual property laws.</p>
+    <p>You retain ownership of all content you submit to AURA (photos, bio text, etc.). By posting content on AURA, you grant us a worldwide, royalty-free, non-exclusive, sublicensable license to use, reproduce, modify, adapt, publish, and display that content for the purpose of operating and promoting the Service.</p>
+    <p>This license ends when you delete your content or your account, except where content has been shared with other users who have not deleted it, or where required by law.</p>
+  </div>
+
+  <div class="doc-section" id="s10">
+    <div class="doc-section-num">Section 10</div>
+    <h2>Disclaimers</h2>
+    <p>AURA is provided "as is" and "as available" without warranties of any kind, either express or implied, including but not limited to:</p>
+    <ul>
+      <li>Implied warranties of merchantability, fitness for a particular purpose, or non-infringement</li>
+      <li>That the Service will be uninterrupted, error-free, or secure</li>
+      <li>That any matches, compatibility scores, or AI recommendations will result in successful relationships</li>
+      <li>The accuracy or completeness of any user-provided information, including profile photos and bios</li>
+    </ul>
+    <div class="warning-box">
+      <p>⚠️ <strong>AURA does not conduct background checks on users by default</strong> (background checks are a paid AURA Pro feature). Exercise caution and use your judgment when meeting someone in person. Always meet in public places first.</p>
+    </div>
+  </div>
+
+  <div class="doc-section" id="s11">
+    <div class="doc-section-num">Section 11</div>
+    <h2>Limitation of Liability</h2>
+    <p>To the fullest extent permitted by applicable law, AURA, its officers, directors, employees, and agents shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including:</p>
+    <ul>
+      <li>Loss of profits, data, or goodwill</li>
+      <li>Service interruptions or unavailability</li>
+      <li>Unauthorized access to or alteration of your data</li>
+      <li>Conduct of third parties (including other users) on or off the platform</li>
+    </ul>
+    <p>Our total aggregate liability to you for any claims arising out of or related to these Terms or the Service shall not exceed the greater of (a) the amount you paid to AURA in the 12 months preceding the claim, or (b) $100 USD.</p>
+  </div>
+
+  <div class="doc-section" id="s12">
+    <div class="doc-section-num">Section 12</div>
+    <h2>Termination</h2>
+    <p>You may delete your account at any time through the app settings. Upon deletion, your profile and personal data will be removed in accordance with our <a href="privacy.html">Privacy Policy</a>.</p>
+    <p>AURA may suspend or permanently terminate your account, without notice, if we determine that you have:</p>
+    <ul>
+      <li>Violated any provision of these Terms</li>
+      <li>Provided false or misleading information</li>
+      <li>Engaged in fraudulent, harmful, or illegal conduct</li>
+      <li>Used the Service in a way that creates legal liability for AURA</li>
+    </ul>
+    <p>Upon termination, your right to use the Service immediately ceases. Provisions that by their nature should survive termination (including intellectual property, disclaimers, and limitations of liability) will remain in effect.</p>
+  </div>
+
+  <div class="doc-section" id="s13">
+    <div class="doc-section-num">Section 13</div>
+    <h2>Governing Law & Disputes</h2>
+    <p>These Terms are governed by and construed in accordance with the laws of India, without regard to conflict of law principles. For users outside India, we comply with the applicable consumer protection and data protection laws of your jurisdiction.</p>
+    <p>Any disputes arising from or relating to these Terms or the Service shall first be attempted to be resolved through good-faith negotiation. If that fails, disputes will be resolved through binding arbitration under the Arbitration and Conciliation Act, 2015 (India), except that either party may seek emergency injunctive relief in a court of competent jurisdiction.</p>
+    <p>You agree to resolve disputes individually, not as part of any class action or collective proceeding.</p>
+  </div>
+
+  <div class="doc-section" id="s14">
+    <div class="doc-section-num">Section 14</div>
+    <h2>Contact Us</h2>
+    <p>If you have questions about these Terms, please reach out:</p>
+    <ul>
+      <li><strong>Email:</strong> legal@aura.app</li>
+      <li><strong>Safety issues:</strong> safety@aura.app</li>
+      <li><strong>Mailing address:</strong> AURA Technologies Pvt. Ltd., 91 Springboard, Koramangala, Bengaluru — 560034, India</li>
+    </ul>
+    <p>For the fastest response, use the in-app Help Centre (Settings → Help & Support).</p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <div class="doc-footer-links">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="safety.html">Safety Center</a>
+    <a href="index.html">Back to AURA</a>
+  </div>
+  <div class="doc-footer-copy">© 2026 AURA Technologies Pvt. Ltd.</div>
+</div>
+
+<script src="js/theme.js"></script>
+</body>
+</html>

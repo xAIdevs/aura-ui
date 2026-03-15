@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Security Settings – AURA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+
+  <style>
+    /* ── PAGE LAYOUT ──────────────────────────────── */
+    body { display: flex; overflow-x: hidden; }
+    .panel-center { padding: 0 !important; }
+    .panel-left { gap: 0 !important; }
+
+    /* ── LEFT PANEL ───────────────────────────────── */
+    .left-title {
+      padding: 20px 16px 14px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px; font-weight: 700;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Security Score card */
+    .sec-score-card {
+      margin: 16px 12px 0;
+      background: rgba(16,185,129, .08);
+      border: 1px solid rgba(16,185,129, .3);
+      border-radius: var(--radius3);
+      padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .sec-score-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 36px; font-weight: 700;
+      color: var(--green); line-height: 1;
+    }
+    .sec-score-label {
+      font-size: 12px; color: var(--muted2);
+      text-transform: uppercase; letter-spacing: .6px;
+    }
+    .sec-score-bar-track {
+      width: 100%; height: 6px; background: var(--bg3);
+      border-radius: 3px; overflow: hidden;
+    }
+    .sec-score-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--cyan));
+      border-radius: 3px; width: 78%;
+    }
+    .sec-score-status {
+      font-size: 12px; color: var(--green); font-weight: 600;
+    }
+
+    /* Section nav */
+    .section-nav { display: flex; flex-direction: column; gap: 3px; padding: 16px 12px; }
+    .section-nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 10px;
+      font-size: 14px; font-weight: 500; color: var(--muted2);
+      transition: all .2s; cursor: pointer; text-decoration: none;
+      border: none; background: none; width: 100%; text-align: left;
+    }
+    .section-nav-item:hover { background: var(--card-b); color: var(--text); }
+    .section-nav-item.active {
+      background: rgba(16,185,129,.12); color: var(--green);
+      border-left: 3px solid var(--green); padding-left: 9px;
+    }
+
+    /* Trust badge */
+    .trust-badge {
+      margin: auto 12px 16px;
+      padding: 10px 14px;
+      background: rgba(16,185,129,.06);
+      border: 1px solid rgba(16,185,129,.2);
+      border-radius: 10px;
+      font-size: 12px; color: var(--green); font-weight: 500;
+      text-align: center; line-height: 1.6;
+    }
+
+    /* ── CENTER PANEL ──────────────────────────────── */
+    .sec-pane {
+      display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+    }
+    .sec-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 28px; border-bottom: 1px solid var(--border);
+      background: var(--bg); flex-shrink: 0;
+    }
+    .sec-topbar h1 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700;
+    }
+    .topbar-subtitle { font-size: 13px; color: var(--muted2); margin-top: 2px; }
+
+    .sec-body {
+      flex: 1; overflow-y: auto;
+      padding: 24px; display: flex; flex-direction: column; gap: 28px;
+    }
+
+    /* Section anchor */
+    .section-anchor { scroll-margin-top: 24px; }
+    .sec-section-head {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+    }
+    .sec-section-head h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px; font-weight: 600;
+    }
+
+    /* Generic settings card */
+    .settings-card {
+      background: var(--card-b); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .settings-card-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted);
+      padding-bottom: 10px; border-bottom: 1px solid var(--border);
+    }
+
+    /* Registration info row */
+    .reg-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; background: var(--bg2);
+      border: 1px solid var(--border); border-radius: 10px; font-size: 14px;
+    }
+    .reg-method-icon {
+      width: 32px; height: 32px; border-radius: 50%; background: var(--card-c);
+      display: flex; align-items: center; justify-content: center; font-size: 16px;
+      border: 1px solid var(--border); flex-shrink: 0;
+    }
+    .reg-info { flex: 1; }
+    .reg-info-title { font-weight: 600; font-size: 14px; }
+    .reg-info-sub { font-size: 12px; color: var(--muted2); margin-top: 2px; }
+
+    /* Login activity */
+    .login-activity {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px; font-size: 13px; color: var(--muted2);
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .login-activity strong { color: var(--text); }
+    .login-ip {
+      font-family: 'Space Grotesk', monospace; font-size: 12px;
+      color: var(--muted); background: var(--bg3);
+      padding: 2px 8px; border-radius: 5px; display: inline-block; margin-top: 2px;
+    }
+
+    /* Password card */
+    .pw-card {
+      background: var(--card-b); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .field-row { display: flex; flex-direction: column; gap: 6px; }
+    .field-label {
+      font-size: 11px; font-weight: 600; color: var(--muted2);
+      text-transform: uppercase; letter-spacing: .7px;
+    }
+    .pw-input-wrap { position: relative; }
+    .field-input {
+      background: var(--card-b); border: 1px solid var(--border);
+      border-radius: 10px; padding: 11px 40px 11px 14px; color: var(--text);
+      font-size: 15px; outline: none; transition: border-color .2s; width: 100%;
+    }
+    .field-input:focus { border-color: var(--accent2); }
+    .pw-eye {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; font-size: 16px; color: var(--muted);
+      padding: 0; line-height: 1;
+    }
+
+    /* Strength meter */
+    .pw-strength { display: flex; flex-direction: column; gap: 6px; }
+    .strength-track {
+      height: 4px; background: var(--bg3); border-radius: 2px; overflow: hidden;
+    }
+    .strength-fill {
+      height: 100%; border-radius: 2px; transition: width .3s, background .3s;
+      width: 0%;
+    }
+    .strength-label { font-size: 12px; color: var(--muted); }
+
+    /* Password requirements */
+    .pw-reqs { display: flex; flex-direction: column; gap: 5px; }
+    .pw-req {
+      font-size: 12px; color: var(--muted2);
+      display: flex; align-items: center; gap: 6px; transition: color .2s;
+    }
+    .pw-req.met { color: var(--green); }
+    .pw-req .req-icon { font-size: 13px; width: 16px; text-align: center; }
+
+    /* Change pw button */
+    .btn-primary-sm {
+      padding: 11px 24px; background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; border: none; border-radius: 10px; font-size: 14px;
+      font-weight: 600; cursor: pointer; transition: all .2s; align-self: flex-start;
+      box-shadow: 0 4px 16px rgba(var(--accent-rgb),.3);
+    }
+    .btn-primary-sm:hover { opacity: .9; transform: translateY(-2px); }
+
+    /* Connected accounts */
+    .connected-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 0; border-bottom: 1px solid var(--border);
+    }
+    .connected-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .connected-icon { font-size: 18px; width: 26px; text-align: center; flex-shrink: 0; }
+    .connected-name { font-size: 14px; font-weight: 500; flex: 1; }
+    .connected-ok { font-size: 12px; color: var(--green); font-weight: 600; margin-right: 4px; }
+    .connect-btn {
+      font-size: 12px; padding: 5px 12px;
+      border: 1px solid var(--border2); border-radius: 6px;
+      background: none; color: var(--accent3); cursor: pointer; transition: all .2s; white-space: nowrap;
+    }
+    .connect-btn:hover { background: rgba(var(--accent-rgb),.1); }
+    .disconnect-btn {
+      font-size: 12px; padding: 5px 12px;
+      border: 1px solid var(--border); border-radius: 6px;
+      background: none; color: var(--muted2); cursor: pointer; transition: all .2s; white-space: nowrap;
+    }
+    .disconnect-btn:hover { border-color: rgba(239,68,68,.4); color: var(--red); }
+
+    /* ── 2FA Section ── */
+    .twofa-status-card {
+      border-radius: 14px; padding: 24px;
+      display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;
+    }
+    .twofa-status-card.off {
+      background: rgba(var(--accent-rgb),.06); border: 1px solid var(--border2);
+    }
+    .twofa-status-card.on {
+      background: rgba(16,185,129,.06); border: 1px solid rgba(16,185,129,.3);
+    }
+    .twofa-shield { font-size: 48px; }
+    .twofa-title {
+      font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700;
+    }
+    .twofa-desc { font-size: 14px; color: var(--muted2); max-width: 360px; line-height: 1.6; }
+    .twofa-on-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(16,185,129,.15); color: var(--green);
+      border: 1px solid rgba(16,185,129,.3); border-radius: 20px;
+      font-size: 13px; font-weight: 700; padding: 5px 14px;
+    }
+    .twofa-enabled-date { font-size: 12px; color: var(--muted2); }
+    .btn-enable-2fa {
+      padding: 12px 32px; background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; border: none; border-radius: 12px; font-size: 15px;
+      font-weight: 600; cursor: pointer; transition: all .2s;
+      box-shadow: 0 4px 20px rgba(var(--accent-rgb),.3);
+    }
+    .btn-enable-2fa:hover { opacity: .9; transform: translateY(-2px); }
+    .btn-disable-2fa {
+      padding: 9px 20px; border: 1px solid rgba(239,68,68,.4);
+      background: none; color: var(--red); border-radius: 10px;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s;
+    }
+    .btn-disable-2fa:hover { background: rgba(239,68,68,.1); }
+
+    /* Setup flow */
+    .setup-card {
+      background: var(--card-b); border: 1px solid var(--border2);
+      border-radius: 14px; padding: 20px;
+      display: flex; flex-direction: column; gap: 18px;
+    }
+    .setup-step {
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .setup-step-num {
+      width: 28px; height: 28px; flex-shrink: 0;
+      background: rgba(var(--accent-rgb),.2); color: var(--accent3);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; border: 1px solid var(--border2);
+    }
+    .setup-step-content { flex: 1; }
+    .setup-step-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .setup-step-desc { font-size: 13px; color: var(--muted2); line-height: 1.5; }
+
+    /* QR placeholder */
+    .qr-placeholder {
+      width: 120px; height: 120px; border-radius: 12px; margin-top: 10px;
+      background: linear-gradient(135deg, var(--bg3), var(--bg4));
+      border: 2px solid var(--border2);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 6px; position: relative; overflow: hidden;
+    }
+    .qr-grid {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
+      width: 90px; height: 90px;
+    }
+    .qr-cell {
+      border-radius: 1px;
+      background: var(--accent2);
+      opacity: 0;
+    }
+    .qr-cell.filled { opacity: 1; }
+    .manual-code {
+      margin-top: 8px; font-family: 'Space Grotesk', monospace;
+      font-size: 12px; color: var(--accent3); letter-spacing: 1px;
+      background: var(--bg3); padding: 5px 10px; border-radius: 6px;
+      border: 1px solid var(--border2); user-select: all; cursor: text;
+    }
+
+    /* 6-digit OTP inputs */
+    .otp-inputs {
+      display: flex; gap: 8px; margin-top: 8px;
+    }
+    .otp-input {
+      width: 44px; height: 52px; text-align: center;
+      font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700;
+      background: var(--card-c); border: 2px solid var(--border);
+      border-radius: 10px; color: var(--text); outline: none;
+      transition: border-color .2s; caret-color: var(--accent2);
+    }
+    .otp-input:focus { border-color: var(--accent2); background: rgba(var(--accent-rgb),.08); }
+    .otp-input.filled { border-color: var(--accent2); color: var(--accent3); }
+
+    .btn-verify-2fa {
+      padding: 11px 24px; background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; border: none; border-radius: 10px; font-size: 14px;
+      font-weight: 600; cursor: pointer; transition: all .2s; margin-top: 4px; align-self: flex-start;
+    }
+    .btn-verify-2fa:hover { opacity: .9; transform: translateY(-2px); }
+
+    /* Backup codes */
+    .backup-codes-card {
+      background: var(--card-b); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .backup-count-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(var(--accent-rgb),.12); color: var(--accent3);
+      border: 1px solid var(--border2); border-radius: 20px;
+      font-size: 13px; font-weight: 700; padding: 4px 14px;
+    }
+    .backup-desc { font-size: 13px; color: var(--muted2); line-height: 1.5; }
+    .backup-codes-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    }
+    .backup-code-item {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 9px; padding: 10px 12px;
+      font-family: 'Space Grotesk', monospace; font-size: 14px; font-weight: 600;
+      color: var(--muted2); letter-spacing: 1px; text-align: center;
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
+    }
+    .backup-code-item.revealed { color: var(--text); }
+    .reveal-btn {
+      background: none; border: none; cursor: pointer; font-size: 14px; color: var(--muted);
+      padding: 0; line-height: 1; transition: color .15s;
+    }
+    .reveal-btn:hover { color: var(--accent3); }
+    .backup-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-ghost-sm {
+      padding: 8px 16px; border: 1px solid var(--border);
+      border-radius: 9px; font-size: 13px; font-weight: 500;
+      background: none; color: var(--muted2); cursor: pointer; transition: all .2s;
+    }
+    .btn-ghost-sm:hover { border-color: var(--border2); color: var(--text); }
+
+    /* ── Sessions ── */
+    .sessions-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .sessions-header h2 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600;
+    }
+    .btn-revoke-all {
+      padding: 7px 14px; border: 1px solid rgba(239,68,68,.4);
+      border-radius: 9px; font-size: 13px; font-weight: 600;
+      background: none; color: var(--red); cursor: pointer; transition: all .2s;
+    }
+    .btn-revoke-all:hover { background: rgba(239,68,68,.1); }
+
+    .session-list { display: flex; flex-direction: column; gap: 10px; }
+    .session-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 16px; background: var(--card-b);
+      border: 1px solid var(--border); border-radius: 12px;
+      transition: border-color .2s;
+    }
+    .session-row:hover { border-color: var(--border2); }
+    .session-row.current { border-color: rgba(16,185,129,.3); background: rgba(16,185,129,.04); }
+    .session-row.danger { border-color: rgba(239,68,68,.25); }
+    .session-device-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+    .session-info { flex: 1; min-width: 0; }
+    .session-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .session-meta { font-size: 12px; color: var(--muted2); display: flex; flex-wrap: wrap; gap: 6px; }
+    .session-meta-dot { color: var(--muted); }
+    .session-current-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(16,185,129,.12); color: var(--green);
+      border: 1px solid rgba(16,185,129,.25); border-radius: 8px;
+      font-size: 11px; font-weight: 700; padding: 2px 8px; margin-left: 4px;
+    }
+    .session-warn-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(245,158,11,.1); color: var(--gold);
+      border: 1px solid rgba(245,158,11,.25); border-radius: 8px;
+      font-size: 11px; font-weight: 700; padding: 2px 8px; margin-left: 4px;
+    }
+    .session-revoke-btn {
+      padding: 6px 14px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 12px; font-weight: 500;
+      background: none; color: var(--muted2); cursor: pointer; transition: all .2s;
+      flex-shrink: 0; align-self: center;
+    }
+    .session-revoke-btn:hover { border-color: rgba(239,68,68,.5); color: var(--red); }
+    .session-revoke-btn.danger { border-color: rgba(239,68,68,.4); color: var(--red); }
+    .session-revoke-btn.danger:hover { background: rgba(239,68,68,.1); }
+
+    /* ── Account Actions ── */
+    .action-rows { display: flex; flex-direction: column; gap: 12px; }
+    .action-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 20px; background: var(--card-b);
+      border: 1px solid var(--border); border-radius: 14px;
+      transition: border-color .2s;
+    }
+    .action-row:hover { border-color: var(--border2); }
+    .action-row.danger:hover { border-color: rgba(239,68,68,.4); }
+    .action-icon-wrap {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 22px;
+      background: var(--bg3); border: 1px solid var(--border);
+    }
+    .action-info { flex: 1; }
+    .action-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .action-desc { font-size: 13px; color: var(--muted2); line-height: 1.5; }
+    .action-desc-note { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .btn-action-secondary {
+      padding: 9px 18px; border: 1px solid var(--border);
+      border-radius: 10px; font-size: 13px; font-weight: 600;
+      background: var(--card-c); color: var(--muted2); cursor: pointer; transition: all .2s;
+      white-space: nowrap;
+    }
+    .btn-action-secondary:hover { border-color: var(--border2); color: var(--text); }
+    .btn-action-ghost {
+      padding: 9px 18px; border: 1px solid var(--border);
+      border-radius: 10px; font-size: 13px; font-weight: 600;
+      background: none; color: var(--muted2); cursor: pointer; transition: all .2s;
+      white-space: nowrap;
+    }
+    .btn-action-ghost:hover { border-color: var(--border2); color: var(--text); }
+    .btn-action-danger {
+      padding: 9px 18px; border: 1px solid rgba(239,68,68,.4);
+      border-radius: 10px; font-size: 13px; font-weight: 600;
+      background: none; color: var(--red); cursor: pointer; transition: all .2s;
+      white-space: nowrap;
+    }
+    .btn-action-danger:hover { background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.7); }
+
+    /* ── RIGHT PANEL ──────────────────────────────── */
+    .right-card {
+      background: var(--card-b); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .right-card-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted);
+    }
+
+    /* Account health indicators */
+    .health-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; background: var(--bg2); border-radius: 9px; font-size: 13px;
+    }
+    .health-dot {
+      width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+    }
+    .health-dot.green { background: var(--green); box-shadow: 0 0 6px rgba(16,185,129,.6); }
+    .health-dot.yellow { background: var(--gold); box-shadow: 0 0 6px rgba(245,158,11,.6); }
+    .health-dot.red { background: var(--red); box-shadow: 0 0 6px rgba(239,68,68,.6); }
+    .health-label { flex: 1; color: var(--muted2); }
+    .health-status { font-size: 12px; font-weight: 600; }
+    .health-status.ok { color: var(--green); }
+    .health-status.warn { color: var(--gold); }
+    .health-status.err { color: var(--red); }
+
+    /* Security events */
+    .event-row {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 9px 10px; background: var(--bg2); border-radius: 9px;
+    }
+    .event-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .event-desc { font-size: 13px; color: var(--text); line-height: 1.4; }
+    .event-time { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* Security tips */
+    .tip-row-right {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 9px 12px; background: var(--bg2); border-radius: 9px;
+      border-left: 3px solid var(--accent2);
+    }
+    .tip-row-right span { font-size: 13px; color: var(--muted2); line-height: 1.5; }
+
+    /* ── MODALS ──────────────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.6); backdrop-filter: blur(6px);
+      z-index: 1000; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: var(--radius2); padding: 32px; max-width: 440px; width: 90%;
+      box-shadow: var(--shadow2);
+    }
+    .modal-icon { font-size: 36px; margin-bottom: 12px; }
+    .modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .modal-desc { font-size: 14px; color: var(--muted2); line-height: 1.6; margin-bottom: 24px; }
+    .modal-actions { display: flex; gap: 10px; }
+    .modal-cancel {
+      flex: 1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600;
+      border: 1px solid var(--border); background: none; color: var(--muted2); cursor: pointer;
+      transition: all .2s;
+    }
+    .modal-cancel:hover { color: var(--text); border-color: var(--muted2); }
+    .modal-confirm-danger {
+      flex: 1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600;
+      border: 1px solid rgba(239,68,68,.5); background: rgba(239,68,68,.1);
+      color: var(--red); cursor: pointer; transition: all .2s;
+    }
+    .modal-confirm-danger:hover { background: rgba(239,68,68,.2); }
+
+    /* ios-toggle */
+    .ios-toggle { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+    .ios-toggle input { opacity: 0; width: 0; height: 0; }
+    .ios-slider {
+      position: absolute; inset: 0; background: var(--bg3);
+      border-radius: 12px; cursor: pointer; transition: .2s;
+      border: 1px solid var(--border);
+    }
+    .ios-slider::before {
+      content: ''; position: absolute;
+      width: 18px; height: 18px; left: 2px; top: 2px;
+      background: var(--muted2); border-radius: 50%; transition: .2s;
+    }
+    .ios-toggle input:checked + .ios-slider { background: var(--accent2); border-color: var(--accent2); }
+    .ios-toggle input:checked + .ios-slider::before { transform: translateX(20px); background: #fff; }
+  </style>
+</head>
+<body data-page="security-settings">
+
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <!-- ─────────────── SIDEBAR ─────────────── -->
+  <nav class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html" class="nav-item" data-tip="Discover">🔮</a>
+    <a href="matches.html" class="nav-item" data-tip="Matches">💜<span class="badge"></span></a>
+    <a href="chat.html"    class="nav-item" data-tip="Messages">💬<span class="badge"></span></a>
+    <a href="search.html"  class="nav-item" data-tip="Search">🔍</a>
+    <div class="nav-divider"></div>
+    <a href="#" class="nav-item" data-tip="AI Insights">🧠</a>
+    <a href="my-account.html#premium" class="nav-item" data-tip="Premium">⚡</a>
+    <a href="security-settings.html" class="nav-item active" data-tip="Security">🛡️</a>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile" style="border-color:var(--border3);">🌟</a>
+  </nav>
+
+  <!-- ─────────────── APP LAYOUT ─────────────── -->
+  <div class="app-layout">
+
+    <!-- ═══════════════ LEFT PANEL ═══════════════ -->
+    <aside class="panel-left">
+
+      <div class="left-title">Security</div>
+
+      <!-- Security Score -->
+      <div class="sec-score-card">
+        <div class="sec-score-num">78 <span style="font-size:18px;color:var(--muted2);">/ 100</span></div>
+        <div class="sec-score-label">Security Score</div>
+        <div class="sec-score-bar-track">
+          <div class="sec-score-bar-fill"></div>
+        </div>
+        <div class="sec-score-status">● Good</div>
+      </div>
+
+      <!-- Section nav -->
+      <nav class="section-nav">
+        <a href="#section-account-security" class="section-nav-item active" data-scroll="section-account-security">🔐 &nbsp;Account Security</a>
+        <a href="#section-2fa" class="section-nav-item" data-scroll="section-2fa">📱 &nbsp;Two-Factor Auth</a>
+        <a href="#section-sessions" class="section-nav-item" data-scroll="section-sessions">🖥️ &nbsp;Active Sessions</a>
+        <a href="#section-account-actions" class="section-nav-item" data-scroll="section-account-actions">⚠️ &nbsp;Account Actions</a>
+      </nav>
+
+      <!-- Trust badge -->
+      <div class="trust-badge mt-auto">
+        🛡️ Trust Score: <strong>85 / 100</strong><br>
+        <span style="color:var(--green);">● Risk Level: Low</span>
+      </div>
+
+    </aside>
+
+    <!-- ═══════════════ CENTER PANEL ═══════════════ -->
+    <main class="panel-center">
+      <div class="sec-pane">
+
+        <!-- Topbar -->
+        <div class="sec-topbar">
+          <div>
+            <h1>Security Settings</h1>
+            <div class="topbar-subtitle">Keep your account safe</div>
+          </div>
+        </div>
+
+        <!-- Scrollable body -->
+        <div class="sec-body" id="sec-scroll">
+
+          <!-- ── SECTION: Account Security ── -->
+          <section class="section-anchor" id="section-account-security">
+            <div class="sec-section-head">
+              <span style="font-size:20px;">🔐</span>
+              <h2>Account Security</h2>
+            </div>
+
+            <!-- Registered via + last login -->
+            <div class="settings-card" style="gap:12px;">
+              <div class="reg-row">
+                <div class="reg-method-icon">G</div>
+                <div class="reg-info">
+                  <div class="reg-info-title">Registered via Google</div>
+                  <div class="reg-info-sub">Joined February 28, 2024</div>
+                </div>
+              </div>
+
+              <div class="login-activity">
+                <div><strong>Last login:</strong> Today at 2:34 PM</div>
+                <div>📍 San Francisco, CA &nbsp;·&nbsp; Chrome on macOS</div>
+                <div class="login-ip">203.0.113.42</div>
+              </div>
+            </div>
+
+            <!-- Change Password card (shown for EMAIL/PHONE users) -->
+            <div class="pw-card" style="margin-top:14px;">
+              <div class="settings-card-label">Change Password</div>
+
+              <div class="field-row">
+                <label class="field-label" for="current-pw">Current Password</label>
+                <div class="pw-input-wrap">
+                  <input type="password" class="field-input" id="current-pw" placeholder="Enter current password" autocomplete="current-password">
+                  <button class="pw-eye" type="button" aria-label="Toggle visibility" data-target="current-pw">👁</button>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <label class="field-label" for="new-pw">New Password</label>
+                <div class="pw-input-wrap">
+                  <input type="password" class="field-input" id="new-pw" placeholder="Enter new password" autocomplete="new-password">
+                  <button class="pw-eye" type="button" aria-label="Toggle visibility" data-target="new-pw">👁</button>
+                </div>
+                <div class="pw-strength">
+                  <div class="strength-track">
+                    <div class="strength-fill" id="strength-fill"></div>
+                  </div>
+                  <div class="strength-label" id="strength-label">Enter a password</div>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <label class="field-label" for="confirm-pw">Confirm New Password</label>
+                <div class="pw-input-wrap">
+                  <input type="password" class="field-input" id="confirm-pw" placeholder="Confirm new password" autocomplete="new-password">
+                  <button class="pw-eye" type="button" aria-label="Toggle visibility" data-target="confirm-pw">👁</button>
+                </div>
+              </div>
+
+              <!-- Requirements -->
+              <div class="pw-reqs" id="pw-reqs">
+                <div class="pw-req" id="req-length">
+                  <span class="req-icon">○</span>At least 8 characters
+                </div>
+                <div class="pw-req" id="req-upper">
+                  <span class="req-icon">○</span>Contains uppercase letter
+                </div>
+                <div class="pw-req" id="req-number">
+                  <span class="req-icon">○</span>Contains number
+                </div>
+                <div class="pw-req" id="req-special">
+                  <span class="req-icon">○</span>Contains special character
+                </div>
+              </div>
+
+              <button class="btn-primary-sm" type="button">Change Password</button>
+            </div>
+
+            <!-- Login Methods card -->
+            <div class="settings-card" style="margin-top:14px;">
+              <div class="settings-card-label">Login Methods</div>
+
+              <div class="connected-row">
+                <span class="connected-icon">📧</span>
+                <span class="connected-name">Email</span>
+                <span class="connected-ok">verified ✅</span>
+                <button class="disconnect-btn">Edit</button>
+              </div>
+              <div class="connected-row">
+                <span class="connected-icon">🍎</span>
+                <span class="connected-name">Apple</span>
+                <button class="connect-btn">Connect</button>
+              </div>
+              <div class="connected-row">
+                <span class="connected-icon" style="font-weight:700;color:#4285F4;font-size:14px;">G</span>
+                <span class="connected-name">Google</span>
+                <span class="connected-ok">connected ✅</span>
+                <button class="disconnect-btn">Disconnect</button>
+              </div>
+              <div class="connected-row" style="border-bottom:none;padding-bottom:0;">
+                <span class="connected-icon" style="color:#1877F2;font-size:16px;">f</span>
+                <span class="connected-name">Facebook</span>
+                <button class="connect-btn">Connect</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── SECTION: Two-Factor Auth ── -->
+          <section class="section-anchor" id="section-2fa">
+            <div class="sec-section-head">
+              <span style="font-size:20px;">📱</span>
+              <h2>Two-Factor Authentication</h2>
+            </div>
+
+            <!-- 2FA ON State (shown by default as enabled) -->
+            <div class="twofa-status-card on" id="twofa-on-card">
+              <div class="twofa-shield">🔒</div>
+              <div class="twofa-on-badge">● 2FA is ON</div>
+              <div class="twofa-title">Your account is secured</div>
+              <div class="twofa-desc">Two-factor authentication is active. You'll be prompted for a code from your authenticator app when signing in.</div>
+              <div class="twofa-enabled-date">Enabled on January 5, 2025</div>
+              <button class="btn-disable-2fa" id="disable-2fa-btn" aria-haspopup="dialog">Disable 2FA</button>
+            </div>
+
+            <!-- 2FA OFF State (hidden by default) -->
+            <div class="twofa-status-card off" id="twofa-off-card" style="display:none;">
+              <div class="twofa-shield">🛡️</div>
+              <div class="twofa-title" style="color:var(--muted2);">2FA is OFF</div>
+              <div class="twofa-desc">Add an extra layer of security using an authenticator app like Google Authenticator or Authy.</div>
+              <button class="btn-enable-2fa" id="enable-2fa-btn">Enable 2FA</button>
+            </div>
+
+            <!-- Setup Steps (shown when enabling) -->
+            <div class="setup-card" id="setup-card" style="display:none;margin-top:14px;">
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;">Setup Two-Factor Authentication</div>
+
+              <div class="setup-step">
+                <div class="setup-step-num">1</div>
+                <div class="setup-step-content">
+                  <div class="setup-step-title">Open your authenticator app</div>
+                  <div class="setup-step-desc">Use Google Authenticator, Authy, or any TOTP-compatible app on your phone.</div>
+                </div>
+              </div>
+
+              <div class="setup-step">
+                <div class="setup-step-num">2</div>
+                <div class="setup-step-content">
+                  <div class="setup-step-title">Scan QR code or enter manually</div>
+                  <div class="setup-step-desc">Scan the QR code below with your app, or enter the secret key manually.</div>
+                  <div class="qr-placeholder" aria-label="QR code for authenticator setup">
+                    <div class="qr-grid" id="qr-grid"></div>
+                  </div>
+                  <div class="manual-code" title="Click to select" role="textbox" aria-label="Manual 2FA code" aria-readonly="true">JBSWY3DP EHPK3PXP</div>
+                </div>
+              </div>
+
+              <div class="setup-step">
+                <div class="setup-step-num">3</div>
+                <div class="setup-step-content">
+                  <div class="setup-step-title">Enter the 6-digit verification code</div>
+                  <div class="setup-step-desc">Type the code shown in your authenticator app.</div>
+                  <div class="otp-inputs" id="otp-inputs" role="group" aria-label="6-digit verification code">
+                    <input class="otp-input" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 1">
+                    <input class="otp-input" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 2">
+                    <input class="otp-input" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 3">
+                    <input class="otp-input" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 4">
+                    <input class="otp-input" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 5">
+                    <input class="otp-input" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 6">
+                  </div>
+                  <button class="btn-verify-2fa" type="button" id="verify-2fa-btn">Verify &amp; Enable</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Backup Codes -->
+            <div class="backup-codes-card" style="margin-top:14px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;">Backup Codes</div>
+                <div class="backup-count-badge">🔑 8 codes remaining</div>
+              </div>
+              <div class="backup-desc">Store these in a safe place. Each code can only be used once to access your account if you lose your authenticator.</div>
+
+              <div class="backup-codes-grid">
+                <div class="backup-code-item" data-code="3k8x-9p2m">
+                  <span class="code-display">****-****</span>
+                  <button class="reveal-btn" data-target-code="3k8x-9p2m" aria-label="Reveal code">👁</button>
+                </div>
+                <div class="backup-code-item" data-code="7n4w-1q6r">
+                  <span class="code-display">****-****</span>
+                  <button class="reveal-btn" data-target-code="7n4w-1q6r" aria-label="Reveal code">👁</button>
+                </div>
+                <div class="backup-code-item" data-code="5j2t-8h5v">
+                  <span class="code-display">****-****</span>
+                  <button class="reveal-btn" data-target-code="5j2t-8h5v" aria-label="Reveal code">👁</button>
+                </div>
+                <div class="backup-code-item" data-code="2b9z-4c7f">
+                  <span class="code-display">****-****</span>
+                  <button class="reveal-btn" data-target-code="2b9z-4c7f" aria-label="Reveal code">👁</button>
+                </div>
+              </div>
+
+              <div class="backup-actions">
+                <button class="btn-ghost-sm" type="button">↻ Generate New Codes</button>
+                <button class="btn-ghost-sm" type="button">⬇ Download Backup Codes</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── SECTION: Active Sessions ── -->
+          <section class="section-anchor" id="section-sessions">
+            <div class="sessions-header">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span style="font-size:20px;">🖥️</span>
+                <h2>Your Active Sessions</h2>
+              </div>
+              <button class="btn-revoke-all" type="button" aria-label="Revoke all other sessions">Revoke All Other Sessions</button>
+            </div>
+
+            <div class="session-list">
+
+              <!-- Session 1: Current -->
+              <div class="session-row current">
+                <div class="session-device-icon">💻</div>
+                <div class="session-info">
+                  <div class="session-name">
+                    Chrome on macOS
+                    <span class="session-current-badge">● Current Device</span>
+                  </div>
+                  <div class="session-meta">
+                    <span>San Francisco, CA</span>
+                    <span class="session-meta-dot">·</span>
+                    <span style="color:var(--green);font-weight:600;">Active now</span>
+                    <span class="session-meta-dot">·</span>
+                    <span>macOS 14 · Chrome 122</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Session 2: iOS -->
+              <div class="session-row">
+                <div class="session-device-icon">📱</div>
+                <div class="session-info">
+                  <div class="session-name">AURA iOS App · iPhone 15</div>
+                  <div class="session-meta">
+                    <span>San Francisco, CA</span>
+                    <span class="session-meta-dot">·</span>
+                    <span>2 hours ago</span>
+                    <span class="session-meta-dot">·</span>
+                    <span>iOS 17.3</span>
+                  </div>
+                </div>
+                <button class="session-revoke-btn" type="button">Revoke</button>
+              </div>
+
+              <!-- Session 3: Android -->
+              <div class="session-row">
+                <div class="session-device-icon">📱</div>
+                <div class="session-info">
+                  <div class="session-name">AURA Android App · Pixel 8</div>
+                  <div class="session-meta">
+                    <span>New York, NY</span>
+                    <span class="session-meta-dot">·</span>
+                    <span>3 days ago</span>
+                    <span class="session-meta-dot">·</span>
+                    <span>Android 14</span>
+                  </div>
+                </div>
+                <button class="session-revoke-btn" type="button">Revoke</button>
+              </div>
+
+              <!-- Session 4: Unknown / danger -->
+              <div class="session-row danger">
+                <div class="session-device-icon">💻</div>
+                <div class="session-info">
+                  <div class="session-name">
+                    Chrome on Windows
+                    <span class="session-warn-badge">⚠️ Unrecognized location</span>
+                  </div>
+                  <div class="session-meta">
+                    <span style="color:var(--gold);">Unknown location</span>
+                    <span class="session-meta-dot">·</span>
+                    <span>5 days ago</span>
+                    <span class="session-meta-dot">·</span>
+                    <span>Windows 11 · Chrome 121</span>
+                  </div>
+                </div>
+                <button class="session-revoke-btn danger" type="button">Revoke</button>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- ── SECTION: Account Actions ── -->
+          <section class="section-anchor" id="section-account-actions" style="padding-bottom:40px;">
+            <div class="sec-section-head">
+              <span style="font-size:20px;">⚠️</span>
+              <h2>Account Actions</h2>
+            </div>
+
+            <div class="action-rows">
+
+              <!-- Pause Account -->
+              <div class="action-row">
+                <div class="action-icon-wrap">⏸️</div>
+                <div class="action-info">
+                  <div class="action-title">Pause Account</div>
+                  <div class="action-desc">Hide your profile while keeping all your data intact. You can resume anytime.</div>
+                </div>
+                <button class="btn-action-secondary" type="button">Pause Account</button>
+              </div>
+
+              <!-- Take a Break -->
+              <div class="action-row">
+                <div class="action-icon-wrap">🌙</div>
+                <div class="action-info">
+                  <div class="action-title">Take a 7-Day Break</div>
+                  <div class="action-desc">Snooze your profile for exactly 7 days. You'll be automatically reactivated.</div>
+                </div>
+                <button class="btn-action-ghost" type="button">Start Break</button>
+              </div>
+
+              <!-- Delete Account -->
+              <div class="action-row danger">
+                <div class="action-icon-wrap" style="border-color:rgba(239,68,68,.3);">🗑️</div>
+                <div class="action-info">
+                  <div class="action-title" style="color:var(--red);">Delete Account</div>
+                  <div class="action-desc">Permanently delete your account and all associated data. This initiates a 30-day grace period during which you can cancel.</div>
+                  <div class="action-desc-note">After 30 days, all data is permanently erased per GDPR Article 17.</div>
+                </div>
+                <button class="btn-action-danger" type="button" id="open-delete-modal" aria-haspopup="dialog">Delete Account</button>
+              </div>
+
+            </div>
+          </section>
+
+        </div><!-- /sec-body -->
+      </div><!-- /sec-pane -->
+    </main>
+
+    <!-- ═══════════════ RIGHT PANEL ═══════════════ -->
+    <aside class="panel-right">
+
+      <!-- Account Health -->
+      <div class="right-card">
+        <div class="right-card-title">Account Health</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div class="health-row">
+            <div class="health-dot green"></div>
+            <span class="health-label">Email Verified</span>
+            <span class="health-status ok">✅</span>
+          </div>
+          <div class="health-row">
+            <div class="health-dot green"></div>
+            <span class="health-label">Phone Verified</span>
+            <span class="health-status ok">✅</span>
+          </div>
+          <div class="health-row">
+            <div class="health-dot yellow"></div>
+            <span class="health-label">2FA Enabled</span>
+            <span class="health-status warn">⚠️</span>
+          </div>
+          <div class="health-row">
+            <div class="health-dot green"></div>
+            <span class="health-label">Profile Verified</span>
+            <span class="health-status ok">✅</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Security Events -->
+      <div class="right-card">
+        <div class="right-card-title">Recent Security Events</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div class="event-row">
+            <div class="event-icon">🖥️</div>
+            <div>
+              <div class="event-desc">Login from new device</div>
+              <div class="event-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="event-row">
+            <div class="event-icon">🔑</div>
+            <div>
+              <div class="event-desc">Password changed</div>
+              <div class="event-time">3 days ago</div>
+            </div>
+          </div>
+          <div class="event-row">
+            <div class="event-icon">🔒</div>
+            <div>
+              <div class="event-desc">2FA enabled</div>
+              <div class="event-time">January 5, 2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Tips -->
+      <div class="right-card">
+        <div class="right-card-title">Security Tips</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div class="tip-row-right">
+            <span>🔐 Enable 2FA for maximum account protection</span>
+          </div>
+          <div class="tip-row-right" style="border-left-color:var(--cyan);">
+            <span>🖥️ Review your active sessions monthly</span>
+          </div>
+          <div class="tip-row-right" style="border-left-color:var(--pink);">
+            <span>🔑 Use a unique password you don't use elsewhere</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="theme-switcher"></div>
+
+    </aside>
+  </div><!-- /app-layout -->
+
+  <!-- ── DISABLE 2FA MODAL ── -->
+  <div class="modal-overlay" id="disable-2fa-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-2fa">
+    <div class="modal-box">
+      <div class="modal-icon">⚠️</div>
+      <div class="modal-title" id="modal-title-2fa">Disable Two-Factor Authentication?</div>
+      <div class="modal-desc">
+        Disabling 2FA will reduce the security of your account. Anyone who obtains your password could access your account without a second verification step.
+      </div>
+      <div class="modal-actions">
+        <button class="modal-cancel" id="cancel-disable-2fa">Keep 2FA On</button>
+        <button class="modal-confirm-danger" id="confirm-disable-2fa">Disable 2FA</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DELETE ACCOUNT MODAL ── -->
+  <div class="modal-overlay" id="delete-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-delete">
+    <div class="modal-box">
+      <div class="modal-icon">🗑️</div>
+      <div class="modal-title" id="modal-title-delete">Delete Account?</div>
+      <div class="modal-desc">
+        This will permanently delete your AURA account and all associated data.<br><br>
+        A <strong>30-day grace period</strong> applies — you can cancel during this time by logging back in. After 30 days, all data is permanently erased per <strong>GDPR Article 17</strong>.
+      </div>
+      <div class="modal-actions">
+        <button class="modal-cancel" id="cancel-delete">Keep Account</button>
+        <button class="modal-confirm-danger" id="confirm-delete">Delete My Account</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // ── Section nav smooth scroll + active state
+    document.querySelectorAll('[data-scroll]').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.getElementById(this.dataset.scroll);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.querySelectorAll('.section-nav-item').forEach(n => n.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // ── Password strength meter
+    const newPwInput = document.getElementById('new-pw');
+    const strengthFill = document.getElementById('strength-fill');
+    const strengthLabel = document.getElementById('strength-label');
+    const reqLength = document.getElementById('req-length');
+    const reqUpper = document.getElementById('req-upper');
+    const reqNumber = document.getElementById('req-number');
+    const reqSpecial = document.getElementById('req-special');
+
+    function checkReq(el, condition) {
+      const icon = el.querySelector('.req-icon');
+      if (condition) {
+        el.classList.add('met');
+        icon.textContent = '✅';
+      } else {
+        el.classList.remove('met');
+        icon.textContent = '○';
+      }
+      return condition;
+    }
+
+    if (newPwInput) {
+      newPwInput.addEventListener('input', function() {
+        const val = this.value;
+        const hasLen = val.length >= 8;
+        const hasUpper = /[A-Z]/.test(val);
+        const hasNum = /[0-9]/.test(val);
+        const hasSpec = /[^a-zA-Z0-9]/.test(val);
+
+        checkReq(reqLength, hasLen);
+        checkReq(reqUpper, hasUpper);
+        checkReq(reqNumber, hasNum);
+        checkReq(reqSpecial, hasSpec);
+
+        const score = [hasLen, hasUpper, hasNum, hasSpec].filter(Boolean).length;
+        const levels = [
+          { pct: '0%',   color: 'var(--muted)',  label: 'Enter a password' },
+          { pct: '25%',  color: 'var(--red)',    label: 'Weak' },
+          { pct: '50%',  color: 'var(--gold)',   label: 'Fair' },
+          { pct: '75%',  color: 'var(--cyan)',   label: 'Strong' },
+          { pct: '100%', color: 'var(--green)',  label: 'Very Strong' },
+        ];
+        const level = val.length === 0 ? levels[0] : levels[score];
+        strengthFill.style.width = level.pct;
+        strengthFill.style.background = level.color;
+        strengthLabel.textContent = level.label;
+        strengthLabel.style.color = level.color;
+      });
+    }
+
+    // ── Password eye toggle
+    document.querySelectorAll('.pw-eye').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const input = document.getElementById(this.dataset.target);
+        if (!input) return;
+        input.type = input.type === 'password' ? 'text' : 'password';
+        this.textContent = input.type === 'password' ? '👁' : '🙈';
+      });
+    });
+
+    // ── OTP input auto-focus next box
+    const otpInputs = document.querySelectorAll('.otp-input');
+    otpInputs.forEach((input, idx) => {
+      input.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(-1);
+        if (this.value) {
+          this.classList.add('filled');
+          if (idx < otpInputs.length - 1) otpInputs[idx + 1].focus();
+        } else {
+          this.classList.remove('filled');
+        }
+      });
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && !this.value && idx > 0) {
+          otpInputs[idx - 1].focus();
+        }
+      });
+    });
+
+    // ── 2FA toggle flow
+    const twoFaOnCard  = document.getElementById('twofa-on-card');
+    const twoFaOffCard = document.getElementById('twofa-off-card');
+    const setupCard    = document.getElementById('setup-card');
+    const disableModal = document.getElementById('disable-2fa-modal');
+
+    // Disable 2FA button → show modal
+    document.getElementById('disable-2fa-btn').addEventListener('click', () => {
+      disableModal.classList.add('open');
+    });
+    document.getElementById('cancel-disable-2fa').addEventListener('click', () => {
+      disableModal.classList.remove('open');
+    });
+    document.getElementById('confirm-disable-2fa').addEventListener('click', () => {
+      disableModal.classList.remove('open');
+      twoFaOnCard.style.display  = 'none';
+      twoFaOffCard.style.display = 'flex';
+      setupCard.style.display    = 'none';
+    });
+
+    // Enable 2FA button → show setup
+    document.getElementById('enable-2fa-btn').addEventListener('click', () => {
+      setupCard.style.display = 'flex';
+      setupCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    // Verify & Enable
+    document.getElementById('verify-2fa-btn').addEventListener('click', () => {
+      twoFaOffCard.style.display = 'none';
+      twoFaOnCard.style.display  = 'flex';
+      setupCard.style.display    = 'none';
+      otpInputs.forEach(i => { i.value = ''; i.classList.remove('filled'); });
+    });
+
+    // ── Generate pseudo-random QR grid
+    const qrGrid = document.getElementById('qr-grid');
+    if (qrGrid) {
+      const pattern = [1,0,1,1,0,1,1, 0,1,0,1,1,0,1, 1,1,1,0,1,1,0, 0,0,1,1,0,0,1,
+                       1,0,0,1,1,0,1, 0,1,1,0,0,1,0, 1,0,1,1,0,1,1];
+      pattern.forEach(bit => {
+        const cell = document.createElement('div');
+        cell.className = 'qr-cell' + (bit ? ' filled' : '');
+        qrGrid.appendChild(cell);
+      });
+    }
+
+    // ── Backup code reveal toggle
+    document.querySelectorAll('.reveal-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const item = this.closest('.backup-code-item');
+        const display = item.querySelector('.code-display');
+        const code = item.dataset.code;
+        if (display.textContent.includes('*')) {
+          display.textContent = code;
+          item.classList.add('revealed');
+          this.textContent = '🙈';
+          this.setAttribute('aria-label', 'Hide code');
+        } else {
+          display.textContent = '****-****';
+          item.classList.remove('revealed');
+          this.textContent = '👁';
+          this.setAttribute('aria-label', 'Reveal code');
+        }
+      });
+    });
+
+    // ── Session revoke buttons
+    document.querySelectorAll('.session-revoke-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const row = this.closest('.session-row');
+        if (row) {
+          row.style.transition = 'opacity .3s, transform .3s';
+          row.style.opacity = '0';
+          row.style.transform = 'translateX(20px)';
+          setTimeout(() => row.remove(), 300);
+        }
+      });
+    });
+
+    // ── Delete account modal
+    const deleteModal = document.getElementById('delete-modal');
+    document.getElementById('open-delete-modal').addEventListener('click', () => {
+      deleteModal.classList.add('open');
+    });
+    document.getElementById('cancel-delete').addEventListener('click', () => {
+      deleteModal.classList.remove('open');
+    });
+    document.getElementById('confirm-delete').addEventListener('click', () => {
+      deleteModal.classList.remove('open');
+      // In production: initiate DATA_DELETION GDPR request with 30-day grace period
+    });
+
+    // Close modals on backdrop click
+    [disableModal, deleteModal].forEach(modal => {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('open');
+      });
+    });
+
+    // ── Active section highlight on scroll
+    const sections = document.querySelectorAll('.section-anchor');
+    const navLinks = document.querySelectorAll('.section-nav-item[data-scroll]');
+    const scrollBody = document.getElementById('sec-scroll');
+
+    if (scrollBody) {
+      scrollBody.addEventListener('scroll', function() {
+        let current = '';
+        sections.forEach(sec => {
+          if (scrollBody.scrollTop >= sec.offsetTop - 60) current = sec.id;
+        });
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.dataset.scroll === current) link.classList.add('active');
+        });
+      }, { passive: true });
+    }
+  </script>
+</body>
+</html>

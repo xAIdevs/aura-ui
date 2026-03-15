@@ -105,7 +105,7 @@
   top: 0;
 }
 .panel-center {
-  padding: 24px 28px;
+  padding: 20px 20px;
   overflow-y: auto;
   height: 100vh;
   position: relative;
@@ -360,7 +360,7 @@
 }
 @media (max-width: 768px) {
   .page-section { padding: 60px 0; }
-  .page-section-inner { padding: 0 20px; }
+  .page-section-inner { max-width: 100%; padding: 0 20px; }
 }
 
 /* ── TWO-COLUMN FEATURE GRID ─────────────────────────── */
@@ -380,4 +380,14 @@
 /* ── FIX PANEL-CENTER MOBILE ──────────────────────────── */
 @media (max-width: 768px) {
   .panel-center { min-height: calc(100vh - 60px); }
+}
+
+/* ── TOPBAR MOBILE WRAP ───────────────────────────────── */
+@media (max-width: 600px) {
+  .topbar { flex-wrap: wrap; gap: 8px; }
+}
+
+/* ── PANEL TITLE SMALL SCREENS ───────────────────────── */
+@media (max-width: 480px) {
+  .panel-header .panel-title { font-size: 16px; }
 }

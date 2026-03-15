@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community – AURA AI Dating</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    /* ── Room Category Links ── */
+    .room-cat-link {
+      display: block;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted2);
+      text-decoration: none;
+      transition: all .2s;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    .room-cat-link:hover  { background: var(--card-b); color: var(--text); }
+    .room-cat-link.active { background: rgba(var(--accent-rgb), .15); color: var(--accent3); font-weight: 600; }
+
+    /* ── Rooms Grid ── */
+    .rooms-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 768px) { .rooms-grid { grid-template-columns: 1fr; } }
+
+    /* ── Room Card ── */
+    .room-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all .2s;
+    }
+    .room-card:hover {
+      border-color: var(--border2);
+      transform: translateY(-2px);
+      box-shadow: var(--glow);
+    }
+    .room-card-header {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      position: relative;
+    }
+    .room-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 3px 8px;
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .room-badge .live-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse-dot 1.5s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .35; }
+    }
+    .room-card-body { padding: 14px; }
+    .room-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .room-meta {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-bottom: 8px;
+    }
+    .room-desc {
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    /* ── Feed Posts ── */
+    .feed-section { margin-bottom: 28px; }
+    .feed-post {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: all .18s;
+    }
+    .feed-post:hover { background: var(--card-b); border-color: var(--border2); }
+    .feed-post-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .feed-av {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
+    .feed-av img { width: 100%; height: 100%; object-fit: cover; }
+    .feed-anon-av {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: var(--card-b);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .feed-poster-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .feed-post-time {
+      font-size: 11px;
+      color: var(--muted2);
+    }
+    .feed-post-body {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .feed-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .feed-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted2);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: all .18s;
+    }
+    .feed-action-btn:hover { background: var(--card-b); color: var(--text2); }
+    .feed-action-btn.liked { color: var(--pink); }
+
+    /* ── Advice Replies ── */
+    .advice-replies {
+      margin-top: 10px;
+      padding: 10px;
+      background: var(--card-b);
+      border-radius: var(--radius3);
+      border: 1px solid var(--border);
+    }
+    .advice-reply-item {
+      font-size: 12px;
+      color: var(--muted2);
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.5;
+    }
+    .advice-reply-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .reply-name { font-weight: 600; color: var(--text2); }
+
+    /* ── Success Stories ── */
+    .stories-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 680px) { .stories-grid { grid-template-columns: 1fr; } }
+    .story-card {
+      background: linear-gradient(135deg, rgba(var(--pink-rgb), .07) 0%, rgba(var(--accent-rgb), .06) 100%);
+      border: 1px solid rgba(var(--pink-rgb), .2);
+      border-radius: var(--radius);
+      padding: 20px 16px;
+      text-align: center;
+      transition: all .2s;
+    }
+    .story-card:hover {
+      border-color: rgba(var(--pink-rgb), .4);
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(var(--pink-rgb), .1);
+    }
+    .story-avatars {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 12px;
+    }
+    .story-av {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+    }
+    .story-av img { width: 100%; height: 100%; object-fit: cover; }
+    .story-heart {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: rgba(var(--pink-rgb), .15);
+      border: 1px solid rgba(var(--pink-rgb), .4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      margin: 0 -2px;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+    .story-names {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+    .story-date {
+      font-size: 11px;
+      color: var(--accent3);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .story-quote {
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.55;
+      font-style: italic;
+    }
+
+    /* ── Section Label ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    /* ── Trending Topics (right panel) ── */
+    .trending-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 8px;
+    }
+    .trending-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 12px;
+      background: var(--card-b);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent3);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all .18s;
+    }
+    .trending-pill:hover {
+      background: rgba(var(--accent-rgb), .12);
+      border-color: var(--border2);
+    }
+
+    /* ── Ask the Community ── */
+    .ask-textarea {
+      width: 100%;
+      min-height: 70px;
+      padding: 10px 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius3);
+      color: var(--text);
+      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      resize: none;
+      outline: none;
+      transition: border-color .2s;
+      margin-bottom: 8px;
+    }
+    .ask-textarea::placeholder { color: var(--muted); }
+    .ask-textarea:focus { border-color: var(--input-focus); }
+
+    /* ── Upvoted Q&A ── */
+    .qa-example {
+      margin-top: 12px;
+      padding: 10px;
+      background: rgba(var(--accent-rgb), .05);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius3);
+    }
+    .qa-q {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    .qa-a {
+      font-size: 11px;
+      color: var(--muted2);
+      line-height: 1.5;
+      padding-left: 16px;
+    }
+
+    /* ── Green Flag Card ── */
+    .green-flag-card {
+      background: rgba(16,185,129,.05);
+      border: 1px solid rgba(16,185,129,.25);
+      border-left: 3px solid var(--green);
+      border-radius: var(--radius3);
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .green-flag-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+    .green-flag-text {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.55;
+      margin-bottom: 10px;
+    }
+
+    /* ── Community Events ── */
+    .community-event-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .community-event-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .event-date-badge {
+      width: 40px;
+      text-align: center;
+      flex-shrink: 0;
+      background: rgba(var(--accent-rgb), .12);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 4px;
+    }
+    .event-date-badge .ev-month { font-size: 9px; font-weight: 700; text-transform: uppercase; color: var(--accent3); }
+    .event-date-badge .ev-day   { font-size: 16px; font-weight: 800; color: var(--text); line-height: 1.1; }
+
+    /* ── Active members count ── */
+    .members-count-bar {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body data-page="community">
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <aside class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html"      class="nav-item" data-tip="Discover">🔥</a>
+    <a href="matches.html"       class="nav-item" data-tip="Matches">💜</a>
+    <a href="chat.html"          class="nav-item" data-tip="Chat">💬</a>
+    <a href="search.html"        class="nav-item" data-tip="Search">🔍</a>
+    <a href="events.html"        class="nav-item" data-tip="Events">🎉</a>
+    <a href="wellness.html"      class="nav-item" data-tip="Wellness">🌸</a>
+    <a href="community.html"     class="nav-item active" data-tip="Community">🌍</a>
+    <div class="nav-divider"></div>
+    <a href="notifications.html" class="nav-item" data-tip="Notifications">🔔</a>
+    <div class="nav-divider"></div>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">
+      <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=750&fit=crop&crop=face&auto=format&q=90" class="photo-avatar" loading="lazy" alt="My profile">
+    </a>
+  </aside>
+
+  <main class="app-layout">
+
+    <!-- ── LEFT PANEL ── -->
+    <div class="panel-left" style="display:flex;flex-direction:column;">
+      <div class="panel-header"><span class="panel-title">Community</span></div>
+
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <button class="room-cat-link active" data-cat="all">🌟 All Rooms</button>
+        <button class="room-cat-link" data-cat="fitness">🏃 Fitness &amp; Health</button>
+        <button class="room-cat-link" data-cat="gaming">🎮 Gaming &amp; Tech</button>
+        <button class="room-cat-link" data-cat="food">🍕 Foodies</button>
+        <button class="room-cat-link" data-cat="books">📚 Bookworms</button>
+        <button class="room-cat-link" data-cat="creative">🎨 Creative Arts</button>
+        <button class="room-cat-link" data-cat="mindfulness">🧘 Mindfulness</button>
+        <button class="room-cat-link" data-cat="travel">✈️ Travel &amp; Adventure</button>
+        <button class="room-cat-link" data-cat="music">🎵 Music Lovers</button>
+        <button class="room-cat-link" data-cat="lgbtq">🌈 LGBTQ+ Safe Space</button>
+      </div>
+
+      <div class="members-count-bar">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:4px;">Active Now</div>
+        <div style="display:flex;align-items:center;gap:7px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse-dot 1.5s infinite;"></div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);">2,847 members active</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CENTER PANEL ── -->
+    <div class="panel-center">
+      <div class="topbar">
+        <h1 class="page-title">Community Rooms</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost btn-sm">My Rooms (3)</button>
+          <button class="btn btn-primary btn-sm">+ Join a Room</button>
+        </div>
+      </div>
+
+      <!-- Featured Rooms -->
+      <div class="section-label" style="margin-bottom:14px;">Featured Rooms</div>
+      <div class="rooms-grid">
+
+        <!-- Fitness First -->
+        <div class="room-card">
+          <div class="room-card-header" style="background:linear-gradient(135deg,var(--green),var(--cyan));">
+            🏃
+            <div class="room-badge"><div class="live-dot"></div>34 active</div>
+          </div>
+          <div class="room-card-body">
+            <div class="room-name">Fitness First Singles</div>
+            <div class="room-meta">847 members</div>
+            <p class="room-desc">Connect with health-conscious singles who live an active lifestyle.</p>
+            <button class="btn btn-primary btn-sm w-100">Join Room</button>
+          </div>
+        </div>
+
+        <!-- Gamer Love -->
+        <div class="room-card">
+          <div class="room-card-header" style="background:linear-gradient(135deg,var(--accent),var(--cyan));">
+            🎮
+            <div class="room-badge"><div class="live-dot"></div>67 active</div>
+          </div>
+          <div class="room-card-body">
+            <div class="room-name">Gamer Love</div>
+            <div class="room-meta">1.2k members</div>
+            <p class="room-desc">Find your player 2. Game together, date better.</p>
+            <button class="btn btn-primary btn-sm w-100">Join Room</button>
+          </div>
+        </div>
+
+        <!-- Foodie Dates -->
+        <div class="room-card">
+          <div class="room-card-header" style="background:linear-gradient(135deg,var(--gold),var(--red));">
+            🍕
+            <div class="room-badge"><div class="live-dot"></div>28 active</div>
+          </div>
+          <div class="room-card-body">
+            <div class="room-name">Foodie Dates</div>
+            <div class="room-meta">923 members</div>
+            <p class="room-desc">Culinary enthusiasts who date through shared food experiences.</p>
+            <button class="btn btn-secondary btn-sm w-100">Join Room</button>
+          </div>
+        </div>
+
+        <!-- Bookworm Corner -->
+        <div class="room-card">
+          <div class="room-card-header" style="background:linear-gradient(135deg,var(--cyan),var(--accent));">
+            📚
+            <div class="room-badge"><div class="live-dot"></div>19 active</div>
+          </div>
+          <div class="room-card-body">
+            <div class="room-name">Bookworm Corner</div>
+            <div class="room-meta">634 members</div>
+            <p class="room-desc">Deep readers seeking intellectual connections one chapter at a time.</p>
+            <button class="btn btn-secondary btn-sm w-100">Join Room</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Community Feed -->
+      <div class="feed-section">
+        <div class="section-label" style="margin-bottom:14px;">Latest from the Community</div>
+
+        <!-- Post 1 -->
+        <div class="feed-post">
+          <div class="feed-post-header">
+            <div class="feed-av">
+              <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Sofia R.">
+            </div>
+            <div style="flex:1;">
+              <div class="feed-poster-name">Sofia R.</div>
+              <div class="feed-post-time">2h ago</div>
+            </div>
+            <span class="ai-badge">✨ AURA Member</span>
+          </div>
+          <p class="feed-post-body">Just had the most amazing virtual coffee date using AURA's AI coaching tips! He suggested we read the same book this week 📚 feeling hopeful 🥰</p>
+          <div class="feed-actions">
+            <button class="feed-action-btn liked" aria-label="Like post">❤️ 47</button>
+            <button class="feed-action-btn" aria-label="Comment on post">💬 12</button>
+            <button class="feed-action-btn" aria-label="Share post">↗️ Share</button>
+          </div>
+        </div>
+
+        <!-- Post 2 -->
+        <div class="feed-post">
+          <div class="feed-post-header">
+            <div class="feed-av">
+              <img src="https://images.unsplash.com/photo-1522529599102-193144843571?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Alex M.">
+            </div>
+            <div style="flex:1;">
+              <div class="feed-poster-name">Alex M.</div>
+              <div class="feed-post-time">4h ago</div>
+            </div>
+          </div>
+          <p class="feed-post-body">PSA: The 36 questions feature in the Date Planner is INCREDIBLE. We talked for 4 hours 😭🔥 Genuinely didn't want the conversation to end. This app is different.</p>
+          <div class="feed-actions">
+            <button class="feed-action-btn liked" aria-label="Like post">❤️ 89</button>
+            <button class="feed-action-btn" aria-label="Comment on post">💬 23</button>
+            <button class="feed-action-btn" aria-label="Share post">↗️ Share</button>
+          </div>
+        </div>
+
+        <!-- Post 3 – Anonymous with replies -->
+        <div class="feed-post">
+          <div class="feed-post-header">
+            <div class="feed-anon-av" aria-label="Anonymous user">🎭</div>
+            <div style="flex:1;">
+              <div class="feed-poster-name" style="color:var(--muted2);">Anonymous</div>
+              <div class="feed-post-time">6h ago</div>
+            </div>
+            <span style="font-size:10px;font-weight:600;color:var(--muted);padding:3px 8px;background:var(--card-b);border-radius:99px;border:1px solid var(--border);">Advice Needed</span>
+          </div>
+          <p class="feed-post-body">Matched with someone amazing but they live 200 miles away. Worth pursuing a long distance connection? 🤔 Anyone have experience with this?</p>
+          <div class="feed-actions">
+            <button class="feed-action-btn" aria-label="Like post">❤️ 34</button>
+            <button class="feed-action-btn liked" aria-label="Comment on post">💬 41</button>
+            <button class="feed-action-btn" aria-label="Share post">↗️ Share</button>
+          </div>
+          <div class="advice-replies">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;">Top Replies</div>
+            <div class="advice-reply-item"><span class="reply-name">Maya L.:</span> "My partner and I started 3 hrs apart. 2 years together now. 100% worth it if the connection is real."</div>
+            <div class="advice-reply-item"><span class="reply-name">Jordan K.:</span> "Video dates first! AURA's virtual date planner makes this so much easier."</div>
+            <div class="advice-reply-item"><span class="reply-name">Alex T.:</span> "Set clear intentions early. LDR only works with a plan to close the distance eventually."</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Success Stories -->
+      <div style="margin-bottom:28px;">
+        <div class="section-label" style="margin-bottom:14px;">Couples Who Found Each Other Here 💜</div>
+        <div class="stories-grid">
+
+          <div class="story-card">
+            <div class="story-avatars">
+              <div class="story-av">
+                <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Jamie">
+              </div>
+              <div class="story-heart">💜</div>
+              <div class="story-av">
+                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Reena">
+              </div>
+            </div>
+            <div class="story-names">Jamie &amp; Reena</div>
+            <div class="story-date">Together since Jan 2025</div>
+            <p class="story-quote">"AURA's AI knew we were perfect before we did. First message and we talked for 6 hours straight."</p>
+          </div>
+
+          <div class="story-card">
+            <div class="story-avatars">
+              <div class="story-av">
+                <img src="https://images.unsplash.com/photo-1479936343636-73cdc5aae0c3?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Sam">
+              </div>
+              <div class="story-heart">💜</div>
+              <div class="story-av">
+                <img src="https://images.unsplash.com/photo-1531891437562-4301cf35b7e4?w=600&h=750&fit=crop&crop=face&auto=format&q=90" loading="lazy" alt="Alex">
+              </div>
+            </div>
+            <div class="story-names">Sam &amp; Alex</div>
+            <div class="story-date">Together since Nov 2024</div>
+            <p class="story-quote">"The compatibility report said 96%. Married last month. 🥂"</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── RIGHT PANEL ── -->
+    <div class="panel-right">
+
+      <!-- Trending Topics -->
+      <div class="g-card" style="padding:16px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Trending Topics 🔥</div>
+        <div style="font-size:11px;color:var(--muted2);margin-bottom:4px;">What the community is talking about</div>
+        <div class="trending-pills">
+          <a href="#" class="trending-pill">#FirstDateNerves</a>
+          <a href="#" class="trending-pill">#AIMatching</a>
+          <a href="#" class="trending-pill">#LongDistance</a>
+          <a href="#" class="trending-pill">#GreenFlags</a>
+          <a href="#" class="trending-pill">#SlowDating</a>
+        </div>
+      </div>
+
+      <!-- Ask the Community -->
+      <div class="g-card" style="padding:16px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Ask the Community</div>
+        <textarea class="ask-textarea" placeholder="Ask something anonymously — no judgment here..." aria-label="Ask the community"></textarea>
+        <button class="btn btn-secondary w-100" style="font-size:12px;">🎭 Post Anonymously</button>
+        <div class="qa-example">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:6px;">⬆ Most Upvoted</div>
+          <div class="qa-q">❓ <span>"How do you know when to move from texting to a real date?"</span></div>
+          <div class="qa-a">After 3–5 good conversations, suggest a short video call first. It removes pressure and filters out mismatches early. — 142 upvotes</div>
+        </div>
+      </div>
+
+      <!-- Green Flag of the Day -->
+      <div class="green-flag-card">
+        <div class="green-flag-label">💚 Green Flag of the Day</div>
+        <p class="green-flag-text">"They remember the small things you mentioned weeks ago — your dog's name, your favourite film, how your interview went."</p>
+        <button class="btn btn-ghost btn-sm" style="font-size:11px;padding:5px 12px;">↗️ Share</button>
+      </div>
+
+      <!-- Upcoming Community Events -->
+      <div class="g-card" style="padding:16px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px;">Upcoming Community Events</div>
+        <div>
+          <div class="community-event-item">
+            <div class="event-date-badge">
+              <div class="ev-month">MAR</div>
+              <div class="ev-day">20</div>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:12px;font-weight:700;color:var(--text);">Speed Round: Bookworms</div>
+              <div style="font-size:11px;color:var(--muted2);">Live chat · 8:00 PM</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" style="font-size:11px;padding:4px 10px;flex-shrink:0;">Join</button>
+          </div>
+          <div class="community-event-item">
+            <div class="event-date-badge" style="background:rgba(var(--pink-rgb),.1);border-color:rgba(var(--pink-rgb),.3);">
+              <div class="ev-month" style="color:var(--pink);">MAR</div>
+              <div class="ev-day">22</div>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:12px;font-weight:700;color:var(--text);">Fitness Singles Mixer</div>
+              <div style="font-size:11px;color:var(--muted2);">In-room event · 7:00 PM</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" style="font-size:11px;padding:4px 10px;flex-shrink:0;">Join</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="theme-switcher"></div>
+    </div>
+
+  </main>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Room category filter highlight
+    document.querySelectorAll('.room-cat-link').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.room-cat-link').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+    // Like button toggle
+    document.querySelectorAll('.feed-action-btn').forEach(btn => {
+      if (btn.textContent.includes('❤️')) {
+        btn.addEventListener('click', function() {
+          this.classList.toggle('liked');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
