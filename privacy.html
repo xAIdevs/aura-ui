@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURA – Privacy Policy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    body::before { content:''; position:fixed; top:-200px; right:-200px; width:600px; height:600px; background:radial-gradient(circle,rgba(236,72,153,.07),transparent 70%); pointer-events:none; z-index:0; }
+
+    .doc-nav { position:sticky; top:0; z-index:100; background:rgba(10,10,15,.85); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .nav-brand { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700; letter-spacing:-1px; background:linear-gradient(135deg,var(--accent2),var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-decoration:none; }
+    .nav-back { display:flex; align-items:center; gap:7px; color:var(--muted2); font-size:13px; font-weight:600; text-decoration:none; transition:color .2s; }
+    .nav-back:hover { color:var(--text); }
+
+    .doc-hero { position:relative; z-index:1; padding:56px 24px 40px; text-align:center; max-width:760px; margin:0 auto; }
+    .doc-badge { display:inline-flex; align-items:center; gap:8px; padding:5px 16px; background:rgba(236,72,153,.1); border:1px solid rgba(236,72,153,.25); border-radius:20px; font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--pink); margin-bottom:20px; }
+    .doc-title { font-family:'Space Grotesk',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:800; letter-spacing:-1.5px; line-height:1.1; margin-bottom:14px; }
+    .doc-meta { font-size:13px; color:var(--muted2); margin-bottom:32px; }
+    .doc-meta strong { color:var(--accent3); }
+
+    .doc-toc { position:relative; z-index:1; max-width:760px; margin:0 auto 48px; padding:0 24px; }
+    .toc-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:24px 28px; }
+    .toc-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted2); margin-bottom:14px; }
+    .toc-list { list-style:none; columns:2; gap:12px; }
+    @media (max-width:600px) { .toc-list { columns:1; } }
+    .toc-list li { margin-bottom:8px; }
+    .toc-list a { color:var(--muted2); text-decoration:none; font-size:13px; font-weight:500; transition:color .2s; display:flex; align-items:center; gap:6px; }
+    .toc-list a::before { content:'§'; color:var(--pink); font-size:11px; }
+    .toc-list a:hover { color:var(--pink); }
+
+    .doc-body { position:relative; z-index:1; max-width:760px; margin:0 auto; padding:0 24px 100px; }
+    .doc-section { margin-bottom:52px; }
+    .doc-section-num { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--pink); margin-bottom:8px; }
+    .doc-section h2 { font-family:'Space Grotesk',sans-serif; font-size:clamp(1.2rem,3vw,1.5rem); font-weight:700; letter-spacing:-.5px; color:var(--text); margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+    .doc-section p { font-size:15px; color:var(--text-2,var(--muted2)); line-height:1.75; margin-bottom:14px; }
+    .doc-section ul, .doc-section ol { padding-left:20px; margin-bottom:14px; }
+    .doc-section li { font-size:15px; color:var(--text-2,var(--muted2)); line-height:1.75; margin-bottom:8px; }
+    .doc-section strong { color:var(--text); font-weight:600; }
+    .doc-section a { color:var(--accent3); text-decoration:none; }
+    .doc-section a:hover { text-decoration:underline; }
+
+    .data-table { width:100%; border-collapse:collapse; margin-bottom:16px; border-radius:12px; overflow:hidden; border:1px solid var(--border); }
+    .data-table th { background:var(--card-b); padding:10px 14px; text-align:left; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--muted2); }
+    .data-table td { padding:11px 14px; font-size:14px; color:var(--muted2); border-top:1px solid var(--border); line-height:1.5; }
+    .data-table tr:last-child td { border-bottom:none; }
+
+    .highlight-box { background:rgba(124,58,237,.08); border:1px solid rgba(124,58,237,.2); border-radius:14px; padding:18px 20px; margin-bottom:16px; }
+    .highlight-box p { color:var(--text); font-size:14px; margin-bottom:0; }
+    .pink-box { background:rgba(236,72,153,.07); border:1px solid rgba(236,72,153,.2); border-radius:14px; padding:18px 20px; margin-bottom:16px; }
+    .pink-box p { color:var(--text); font-size:14px; margin-bottom:0; }
+
+    .rights-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:16px; }
+    .right-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; }
+    .right-card .right-icon { font-size:22px; margin-bottom:8px; }
+    .right-card .right-title { font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px; }
+    .right-card .right-desc { font-size:12px; color:var(--muted2); line-height:1.4; }
+
+    .doc-footer { position:relative; z-index:1; border-top:1px solid var(--border); padding:32px 24px; max-width:760px; margin:0 auto; display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; }
+    .doc-footer-links { display:flex; gap:16px; flex-wrap:wrap; }
+    .doc-footer-links a { font-size:13px; color:var(--muted2); text-decoration:none; transition:color .2s; }
+    .doc-footer-links a:hover { color:var(--accent3); }
+    .doc-footer-copy { font-size:13px; color:var(--muted2); }
+  </style>
+</head>
+<body>
+
+<nav class="doc-nav">
+  <a href="index.html" class="nav-brand">AURA</a>
+  <a href="javascript:history.back()" class="nav-back">← Back</a>
+</nav>
+
+<div class="doc-hero">
+  <div class="doc-badge">🔒 Privacy</div>
+  <h1 class="doc-title">Privacy Policy</h1>
+  <p class="doc-meta">Last updated: <strong>March 15, 2026</strong> · Effective: March 15, 2026</p>
+  <div class="pink-box">
+    <p>At AURA, <strong>your privacy is not an afterthought — it is the foundation of everything we build.</strong> This policy explains exactly what data we collect, why we collect it, and how you stay in control. We believe you deserve honest, clear answers.</p>
+  </div>
+</div>
+
+<div class="doc-toc">
+  <div class="toc-card">
+    <div class="toc-title">Table of Contents</div>
+    <ul class="toc-list">
+      <li><a href="#p1">Information We Collect</a></li>
+      <li><a href="#p2">How We Use Your Data</a></li>
+      <li><a href="#p3">AI & Compatibility Engine</a></li>
+      <li><a href="#p4">Information Sharing</a></li>
+      <li><a href="#p5">Data Storage & Security</a></li>
+      <li><a href="#p6">Your Rights & Controls</a></li>
+      <li><a href="#p7">Cookies & Tracking</a></li>
+      <li><a href="#p8">Data Retention</a></li>
+      <li><a href="#p9">Children's Privacy</a></li>
+      <li><a href="#p10">International Transfers</a></li>
+      <li><a href="#p11">Changes to Policy</a></li>
+      <li><a href="#p12">Contact & DPO</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="doc-body">
+
+  <div class="doc-section" id="p1">
+    <div class="doc-section-num">Section 01</div>
+    <h2>Information We Collect</h2>
+    <p>We collect information you give us directly, information generated through your use of AURA, and information from third parties.</p>
+
+    <p><strong>Information you provide:</strong></p>
+    <table class="data-table">
+      <tr><th>Category</th><th>Examples</th><th>Required?</th></tr>
+      <tr><td>Identity</td><td>Name, date of birth, gender, photos</td><td>Yes</td></tr>
+      <tr><td>Contact</td><td>Phone number, email address</td><td>Yes</td></tr>
+      <tr><td>Profile</td><td>Bio, occupation, education, height, interests</td><td>Optional</td></tr>
+      <tr><td>Location</td><td>City, region, precise location (with permission)</td><td>City required</td></tr>
+      <tr><td>Preferences</td><td>Age range, distance, relationship goals</td><td>Optional</td></tr>
+      <tr><td>Communications</td><td>Messages sent within AURA, support tickets</td><td>N/A</td></tr>
+    </table>
+
+    <p><strong>Information collected automatically:</strong></p>
+    <ul>
+      <li>Device identifiers, IP address, browser type and version</li>
+      <li>Usage data: features used, swipe behavior (without individual profile data), session duration</li>
+      <li>Crash reports and performance data</li>
+      <li>Log data and timestamps of interactions</li>
+    </ul>
+
+    <p><strong>Information from third parties:</strong></p>
+    <ul>
+      <li>If you sign up with Google, we receive your name, email, and profile photo from your Google account</li>
+      <li>Analytics partners (aggregated and anonymized only)</li>
+    </ul>
+  </div>
+
+  <div class="doc-section" id="p2">
+    <div class="doc-section-num">Section 02</div>
+    <h2>How We Use Your Data</h2>
+    <p>We use your data for the following purposes:</p>
+    <ul>
+      <li><strong>Providing the Service</strong> — Creating your account, showing your profile to potential matches, enabling messaging</li>
+      <li><strong>AI Compatibility Matching</strong> — Running our AURA BRAIN™ algorithms to generate compatibility scores and match recommendations</li>
+      <li><strong>Personalization</strong> — Customizing your feed, suggestions, and AI coaching based on your behavior and preferences</li>
+      <li><strong>Safety & Trust</strong> — Detecting fake accounts, fraud, prohibited content, and violations of our Terms</li>
+      <li><strong>Communications</strong> — Sending transactional messages (OTP, account alerts), product updates (with your consent), and support responses</li>
+      <li><strong>Analytics & Improvement</strong> — Understanding how users interact with AURA to improve features and fix bugs</li>
+      <li><strong>Legal Compliance</strong> — Complying with applicable laws, regulations, and lawful requests</li>
+    </ul>
+    <p>We never sell your personal data to advertisers. AURA is funded by subscriptions, not advertising.</p>
+  </div>
+
+  <div class="doc-section" id="p3">
+    <div class="doc-section-num">Section 03</div>
+    <h2>AI & Compatibility Engine</h2>
+    <p>The <strong>AURA BRAIN™</strong> is our proprietary AI system that powers compatibility matching. Here is exactly what it does and does not do:</p>
+    <ul>
+      <li>It analyzes your profile, stated preferences, and interaction patterns (which profiles you engage with, response times, conversation quality) to generate a <strong>Compatibility Score</strong></li>
+      <li>It infers <strong>Personality Vectors</strong> — behavioral patterns across 47 dimensions — to predict interpersonal chemistry</li>
+      <li>It <strong>does not</strong> read the content of your private messages for matching purposes</li>
+      <li>It <strong>does not</strong> make decisions about who you can match with based on protected characteristics (race, religion, ethnicity, nationality)</li>
+      <li>AI-generated compatibility scores are probabilistic suggestions, not deterministic outcomes</li>
+    </ul>
+    <div class="highlight-box">
+      <p>🤖 <strong>Human oversight:</strong> All AURA AI systems are subject to regular audits for bias and fairness. You can request a review of any AI decision affecting your account by contacting privacy@aura.app.</p>
+    </div>
+    <p>You may opt out of behavioral-pattern-based matching in Settings → Privacy → AI Preferences. Opting out means your matches will be based on stated preferences only.</p>
+  </div>
+
+  <div class="doc-section" id="p4">
+    <div class="doc-section-num">Section 04</div>
+    <h2>Information Sharing</h2>
+    <p>We do not sell your personal data. We share it only in the following circumstances:</p>
+    <ul>
+      <li><strong>With other AURA users</strong> — Your public profile (name, age, photos, bio, interests) is shown to users you appear in their discovery feed. Your precise location is never shared; only your approximate city/distance.</li>
+      <li><strong>With service providers</strong> — We use vetted third-party vendors for cloud hosting (AWS), SMS delivery, payment processing (Stripe), and analytics. These vendors process data only under our instructions and strict confidentiality obligations.</li>
+      <li><strong>For legal reasons</strong> — We may disclose data if required by law, court order, or governmental authority, or to protect the safety of our users or the public.</li>
+      <li><strong>Business transfers</strong> — If AURA is acquired or merges, user data may be transferred to the new entity, subject to equivalent privacy protections. You will be notified in advance.</li>
+    </ul>
+    <p>When you report another user, your report details (but not your identity) may be shared internally to investigate the matter.</p>
+  </div>
+
+  <div class="doc-section" id="p5">
+    <div class="doc-section-num">Section 05</div>
+    <h2>Data Storage & Security</h2>
+    <p>AURA takes data security seriously. Our measures include:</p>
+    <ul>
+      <li><strong>Encryption in transit</strong> — All data transmitted between your device and our servers uses TLS 1.3</li>
+      <li><strong>Encryption at rest</strong> — All stored personal data is encrypted using AES-256</li>
+      <li><strong>Access controls</strong> — Strict role-based access; employees can only access data necessary for their function</li>
+      <li><strong>Penetration testing</strong> — Regular third-party security audits and bug bounty program</li>
+      <li><strong>Photo hashing</strong> — We use perceptual hashing to detect known CSAM and non-consensual intimate images</li>
+    </ul>
+    <p>Our primary data centers are located in India (Mumbai), with backup infrastructure in Singapore. If you are an EU/UK user, your data is processed under Standard Contractual Clauses.</p>
+    <p>In the event of a data breach affecting your personal data, we will notify you within 72 hours as required by applicable law.</p>
+  </div>
+
+  <div class="doc-section" id="p6">
+    <div class="doc-section-num">Section 06</div>
+    <h2>Your Rights & Controls</h2>
+    <p>You have meaningful control over your data. Depending on your jurisdiction, your rights include:</p>
+    <div class="rights-grid">
+      <div class="right-card"><div class="right-icon">👁️</div><div class="right-title">Access</div><div class="right-desc">Request a copy of all personal data we hold about you</div></div>
+      <div class="right-card"><div class="right-icon">✏️</div><div class="right-title">Correction</div><div class="right-desc">Update inaccurate or incomplete information in your profile</div></div>
+      <div class="right-card"><div class="right-icon">🗑️</div><div class="right-title">Deletion</div><div class="right-desc">Delete your account and all associated data ("right to be forgotten")</div></div>
+      <div class="right-card"><div class="right-icon">⛔</div><div class="right-title">Objection</div><div class="right-desc">Object to processing for direct marketing or profiling</div></div>
+      <div class="right-card"><div class="right-icon">📦</div><div class="right-title">Portability</div><div class="right-desc">Export your data in a machine-readable format (JSON/CSV)</div></div>
+      <div class="right-card"><div class="right-icon">⏸️</div><div class="right-title">Restriction</div><div class="right-desc">Restrict certain types of processing while a dispute is resolved</div></div>
+    </div>
+    <p>To exercise any of these rights, go to <strong>Settings → Privacy → My Data</strong> in the AURA app, or email privacy@aura.app. We respond to all requests within 30 days (15 days for Indian residents under DPDP Act 2023).</p>
+  </div>
+
+  <div class="doc-section" id="p7">
+    <div class="doc-section-num">Section 07</div>
+    <h2>Cookies & Tracking</h2>
+    <p>AURA's web experience uses the following types of cookies and similar technologies:</p>
+    <ul>
+      <li><strong>Essential cookies</strong> — Required for authentication, security, and core functionality. Cannot be disabled.</li>
+      <li><strong>Performance cookies</strong> — Collect anonymized data about how users interact with the app to help us improve it (e.g., page load times, error rates). You can opt out.</li>
+      <li><strong>Analytics cookies</strong> — Help us understand aggregate usage patterns using tools like anonymized event tracking. You can opt out.</li>
+    </ul>
+    <p>We <strong>do not</strong> use advertising cookies or cross-site tracking technologies. We do not participate in any advertising networks or real-time bidding systems.</p>
+    <p>You can manage your cookie preferences at any time in Settings → Privacy → Cookies.</p>
+  </div>
+
+  <div class="doc-section" id="p8">
+    <div class="doc-section-num">Section 08</div>
+    <h2>Data Retention</h2>
+    <p>We retain your data for as long as your account is active or as needed to provide services. Specific retention periods:</p>
+    <ul>
+      <li><strong>Active account data</strong> — Retained until you delete your account</li>
+      <li><strong>Messages</strong> — Stored for 3 years after the last message in a conversation, then permanently deleted</li>
+      <li><strong>Account data after deletion</strong> — Deleted within 30 days, except where required for legal compliance</li>
+      <li><strong>Safety-related logs</strong> — Retained for up to 2 years to investigate reported violations</li>
+      <li><strong>Backup copies</strong> — May persist in encrypted backups for up to 90 days after deletion</li>
+      <li><strong>Financial records</strong> — Retained for 7 years as required by tax law</li>
+    </ul>
+    <p>When you delete your account, your profile is immediately hidden from other users. Full deletion from our systems is completed within 30 days.</p>
+  </div>
+
+  <div class="doc-section" id="p9">
+    <div class="doc-section-num">Section 09</div>
+    <h2>Children's Privacy</h2>
+    <p>AURA is strictly intended for adults aged 18 and older. We do not knowingly collect personal information from anyone under 18.</p>
+    <p>We use a combination of age verification at registration, AI-based age estimation on profile photos, and community reporting to enforce this restriction. If we discover or are notified that an account belongs to someone under 18, we will:</p>
+    <ul>
+      <li>Immediately suspend the account</li>
+      <li>Delete all associated personal data</li>
+      <li>Notify the reporter (without disclosing the minor's information)</li>
+    </ul>
+    <p>If you believe a minor is using AURA, please report them immediately using the in-app report function or by emailing safety@aura.app.</p>
+  </div>
+
+  <div class="doc-section" id="p10">
+    <div class="doc-section-num">Section 10</div>
+    <h2>International Data Transfers</h2>
+    <p>AURA operates globally. If you are located outside India, your data may be transferred to and processed in India, where our primary infrastructure is located.</p>
+    <p>For users in the <strong>European Economic Area (EEA)</strong> or <strong>United Kingdom</strong>, we transfer data under Standard Contractual Clauses (SCCs) approved by the European Commission, which provide appropriate safeguards for your personal data.</p>
+    <p>For users in <strong>California</strong>, we comply with the California Consumer Privacy Act (CCPA) / CPRA. California residents have the right to know, delete, and opt out of the sale of personal information (though we do not sell personal data).</p>
+    <p>For users in <strong>India</strong>, we comply with the Digital Personal Data Protection (DPDP) Act, 2023.</p>
+  </div>
+
+  <div class="doc-section" id="p11">
+    <div class="doc-section-num">Section 11</div>
+    <h2>Changes to This Policy</h2>
+    <p>We may update this Privacy Policy periodically. When we make material changes, we will:</p>
+    <ul>
+      <li>Update the "Last updated" date at the top of this page</li>
+      <li>Send an in-app notification and/or email to all active users</li>
+      <li>For significant changes, provide a 30-day notice period before changes take effect</li>
+    </ul>
+    <p>Your continued use of AURA after the effective date of a revised policy constitutes your acceptance of the changes. If you disagree with any changes, you should stop using the Service and delete your account before the effective date.</p>
+  </div>
+
+  <div class="doc-section" id="p12">
+    <div class="doc-section-num">Section 12</div>
+    <h2>Contact Us & Data Protection Officer</h2>
+    <p>For any privacy-related questions, requests, or concerns:</p>
+    <ul>
+      <li><strong>Privacy inquiries:</strong> privacy@aura.app</li>
+      <li><strong>Data export / deletion requests:</strong> In-app Settings → Privacy → My Data</li>
+      <li><strong>Data Protection Officer (DPO):</strong> dpo@aura.app</li>
+      <li><strong>Postal address:</strong> AURA Technologies Pvt. Ltd., Attn: Privacy Team, 91 Springboard, Koramangala, Bengaluru — 560034, India</li>
+    </ul>
+    <p>If you are an EU/UK resident and are unsatisfied with our response, you have the right to lodge a complaint with your local data protection supervisory authority.</p>
+  </div>
+
+</div>
+
+<div class="doc-footer">
+  <div class="doc-footer-links">
+    <a href="terms.html">Terms of Service</a>
+    <a href="safety.html">Safety Center</a>
+    <a href="index.html">Back to AURA</a>
+  </div>
+  <div class="doc-footer-copy">© 2026 AURA Technologies Pvt. Ltd.</div>
+</div>
+
+<script src="js/theme.js"></script>
+</body>
+</html>

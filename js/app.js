@@ -9,11 +9,11 @@
 
 let currentPhoto = 0;
 const photos = [
-  { src: 'https://randomuser.me/api/portraits/women/10.jpg', alt: 'Profile photo 1' },
-  { src: 'https://randomuser.me/api/portraits/women/11.jpg', alt: 'Profile photo 2' },
-  { src: 'https://randomuser.me/api/portraits/women/12.jpg', alt: 'Profile photo 3' },
-  { src: 'https://randomuser.me/api/portraits/women/13.jpg', alt: 'Profile photo 4' },
-  { src: 'https://randomuser.me/api/portraits/women/14.jpg', alt: 'Profile photo 5' },
+  { src: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=750&fit=crop&crop=face&auto=format&q=90', alt: 'Profile photo 1' },
+  { src: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=600&h=750&fit=crop&crop=face&auto=format&q=90', alt: 'Profile photo 2' },
+  { src: 'https://images.unsplash.com/photo-1546961342-ea5f62d1fa3b?w=600&h=750&fit=crop&crop=face&auto=format&q=90', alt: 'Profile photo 3' },
+  { src: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&h=750&fit=crop&crop=face&auto=format&q=90', alt: 'Profile photo 4' },
+  { src: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&h=750&fit=crop&crop=face&auto=format&q=90', alt: 'Profile photo 5' },
 ];
 
 function goPhoto(index, event) {

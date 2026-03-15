@@ -2095,8 +2095,10 @@ input[type="range"]::-webkit-slider-runnable-track {
 /* ── FLOATING THEME PANEL ─────────────────────────────── */
 #aura-theme-panel {
   position: fixed;
-  top: 16px;
-  left: 16px;
+  bottom: 20px;
+  right: 20px;
+  top: auto;
+  left: auto;
   z-index: 10000;
   font-family: 'Inter', sans-serif;
 }
@@ -2135,8 +2137,10 @@ input[type="range"]::-webkit-slider-runnable-track {
 
 .aura-theme-dropdown {
   position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
+  bottom: calc(100% + 8px);
+  top: auto;
+  right: 0;
+  left: auto;
   background: var(--bg2);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -2147,8 +2151,8 @@ input[type="range"]::-webkit-slider-runnable-track {
   box-shadow: var(--shadow2), 0 0 0 1px var(--border);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-6px) scale(.98);
-  transform-origin: top left;
+  transform: translateY(6px) scale(.98);
+  transform-origin: bottom right;
   transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
   pointer-events: none;
 }
@@ -2235,22 +2239,12 @@ input[type="range"]::-webkit-slider-runnable-track {
   line-height: 1;
 }
 
-/* Mobile: shift panel if sidebar bottom bar is present */
+/* Mobile: raise panel above bottom nav bar */
 @media (max-width: 768px) {
   #aura-theme-panel {
     top: auto;
     bottom: 80px;
-    left: 12px;
-  }
-  .aura-theme-dropdown {
-    top: auto;
-    bottom: calc(100% + 8px);
-    transform-origin: bottom left;
-  }
-  .aura-theme-dropdown.open {
-    transform: translateY(0) scale(1);
-  }
-  .aura-theme-dropdown:not(.open) {
-    transform: translateY(6px) scale(.98);
+    right: 12px;
+    left: auto;
   }
 }
