@@ -13,6 +13,7 @@
   <style>
     .tiers-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; align-items:start; }
     @media(max-width:900px){ .tiers-grid { grid-template-columns:1fr; max-width:480px; margin:0 auto; } }
+    @media(max-width:768px){ .tiers-grid .premium-tier-card.featured { margin-top:0; } }
     .features-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
     @media(max-width:900px){ .features-grid { grid-template-columns:1fr 1fr; } }
     @media(max-width:600px){ .features-grid { grid-template-columns:1fr; } }

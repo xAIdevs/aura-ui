@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wellness Hub – AURA AI Dating</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    /* ── Mood Buttons ── */
+    .mood-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .mood-btn {
+      flex: 1;
+      min-width: 56px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      padding: 10px 6px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius3);
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 22px;
+      line-height: 1;
+    }
+    .mood-btn span {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted2);
+      font-family: 'Inter', sans-serif;
+    }
+    .mood-btn:hover {
+      background: var(--card-b);
+      border-color: var(--border2);
+      transform: translateY(-2px);
+    }
+    .mood-btn.active {
+      background: rgba(var(--accent-rgb), .12);
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(var(--accent-rgb), .2);
+    }
+    .mood-btn.active span { color: var(--accent3); }
+
+    /* ── Streak Calendar ── */
+    .streak-dots {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .streak-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted2);
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+    .streak-dot.done {
+      background: rgba(16, 185, 129, .15);
+      border-color: var(--green);
+      color: var(--green);
+    }
+    .streak-dot.today {
+      background: rgba(var(--accent-rgb), .18);
+      border-color: var(--accent);
+      color: var(--accent3);
+      box-shadow: 0 0 10px rgba(var(--accent-rgb), .25);
+    }
+
+    /* ── Quick Action Pills ── */
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .quick-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 12px;
+      background: var(--card-b);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+    }
+    .quick-pill:hover {
+      background: rgba(var(--accent-rgb), .12);
+      border-color: var(--border2);
+      color: var(--accent3);
+      transform: translateY(-1px);
+    }
+
+    /* ── Check-In Card ── */
+    .checkin-card {
+      background: linear-gradient(135deg, rgba(var(--accent-rgb), .1) 0%, rgba(var(--pink-rgb), .07) 100%);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius2);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .checkin-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 18px 0;
+    }
+    .checkin-opt {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--card-b);
+      border: 1px solid var(--border);
+      border-radius: var(--radius3);
+      cursor: pointer;
+      transition: all .18s;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text2);
+    }
+    .checkin-opt:hover {
+      background: rgba(var(--accent-rgb), .1);
+      border-color: var(--border2);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+    .checkin-opt.selected {
+      background: rgba(var(--accent-rgb), .15);
+      border-color: var(--accent);
+      color: var(--text);
+    }
+    .checkin-opt .opt-emoji { font-size: 20px; flex-shrink: 0; }
+
+    /* ── Affirmation Card ── */
+    .affirmation-card {
+      background: linear-gradient(135deg, rgba(var(--pink-rgb), .1) 0%, rgba(var(--accent-rgb), .08) 50%, rgba(16,185,129,.06) 100%);
+      border: 1px solid rgba(var(--pink-rgb), .25);
+      border-radius: var(--radius2);
+      padding: 28px 24px;
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .affirmation-card::before {
+      content: '"';
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      font-size: 100px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      color: var(--pink);
+      opacity: .08;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .affirmation-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.55;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .affirmation-attr {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent3);
+      letter-spacing: .5px;
+    }
+
+    /* ── Journal Card ── */
+    .journal-prompt-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .journal-textarea-faux {
+      margin-top: 14px;
+      padding: 14px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius3);
+      min-height: 80px;
+      font-size: 13px;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      cursor: text;
+    }
+
+    /* ── EI Tips Grid ── */
+    .ei-tips-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 900px) { .ei-tips-grid { grid-template-columns: 1fr; } }
+    .ei-tip-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      transition: all .2s;
+    }
+    .ei-tip-card:hover {
+      background: var(--card-b);
+      border-color: var(--border2);
+      transform: translateY(-2px);
+      box-shadow: var(--glow);
+    }
+    .ei-tip-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    .ei-tip-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .ei-tip-body {
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.55;
+      margin-bottom: 10px;
+    }
+
+    /* ── Breathing Circle ── */
+    .breathe-card {
+      background: linear-gradient(135deg, rgba(var(--accent-rgb), .07) 0%, rgba(16,185,129,.06) 100%);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius2);
+      padding: 28px 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .breathe-circle-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .breathe-circle {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(var(--accent-rgb), .25) 0%, rgba(var(--accent-rgb), .08) 60%, transparent 100%);
+      border: 2px solid rgba(var(--accent-rgb), .4);
+      box-shadow: 0 0 30px rgba(var(--accent-rgb), .2), inset 0 0 20px rgba(var(--accent-rgb), .1);
+      animation: breathe 8s ease-in-out infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+    @keyframes breathe {
+      0%   { transform: scale(1);   box-shadow: 0 0 20px rgba(var(--accent-rgb), .15); }
+      37.5%{ transform: scale(1.4); box-shadow: 0 0 50px rgba(var(--accent-rgb), .35); }
+      50%  { transform: scale(1.4); box-shadow: 0 0 50px rgba(var(--accent-rgb), .35); }
+      100% { transform: scale(1);   box-shadow: 0 0 20px rgba(var(--accent-rgb), .15); }
+    }
+    .breathe-guide {
+      font-size: 13px;
+      color: var(--muted2);
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    /* ── Score Ring (right panel) ── */
+    .health-score-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .score-ring-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .ai-score-ring-lg {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ai-score-ring-lg svg {
+      position: absolute;
+      inset: 0;
+      transform: rotate(-90deg);
+    }
+    .ai-score-ring-lg .ring-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      position: relative;
+      z-index: 1;
+      line-height: 1;
+    }
+    .ring-val-sub {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted2);
+      display: block;
+      text-align: center;
+    }
+    .trait-row {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .trait-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .trait-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .trait-lbl { font-size: 11px; font-weight: 600; color: var(--text2); }
+    .trait-pct { font-size: 11px; font-weight: 700; color: var(--accent3); }
+    .trait-track { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .trait-fill  { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+
+    /* ── Wellness Resources ── */
+    .resource-list { display: flex; flex-direction: column; gap: 2px; }
+    .resource-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius3);
+      transition: all .18s;
+      text-decoration: none;
+      color: var(--text2);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .resource-item:hover {
+      background: var(--card-b);
+      color: var(--accent3);
+    }
+    .resource-item .res-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: rgba(var(--accent-rgb), .1);
+      border: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    /* ── Wins Card ── */
+    .wins-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+    .win-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text2);
+    }
+    .win-check {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(16,185,129,.15);
+      border: 1px solid var(--green);
+      color: var(--green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+
+    /* ── Section titles ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .card-title-row .ai-icon-sm {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(var(--accent-rgb), .3);
+    }
+  </style>
+</head>
+<body data-page="wellness">
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <aside class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html"      class="nav-item" data-tip="Discover">🔥</a>
+    <a href="matches.html"       class="nav-item" data-tip="Matches">💜</a>
+    <a href="chat.html"          class="nav-item" data-tip="Chat">💬</a>
+    <a href="search.html"        class="nav-item" data-tip="Search">🔍</a>
+    <a href="events.html"        class="nav-item" data-tip="Events">🎉</a>
+    <a href="wellness.html"      class="nav-item active" data-tip="Wellness">🌸</a>
+    <div class="nav-divider"></div>
+    <a href="notifications.html" class="nav-item" data-tip="Notifications">🔔</a>
+    <div class="nav-divider"></div>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">
+      <img src="https://randomuser.me/api/portraits/women/10.jpg" class="photo-avatar" loading="lazy" alt="My profile">
+    </a>
+  </aside>
+
+  <main class="app-layout">
+
+    <!-- ── LEFT PANEL ── -->
+    <div class="panel-left">
+      <div class="panel-header"><span class="panel-title">Wellness Hub</span></div>
+
+      <!-- Today's Mood -->
+      <div style="margin-bottom:22px;">
+        <div class="section-label">Today's Mood</div>
+        <div class="mood-row">
+          <button class="mood-btn" aria-label="Great">😄<span>Great</span></button>
+          <button class="mood-btn active" aria-label="Good">🙂<span>Good</span></button>
+          <button class="mood-btn" aria-label="Okay">😐<span>Okay</span></button>
+          <button class="mood-btn" aria-label="Low">😔<span>Low</span></button>
+          <button class="mood-btn" aria-label="Anxious">😰<span>Anxious</span></button>
+        </div>
+      </div>
+
+      <!-- Streak -->
+      <div style="margin-bottom:22px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius3);">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="font-size:18px;">🌿</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--text);">7-Day Streak</div>
+            <div style="font-size:11px;color:var(--green);font-weight:600;">Keep it up!</div>
+          </div>
+        </div>
+        <div class="streak-dots">
+          <div class="streak-dot done">M</div>
+          <div class="streak-dot done">T</div>
+          <div class="streak-dot done">W</div>
+          <div class="streak-dot done">T</div>
+          <div class="streak-dot done">F</div>
+          <div class="streak-dot done">S</div>
+          <div class="streak-dot today">S</div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div>
+        <div class="section-label">Quick Actions</div>
+        <div class="quick-actions">
+          <a class="quick-pill" href="#journal">📖 Journal</a>
+          <a class="quick-pill" href="#breathe">🧘 Breathe</a>
+          <a class="quick-pill" href="#affirmation">💪 Affirmation</a>
+          <a class="quick-pill" href="#report">📊 My Report</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CENTER PANEL ── -->
+    <div class="panel-center">
+      <div class="topbar">
+        <div>
+          <h1 class="page-title">Your Wellness</h1>
+          <div style="font-size:13px;color:var(--muted2);margin-top:2px;">Sunday, Mar 15</div>
+        </div>
+      </div>
+
+      <!-- Daily Check-In -->
+      <div class="checkin-card" id="report">
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;background:rgba(var(--accent-rgb),.15);border:1px solid var(--border2);border-radius:99px;margin-bottom:14px;">
+          <span style="font-size:10px;">✨</span>
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--accent3);">Daily Check-In</span>
+        </div>
+        <h2 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:18px;line-height:1.3;">How are you feeling about dating today?</h2>
+        <div class="checkin-options">
+          <div class="checkin-opt">
+            <span class="opt-emoji">💫</span>
+            <span>Excited and optimistic</span>
+          </div>
+          <div class="checkin-opt selected">
+            <span class="opt-emoji">😌</span>
+            <span>Content, taking it slow</span>
+          </div>
+          <div class="checkin-opt">
+            <span class="opt-emoji">🤔</span>
+            <span>Uncertain, need guidance</span>
+          </div>
+          <div class="checkin-opt">
+            <span class="opt-emoji">😓</span>
+            <span>Feeling discouraged</span>
+          </div>
+        </div>
+        <button class="btn btn-primary">Continue</button>
+      </div>
+
+      <!-- Today's Affirmation -->
+      <div class="affirmation-card" id="affirmation">
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;padding:3px 10px;background:rgba(var(--pink-rgb),.1);border:1px solid rgba(var(--pink-rgb),.3);border-radius:99px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--pink);">Today's Affirmation</span>
+        </div>
+        <p class="affirmation-text">"You deserve a love that makes you feel safe, seen, and celebrated."</p>
+        <div class="affirmation-attr">— AURA AI</div>
+      </div>
+
+      <!-- Journaling Prompt -->
+      <div class="journal-prompt-card" id="journal">
+        <div class="card-title-row">
+          <div class="ai-icon-sm">🤖</div>
+          <div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--accent3);">Daily Reflection</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);">Journaling Prompt</div>
+          </div>
+        </div>
+        <p style="font-size:14px;color:var(--text2);line-height:1.6;margin-top:12px;">What's one thing you appreciate about how you show up in relationships?</p>
+        <div class="journal-textarea-faux" role="textbox" tabindex="0" aria-label="Journal writing area">
+          Start writing your thoughts here...
+        </div>
+        <button class="btn btn-secondary" style="margin-top:12px;">✏️ Start Writing</button>
+      </div>
+
+      <!-- Emotional Intelligence Tips -->
+      <div style="margin-bottom:20px;">
+        <div class="section-label" style="margin-bottom:14px;">Emotional Intelligence Tips</div>
+        <div class="ei-tips-grid">
+          <div class="ei-tip-card">
+            <div class="ei-tip-icon">💬</div>
+            <div class="ei-tip-title">Attachment Awareness</div>
+            <p class="ei-tip-body">You have an anxious attachment style. Here's how to communicate your needs clearly without fear of rejection.</p>
+            <a href="#" class="text-accent" style="font-size:12px;font-weight:600;">Read More →</a>
+          </div>
+          <div class="ei-tip-card">
+            <div class="ei-tip-icon">🧠</div>
+            <div class="ei-tip-title">Overthinking Alert</div>
+            <p class="ei-tip-body">You've been most active late at night. Late-night swiping often leads to less authentic connections.</p>
+            <a href="#" class="text-accent" style="font-size:12px;font-weight:600;">Explore →</a>
+          </div>
+          <div class="ei-tip-card" style="border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.04);">
+            <div class="ei-tip-icon">💚</div>
+            <div class="ei-tip-title">Healthy Pattern</div>
+            <p class="ei-tip-body">Your conversations show high empathy scores this week. You're doing great and building real connections!</p>
+            <a href="#" class="text-green" style="font-size:12px;font-weight:600;">See Details →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Breathing Exercise -->
+      <div class="breathe-card" id="breathe">
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-bottom:4px;padding:3px 10px;background:rgba(var(--accent-rgb),.12);border:1px solid var(--border2);border-radius:99px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--accent3);">Breathing Exercise</span>
+        </div>
+        <h3 style="font-size:16px;font-weight:700;margin-top:4px;margin-bottom:0;">Find Your Calm</h3>
+        <div class="breathe-circle-wrap">
+          <div class="breathe-circle" aria-label="Animated breathing guide circle">🫁</div>
+        </div>
+        <p class="breathe-guide">Inhale 4s · Hold 4s · Exhale 4s</p>
+        <button class="btn btn-primary">🌬️ Breathe with me for 1 minute</button>
+      </div>
+
+    </div>
+
+    <!-- ── RIGHT PANEL ── -->
+    <div class="panel-right">
+
+      <!-- Emotional Health Score -->
+      <div class="health-score-card">
+        <div style="font-size:13px;font-weight:700;margin-bottom:14px;">Emotional Health Score</div>
+        <div class="score-ring-row">
+          <div class="ai-score-ring-lg">
+            <svg viewBox="0 0 90 90" width="90" height="90">
+              <defs>
+                <linearGradient id="wellnessRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="var(--accent)" />
+                  <stop offset="100%" stop-color="var(--pink)" />
+                </linearGradient>
+              </defs>
+              <circle class="ring-bg" cx="45" cy="45" r="39" fill="none" stroke="var(--border)" stroke-width="6"/>
+              <!-- 78% of circumference = 2*pi*39 ≈ 245. 78% = 191 dasharray, offset = 245-191 = 54 -->
+              <circle cx="45" cy="45" r="39" fill="none"
+                stroke="url(#wellnessRingGrad)"
+                stroke-width="6"
+                stroke-linecap="round"
+                stroke-dasharray="191 54"
+                stroke-dashoffset="0"
+              />
+            </svg>
+            <div style="text-align:center;position:relative;z-index:1;">
+              <div class="ring-val">78%</div>
+              <span class="ring-val-sub">Score</span>
+            </div>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;">Great progress!</div>
+            <div style="font-size:11px;color:var(--muted2);line-height:1.5;">Your emotional wellbeing is on an upward trend this week.</div>
+          </div>
+        </div>
+        <div class="trait-row">
+          <div class="trait-item">
+            <div class="trait-head"><span class="trait-lbl">Self-Awareness</span><span class="trait-pct">85%</span></div>
+            <div class="trait-track"><div class="trait-fill" style="width:85%;"></div></div>
+          </div>
+          <div class="trait-item">
+            <div class="trait-head"><span class="trait-lbl">Empathy</span><span class="trait-pct">90%</span></div>
+            <div class="trait-track"><div class="trait-fill" style="width:90%;background:linear-gradient(90deg,var(--green),var(--cyan));"></div></div>
+          </div>
+          <div class="trait-item">
+            <div class="trait-head"><span class="trait-lbl">Resilience</span><span class="trait-pct">68%</span></div>
+            <div class="trait-track"><div class="trait-fill" style="width:68%;background:linear-gradient(90deg,var(--gold),var(--pink));"></div></div>
+          </div>
+          <div class="trait-item">
+            <div class="trait-head"><span class="trait-lbl">Boundary-Setting</span><span class="trait-pct">72%</span></div>
+            <div class="trait-track"><div class="trait-fill" style="width:72%;background:linear-gradient(90deg,var(--accent2),var(--cyan));"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wellness Resources -->
+      <div class="g-card" style="padding:16px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px;">Wellness Resources</div>
+        <div class="resource-list">
+          <a href="#" class="resource-item">
+            <div class="res-icon">📘</div>
+            Dating Anxiety Guide
+          </a>
+          <a href="#" class="resource-item">
+            <div class="res-icon">🔬</div>
+            Attachment Style Quiz
+          </a>
+          <a href="#" class="resource-item">
+            <div class="res-icon">💚</div>
+            Healthy Relationship Patterns
+          </a>
+          <a href="safety.html" class="resource-item" style="color:var(--pink);">
+            <div class="res-icon" style="background:rgba(var(--pink-rgb),.1);border-color:rgba(var(--pink-rgb),.3);">🤝</div>
+            Talk to Someone
+          </a>
+        </div>
+      </div>
+
+      <!-- This Week's Wins -->
+      <div class="g-card" style="padding:16px;margin-bottom:14px;border-color:rgba(16,185,129,.2);background:rgba(16,185,129,.04);">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">This Week's Wins 🏆</div>
+        <div style="font-size:11px;color:var(--muted2);margin-bottom:2px;">You're making real progress</div>
+        <div class="wins-list">
+          <div class="win-item">
+            <div class="win-check">✓</div>
+            <span>Completed 3 check-ins</span>
+          </div>
+          <div class="win-item">
+            <div class="win-check">✓</div>
+            <span>Used breathing exercise</span>
+          </div>
+          <div class="win-item">
+            <div class="win-check">✓</div>
+            <span>Responded thoughtfully</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="theme-switcher"></div>
+    </div>
+
+  </main>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Mood button toggle
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+    // Check-in option toggle
+    document.querySelectorAll('.checkin-opt').forEach(opt => {
+      opt.addEventListener('click', function() {
+        document.querySelectorAll('.checkin-opt').forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+      });
+    });
+  </script>
+</body>
+</html>

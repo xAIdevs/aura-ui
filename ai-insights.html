@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Insights – AURA AI Dating</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    /* ── Left panel nav links ── */
+    .insight-nav-link {
+      display: block;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted2);
+      text-decoration: none;
+      transition: all .2s;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    .insight-nav-link:hover  { background: var(--card-b); color: var(--text); }
+    .insight-nav-link.active { background: rgba(var(--accent-rgb),.15); color: var(--accent3); font-weight: 600; }
+
+    /* ── Accuracy badge ── */
+    .accuracy-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, rgba(var(--accent-rgb),.15), rgba(var(--pink-rgb),.08));
+      border: 1px solid rgba(var(--accent-rgb),.3);
+      border-radius: var(--radius3);
+    }
+    .accuracy-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      flex-shrink: 0;
+    }
+
+    /* ── Section headings ── */
+    .section-block {
+      margin-bottom: 32px;
+    }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent3);
+      margin-bottom: 4px;
+    }
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .section-sub {
+      font-size: 13px;
+      color: var(--muted2);
+      margin-bottom: 20px;
+    }
+
+    /* ── Type DNA card ── */
+    .type-dna-card {
+      background: linear-gradient(135deg, rgba(var(--accent-rgb),.1), rgba(var(--pink-rgb),.06));
+      border: 1px solid rgba(var(--accent-rgb),.25);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+    .type-dna-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .type-dna-sub {
+      font-size: 12px;
+      color: var(--muted2);
+      margin-bottom: 20px;
+    }
+
+    /* ── Vibe tags row ── */
+    .vibe-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+    .vibe-row-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--muted);
+      width: 100%;
+      margin-bottom: 4px;
+    }
+
+    /* ── Preference Drift ── */
+    .drift-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .drift-row:last-of-type { border-bottom: none; }
+    .drift-label {
+      font-size: 13px;
+      color: var(--text2);
+      min-width: 120px;
+      flex-shrink: 0;
+    }
+    .drift-bars {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .drift-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .drift-bar-tag {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted2);
+      min-width: 32px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .drift-bar-track {
+      flex: 1;
+      height: 5px;
+      background: var(--card-b);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .drift-bar-fill-before {
+      height: 100%;
+      background: var(--muted2);
+      border-radius: 99px;
+    }
+    .drift-bar-fill-after {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--pink));
+      border-radius: 99px;
+    }
+    .drift-value {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text2);
+      min-width: 52px;
+      text-align: right;
+    }
+
+    /* ── Behavioral grid ── */
+    .behavioral-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 900px) {
+      .behavioral-grid { grid-template-columns: 1fr; }
+    }
+    .insight-emoji {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    /* ── Counterfactual cards ── */
+    .cf-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      transition: all .25s;
+      margin-bottom: 12px;
+    }
+    .cf-card:hover {
+      border-color: var(--border2);
+      background: var(--card-b);
+      transform: translateY(-2px);
+      box-shadow: var(--glow);
+    }
+    .cf-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(var(--accent-rgb),.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .cf-text {
+      flex: 1;
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+    .cf-text strong { color: var(--text); }
+
+    /* ── Right panel prediction rows ── */
+    .pred-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .pred-row:last-child { border-bottom: none; }
+    .pred-av {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 2px solid rgba(var(--accent-rgb),.3);
+    }
+    .pred-pct {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--accent3);
+    }
+    .pred-why {
+      font-size: 11px;
+      color: var(--muted2);
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    /* ── Love language bars ── */
+    .ll-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .ll-label {
+      font-size: 12px;
+      color: var(--text2);
+      min-width: 130px;
+      flex-shrink: 0;
+    }
+    .ll-bar-track {
+      flex: 1;
+      height: 6px;
+      background: var(--card-b);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .ll-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--pink), var(--accent2));
+    }
+    .ll-pct {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted2);
+      min-width: 30px;
+      text-align: right;
+    }
+
+    /* ── Attachment card ── */
+    .attachment-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      background: rgba(var(--accent-rgb),.12);
+      border: 1px solid rgba(var(--accent-rgb),.3);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-bottom: 10px;
+    }
+
+    /* ── Drift insight box ── */
+    .drift-insight-box {
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: rgba(var(--accent-rgb),.07);
+      border-left: 3px solid var(--accent2);
+      border-radius: 0 var(--radius3) var(--radius3) 0;
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.6;
+    }
+    .drift-insight-box strong { color: var(--accent3); }
+  </style>
+</head>
+<body data-page="ai-insights">
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <aside class="sidebar">
+    <a href="index.html" class="brand">A</a>
+    <a href="discover.html"      class="nav-item" data-tip="Discover">🔥</a>
+    <a href="matches.html"       class="nav-item" data-tip="Matches">💜</a>
+    <a href="chat.html"          class="nav-item" data-tip="Chat">💬</a>
+    <a href="search.html"        class="nav-item" data-tip="Search">🔍</a>
+    <a href="events.html"        class="nav-item" data-tip="Events">🎉</a>
+    <a href="ai-insights.html"   class="nav-item active" data-tip="AI Insights">🤖</a>
+    <a href="date-planner.html"  class="nav-item" data-tip="Date Planner">🗓️</a>
+    <a href="analytics.html"     class="nav-item" data-tip="Analytics">📊</a>
+    <div class="nav-divider"></div>
+    <a href="notifications.html" class="nav-item" data-tip="Notifications">🔔</a>
+    <div class="nav-divider"></div>
+    <a href="my-account.html" class="sidebar-avatar" data-tip="My Profile">
+      <img src="https://randomuser.me/api/portraits/women/10.jpg" class="photo-avatar" loading="lazy" alt="My profile">
+    </a>
+  </aside>
+
+  <main class="app-layout">
+
+    <!-- ── LEFT PANEL ────────────────────────────────────── -->
+    <div class="panel-left">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">AURA BRAIN™</div>
+          <div style="font-size:12px;color:var(--muted2);margin-top:2px;">Your AI Intelligence Report</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <button class="insight-nav-link active" data-section="type">🎯 My Type Analysis</button>
+        <button class="insight-nav-link"        data-section="drift">📈 Preference Drift</button>
+        <button class="insight-nav-link"        data-section="behavior">🧠 Behavioral Patterns</button>
+        <button class="insight-nav-link"        data-section="why">💫 Why I Matched</button>
+        <button class="insight-nav-link"        data-section="predictions">🔮 Predictions</button>
+      </div>
+
+      <div class="mt-auto" style="padding-top:24px;border-top:1px solid var(--border);margin-top:24px;">
+        <div class="accuracy-badge">
+          <div class="accuracy-dot"></div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);">94.2% match accuracy</div>
+            <div style="font-size:11px;color:var(--muted2);margin-top:1px;">47 signals analyzed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CENTER PANEL ───────────────────────────────────── -->
+    <div class="panel-center">
+      <div class="topbar">
+        <div>
+          <h1 class="page-title">AI Insights</h1>
+          <div style="font-size:12px;color:var(--muted2);margin-top:3px;">Last updated 2 hours ago</div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost btn-sm">🔄 Refresh Analysis</button>
+        </div>
+      </div>
+
+      <!-- ── My Type DNA ── -->
+      <div class="section-block" id="section-type">
+        <div class="type-dna-card">
+          <div class="type-dna-header">
+            <div class="ai-badge">🤖 AURA BRAIN™ Analysis</div>
+          </div>
+          <div class="type-dna-sub">Based on 847 interactions over 3 months</div>
+
+          <div class="section-title" style="font-size:18px;margin-bottom:16px;">My Type DNA</div>
+
+          <div class="vector-row">
+            <div class="vector-label">Creative / Artistic</div>
+            <div class="vector-bar"><div class="vector-fill" style="width:91%;"></div></div>
+            <div class="vector-value">91%</div>
+          </div>
+          <div class="vector-row">
+            <div class="vector-label">Adventurous</div>
+            <div class="vector-bar"><div class="vector-fill" style="width:88%;"></div></div>
+            <div class="vector-value">88%</div>
+          </div>
+          <div class="vector-row">
+            <div class="vector-label">Emotionally Intelligent</div>
+            <div class="vector-bar"><div class="vector-fill" style="width:85%;"></div></div>
+            <div class="vector-value">85%</div>
+          </div>
+          <div class="vector-row">
+            <div class="vector-label">Fitness-Focused</div>
+            <div class="vector-bar"><div class="vector-fill" style="width:72%;background:linear-gradient(90deg,var(--accent),var(--cyan));"></div></div>
+            <div class="vector-value">72%</div>
+          </div>
+          <div class="vector-row">
+            <div class="vector-label">Career-Driven</div>
+            <div class="vector-bar"><div class="vector-fill" style="width:68%;background:linear-gradient(90deg,var(--accent),var(--cyan));"></div></div>
+            <div class="vector-value">68%</div>
+          </div>
+          <div class="vector-row">
+            <div class="vector-label">Introverted</div>
+            <div class="vector-bar"><div class="vector-fill" style="width:61%;background:linear-gradient(90deg,var(--pink),var(--accent2));"></div></div>
+            <div class="vector-value">61%</div>
+          </div>
+          <div class="vector-row">
+            <div class="vector-label">Spiritual / Mindful</div>
+            <div class="vector-bar"><div class="vector-fill" style="width:54%;background:linear-gradient(90deg,var(--pink),var(--gold));"></div></div>
+            <div class="vector-value">54%</div>
+          </div>
+          <div class="vector-row" style="margin-bottom:0;">
+            <div class="vector-label">Homebody</div>
+            <div class="vector-bar"><div class="vector-fill" style="width:43%;background:linear-gradient(90deg,var(--muted2),var(--muted));"></div></div>
+            <div class="vector-value" style="color:var(--muted2);">43%</div>
+          </div>
+
+          <div class="vibe-row">
+            <div class="vibe-row-label">Your vibe tags</div>
+            <span class="vibe-tag v1">🎨 Creative</span>
+            <span class="vibe-tag v2">🌍 Explorer</span>
+            <span class="vibe-tag v3">🧠 Deep Thinker</span>
+            <span class="vibe-tag v4">💚 Empathic</span>
+            <span class="vibe-tag v5">✨ Authentic</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Preference Drift ── -->
+      <div class="section-block" id="section-drift">
+        <div class="section-label">Trend Report</div>
+        <div class="section-title">Preference Drift</div>
+        <div class="section-sub">How your ideal partner has evolved over time</div>
+
+        <div class="g-card" style="padding:20px;">
+
+          <div class="drift-row">
+            <div class="drift-label">Age Preference</div>
+            <div class="drift-bars">
+              <div class="drift-bar-wrap">
+                <div class="drift-bar-tag">Before</div>
+                <div class="drift-bar-track"><div class="drift-bar-fill-before" style="width:38%;"></div></div>
+                <div class="drift-value">25–30</div>
+              </div>
+              <div class="drift-bar-wrap">
+                <div class="drift-bar-tag">Now</div>
+                <div class="drift-bar-track"><div class="drift-bar-fill-after" style="width:58%;"></div></div>
+                <div class="drift-value">26–34</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="drift-row">
+            <div class="drift-label">Distance</div>
+            <div class="drift-bars">
+              <div class="drift-bar-wrap">
+                <div class="drift-bar-tag">Before</div>
+                <div class="drift-bar-track"><div class="drift-bar-fill-before" style="width:20%;"></div></div>
+                <div class="drift-value">5 km</div>
+              </div>
+              <div class="drift-bar-wrap">
+                <div class="drift-bar-tag">Now</div>
+                <div class="drift-bar-track"><div class="drift-bar-fill-after" style="width:65%;"></div></div>
+                <div class="drift-value">25 km</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="drift-row">
+            <div class="drift-label">Activity Level</div>
+            <div class="drift-bars">
+              <div class="drift-bar-wrap">
+                <div class="drift-bar-tag">Before</div>
+                <div class="drift-bar-track"><div class="drift-bar-fill-before" style="width:30%;"></div></div>
+                <div class="drift-value">Casual</div>
+              </div>
+              <div class="drift-bar-wrap">
+                <div class="drift-bar-tag">Now</div>
+                <div class="drift-bar-track"><div class="drift-bar-fill-after" style="width:75%;background:linear-gradient(90deg,var(--accent),var(--cyan));"></div></div>
+                <div class="drift-value">Active</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="drift-row">
+            <div class="drift-label">Communication</div>
+            <div class="drift-bars">
+              <div class="drift-bar-wrap">
+                <div class="drift-bar-tag">Before</div>
+                <div class="drift-bar-track"><div class="drift-bar-fill-before" style="width:45%;"></div></div>
+                <div class="drift-value">Texter</div>
+              </div>
+              <div class="drift-bar-wrap">
+                <div class="drift-bar-tag">Now</div>
+                <div class="drift-bar-track"><div class="drift-bar-fill-after" style="width:80%;background:linear-gradient(90deg,var(--pink),var(--accent2));"></div></div>
+                <div class="drift-value">Caller</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="drift-insight-box">
+            <strong>AI Observation:</strong> Your preferences are maturing — you're prioritizing emotional depth over surface-level attributes. This is a strong signal of dating readiness.
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── Behavioral Pattern Reveals ── -->
+      <div class="section-block" id="section-behavior">
+        <div class="section-label">Pattern Analysis</div>
+        <div class="section-title">Behavioral Pattern Reveals</div>
+        <div class="section-sub">AURA BRAIN™ has identified key patterns in your dating behaviour</div>
+
+        <div class="behavioral-grid">
+
+          <div class="ai-insight-card">
+            <div class="insight-emoji">🕐</div>
+            <div class="ai-insight-label">Peak Receptivity</div>
+            <div class="ai-insight-text">You're <strong>3× more receptive</strong> to matches on Tuesday &amp; Thursday evenings 7–9 PM. That's your golden window.</div>
+          </div>
+
+          <div class="ai-insight-card">
+            <div class="insight-emoji">💬</div>
+            <div class="ai-insight-label">Conversation Starter</div>
+            <div class="ai-insight-text">Conversations you <strong>initiate with a question</strong> have 67% higher response rates than openers without one.</div>
+          </div>
+
+          <div class="ai-insight-card">
+            <div class="insight-emoji">📸</div>
+            <div class="ai-insight-label">Photo Impact</div>
+            <div class="ai-insight-text">Your profile views <strong>spike 40%</strong> in the 48 hours after you update your main photo. Refresh it regularly.</div>
+          </div>
+
+          <div class="ai-insight-card">
+            <div class="insight-emoji">🔄</div>
+            <div class="ai-insight-label">Second Chances</div>
+            <div class="ai-insight-text">You've <strong>re-visited 12 "skipped" profiles</strong> this month. The Second Chance feature was built for you — try it!</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── Counterfactual Insights ── -->
+      <div class="section-block" id="section-why">
+        <div class="section-label">What-If Scenarios</div>
+        <div class="section-title">Change X, See Different Matches</div>
+        <div class="section-sub">Small tweaks, significantly more high-compatibility profiles</div>
+
+        <div class="cf-card">
+          <div class="cf-icon">📍</div>
+          <div class="cf-text">If you extended your distance to <strong>30 km</strong>, <strong>18 new high-compatibility profiles</strong> would appear — all within driving distance.</div>
+          <button class="btn btn-ghost btn-sm" style="white-space:nowrap;flex-shrink:0;">Explore</button>
+        </div>
+
+        <div class="cf-card">
+          <div class="cf-icon">🏕️</div>
+          <div class="cf-text">If you added <strong>"hiking"</strong> to your interests, <strong>23 more outdoor-enthusiast matches</strong> would rank in your top results.</div>
+          <button class="btn btn-ghost btn-sm" style="white-space:nowrap;flex-shrink:0;">Add Interest</button>
+        </div>
+
+        <div class="cf-card" style="margin-bottom:0;">
+          <div class="cf-icon">🤳</div>
+          <div class="cf-text">If you <strong>updated your main photo</strong>, we estimate a <strong>35% increase in profile views</strong> this week alone.</div>
+          <button class="btn btn-primary btn-sm" style="white-space:nowrap;flex-shrink:0;">Update Photo</button>
+        </div>
+      </div>
+
+    </div><!-- /panel-center -->
+
+    <!-- ── RIGHT PANEL ────────────────────────────────────── -->
+    <div class="panel-right">
+
+      <!-- Chemistry Predictions -->
+      <div class="g-card" style="padding:16px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:3px;">🔮 Chemistry Predictions</div>
+        <div style="font-size:11px;color:var(--muted2);margin-bottom:14px;">Your top predicted high-chemistry matches</div>
+
+        <div class="pred-row">
+          <div class="pred-av">
+            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="photo-avatar" loading="lazy" alt="Sofia">
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;">Sofia M., 28</div>
+            <div class="pred-pct">97%</div>
+            <div class="pred-why">Deep emotional compatibility, shared creative values</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" style="padding:4px 10px;font-size:11px;">View</button>
+        </div>
+
+        <div class="pred-row">
+          <div class="pred-av">
+            <img src="https://randomuser.me/api/portraits/women/5.jpg" class="photo-avatar" loading="lazy" alt="Maya">
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;">Maya R., 26</div>
+            <div class="pred-pct" style="color:var(--pink);">94%</div>
+            <div class="pred-why">Communication styles perfectly complementary</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" style="padding:4px 10px;font-size:11px;">View</button>
+        </div>
+
+        <div class="pred-row">
+          <div class="pred-av">
+            <img src="https://randomuser.me/api/portraits/women/9.jpg" class="photo-avatar" loading="lazy" alt="Zoe">
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;">Zoe K., 27</div>
+            <div class="pred-pct" style="color:var(--cyan);">91%</div>
+            <div class="pred-why">Shared adventure spirit, aligned life goals</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" style="padding:4px 10px;font-size:11px;">View</button>
+        </div>
+      </div>
+
+      <!-- Love Language Detection -->
+      <div class="g-card" style="padding:16px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:3px;">💗 Love Language Detection</div>
+        <div style="font-size:11px;color:var(--muted2);margin-bottom:14px;">Detected from your messaging patterns</div>
+
+        <div class="ll-row">
+          <div class="ll-label">Words of Affirmation</div>
+          <div class="ll-bar-track"><div class="ll-bar-fill" style="width:35%;"></div></div>
+          <div class="ll-pct">35%</div>
+        </div>
+        <div class="ll-row">
+          <div class="ll-label">Quality Time</div>
+          <div class="ll-bar-track"><div class="ll-bar-fill" style="width:28%;background:linear-gradient(90deg,var(--accent2),var(--cyan));"></div></div>
+          <div class="ll-pct">28%</div>
+        </div>
+        <div class="ll-row">
+          <div class="ll-label">Acts of Service</div>
+          <div class="ll-bar-track"><div class="ll-bar-fill" style="width:20%;background:linear-gradient(90deg,var(--cyan),var(--green));"></div></div>
+          <div class="ll-pct">20%</div>
+        </div>
+        <div class="ll-row">
+          <div class="ll-label">Physical Touch</div>
+          <div class="ll-bar-track"><div class="ll-bar-fill" style="width:12%;background:linear-gradient(90deg,var(--gold),var(--pink));"></div></div>
+          <div class="ll-pct">12%</div>
+        </div>
+        <div class="ll-row" style="margin-bottom:0;">
+          <div class="ll-label">Gifts</div>
+          <div class="ll-bar-track"><div class="ll-bar-fill" style="width:5%;background:linear-gradient(90deg,var(--muted2),var(--muted));"></div></div>
+          <div class="ll-pct" style="color:var(--muted);">5%</div>
+        </div>
+      </div>
+
+      <!-- Attachment Style -->
+      <div class="g-card" style="padding:16px;margin-bottom:14px;border-color:rgba(var(--accent-rgb),.25);">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px;">🧬 Attachment Style</div>
+        <div class="attachment-pill">🔒 Secure-Leaning Anxious</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.55;margin-bottom:14px;">
+          You generally form healthy bonds but occasionally seek reassurance in early dating stages. With the right partner, you thrive.
+        </div>
+        <button class="btn btn-ghost btn-sm w-100">Take Full Quiz →</button>
+      </div>
+
+      <div id="theme-switcher"></div>
+    </div><!-- /panel-right -->
+
+  </main>
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personality Quiz – AURA AI Dating</title>
+  <meta name="description" content="Discover your personality profile and let AURA BRAIN find deeply compatible matches." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    /* ── QUIZ LAYOUT ──────────────────────────────────── */
+    body { overflow-x: hidden; }
+
+    .quiz-shell {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      z-index: 1;
+    }
+
+    /* ── TOP NAV BAR ──────────────────────────────────── */
+    .quiz-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      background: rgba(10,10,15,.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .quiz-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent2), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .quiz-progress-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .quiz-progress-label {
+      font-size: 11px;
+      color: var(--muted2);
+      font-weight: 600;
+      text-align: center;
+    }
+    .quiz-progress-bar {
+      height: 6px;
+      background: var(--card-c);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--pink));
+      border-radius: 99px;
+      transition: width .5s cubic-bezier(.4, 0, .2, 1);
+      width: 0%;
+    }
+    .quiz-skip-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted2);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: all .2s;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .quiz-skip-btn:hover { border-color: var(--border2); color: var(--text); }
+
+    /* ── QUIZ CONTENT ─────────────────────────────────── */
+    .quiz-content {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 24px 120px;
+    }
+
+    .quiz-inner {
+      width: 100%;
+      max-width: 680px;
+    }
+
+    /* ── SECTION SLIDES ───────────────────────────────── */
+    .quiz-section {
+      display: none;
+    }
+    .quiz-section.active {
+      display: block;
+      animation: quizSlideIn .35s cubic-bezier(.4, 0, .2, 1) both;
+    }
+    .quiz-section.exit-left {
+      animation: quizSlideOut .3s cubic-bezier(.4, 0, .2, 1) both;
+    }
+    @keyframes quizSlideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes quizSlideOut {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(-30px); }
+    }
+
+    .quiz-section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent3);
+      background: rgba(var(--accent-rgb),.12);
+      border: 1px solid rgba(var(--accent-rgb),.25);
+      padding: 4px 12px;
+      border-radius: 99px;
+      margin-bottom: 16px;
+    }
+    .quiz-heading {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.15;
+    }
+    .quiz-subtitle {
+      font-size: 15px;
+      color: var(--muted2);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* ── TRAIT SLIDER QUESTION ────────────────────────── */
+    .trait-question {
+      padding: 20px 22px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .trait-question.answered {
+      border-color: rgba(var(--accent-rgb),.3);
+      background: rgba(var(--accent-rgb),.04);
+    }
+    .trait-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .trait-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent3);
+      text-transform: uppercase;
+      letter-spacing: .7px;
+    }
+    .trait-score-badge {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted2);
+      min-width: 60px;
+      text-align: right;
+      transition: color .2s;
+    }
+    .trait-question.answered .trait-score-badge { color: var(--accent2); }
+    .trait-q-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.45;
+    }
+    .trait-bar-wrap {
+      height: 4px;
+      background: var(--card-c);
+      border-radius: 99px;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .trait-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 99px;
+      width: 0%;
+      transition: width .3s cubic-bezier(.4, 0, .2, 1);
+    }
+    .trait-slider-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .trait-slider-row input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      flex: 1;
+      height: 6px;
+      background: var(--card-c);
+      border-radius: 99px;
+      outline: none;
+      cursor: pointer;
+    }
+    .trait-slider-row input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent2);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.3), var(--glow3);
+      cursor: pointer;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .trait-slider-row input[type="range"]:hover::-webkit-slider-thumb,
+    .trait-slider-row input[type="range"]:focus::-webkit-slider-thumb {
+      box-shadow: 0 0 0 6px rgba(var(--accent-rgb),.3), var(--glow3);
+      transform: scale(1.1);
+    }
+    .trait-slider-row input[type="range"]::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent2);
+      border: 2px solid var(--bg);
+      cursor: pointer;
+    }
+    .trait-scale-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2px;
+    }
+    .trait-scale-label {
+      font-size: 11px;
+      color: var(--muted);
+      max-width: 38%;
+      line-height: 1.4;
+    }
+    .trait-scale-label.right { text-align: right; }
+
+    /* ── STYLE SELECT CARDS ───────────────────────────── */
+    .style-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .style-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 18px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+      position: relative;
+    }
+    .style-card:hover {
+      border-color: var(--border2);
+      background: var(--card-b);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .style-card.selected {
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb),.1);
+      box-shadow: 0 0 0 2px rgba(var(--accent-rgb),.2), var(--glow);
+    }
+    .style-card input { display: none; }
+    .style-card-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+      width: 36px;
+      text-align: center;
+      margin-top: 2px;
+    }
+    .style-card-body { flex: 1; }
+    .style-card-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .style-card.selected .style-card-name { color: var(--accent3); }
+    .style-card-desc {
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.5;
+    }
+    .style-card-traits {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .style-trait-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: var(--card-b);
+      border: 1px solid var(--border);
+      color: var(--muted2);
+    }
+    .style-card.selected .style-trait-tag {
+      background: rgba(var(--accent-rgb),.1);
+      border-color: rgba(var(--accent-rgb),.2);
+      color: var(--accent3);
+    }
+    .style-select-check {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: transparent;
+      transition: all .2s;
+      flex-shrink: 0;
+    }
+    .style-card.selected .style-select-check {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* ── LOVE LANGUAGE CARDS (multi-select 2) ─────────── */
+    .ll-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 18px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+      position: relative;
+    }
+    .ll-card:hover {
+      border-color: var(--border2);
+      background: var(--card-b);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .ll-card.primary-selected {
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb),.1);
+      box-shadow: 0 0 0 2px rgba(var(--accent-rgb),.2), var(--glow);
+    }
+    .ll-card.secondary-selected {
+      border-color: var(--pink);
+      background: rgba(var(--pink-rgb),.08);
+      box-shadow: 0 0 0 2px rgba(var(--pink-rgb),.15);
+    }
+    .ll-card input { display: none; }
+    .ll-badge {
+      position: absolute;
+      top: -8px;
+      left: 20px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 99px;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .ll-card.primary-selected .ll-badge {
+      opacity: 1;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+    }
+    .ll-card.secondary-selected .ll-badge {
+      opacity: 1;
+      background: linear-gradient(135deg, var(--pink), var(--accent2));
+      color: #fff;
+    }
+
+    /* ── COMMUNICATION / CONFLICT CARDS ───────────────── */
+    .comm-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .comm-card {
+      padding: 18px 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+      text-align: center;
+    }
+    .comm-card:hover {
+      border-color: var(--border2);
+      background: var(--card-b);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .comm-card.selected {
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb),.12);
+      box-shadow: 0 0 0 2px rgba(var(--accent-rgb),.2), var(--glow);
+    }
+    .comm-card input { display: none; }
+    .comm-card-icon { font-size: 28px; margin-bottom: 8px; }
+    .comm-card-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .comm-card.selected .comm-card-name { color: var(--accent3); }
+    .comm-card-desc {
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.5;
+    }
+
+    /* ── BOTTOM NAVIGATION ────────────────────────────── */
+    .quiz-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 90;
+      padding: 16px 24px;
+      background: rgba(10,10,15,.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .quiz-back-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted2);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .quiz-back-btn:hover { border-color: var(--border2); color: var(--text); }
+    .quiz-back-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .quiz-next-btn {
+      flex: 1;
+      max-width: 280px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 13px 32px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: all .25s;
+      box-shadow: var(--glow);
+    }
+    .quiz-next-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: var(--glow2);
+    }
+    .quiz-next-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .quiz-step-count {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    /* ── RESULTS PAGE ─────────────────────────────────── */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .result-card {
+      padding: 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--card);
+    }
+    .result-card-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 8px;
+    }
+    .result-card-value {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .result-card-sub {
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.4;
+    }
+
+    /* ── CSS RADAR / PENTAGON ─────────────────────────── */
+    .ocean-radar {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin: 0 auto 24px;
+    }
+    .ocean-radar-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ocean-pentagon {
+      width: 180px;
+      height: 180px;
+      position: relative;
+    }
+    /* Pentagon shape using clip-path */
+    .ocean-pentagon-bg {
+      position: absolute;
+      inset: 0;
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      background: rgba(var(--accent-rgb),.06);
+      border: 1px solid rgba(var(--accent-rgb),.15);
+    }
+    .ocean-pentagon-grid-1 {
+      position: absolute;
+      inset: 15%;
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      border: 1px solid rgba(var(--accent-rgb),.08);
+    }
+    .ocean-pentagon-grid-2 {
+      position: absolute;
+      inset: 30%;
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      border: 1px solid rgba(var(--accent-rgb),.08);
+    }
+    /* Data fill */
+    .ocean-pentagon-data {
+      position: absolute;
+      inset: 0;
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      background: linear-gradient(135deg, rgba(var(--accent-rgb),.35), rgba(var(--pink-rgb),.2));
+      transition: clip-path .5s cubic-bezier(.4,0,.2,1);
+    }
+    /* Trait axis labels */
+    .ocean-label {
+      position: absolute;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent3);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .ocean-label.top    { top: 0; left: 50%; transform: translateX(-50%); }
+    .ocean-label.right  { top: 42%; right: -28px; }
+    .ocean-label.br     { bottom: -4px; right: 0; }
+    .ocean-label.bl     { bottom: -4px; left: 0; }
+    .ocean-label.left   { top: 42%; left: -30px; }
+
+    /* ── TRAIT BAR RESULT ─────────────────────────────── */
+    .trait-result-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .trait-result-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text2);
+      width: 130px;
+      flex-shrink: 0;
+    }
+    .trait-result-bar-wrap {
+      flex: 1;
+      height: 8px;
+      background: var(--card-c);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .trait-result-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 99px;
+      width: 0%;
+      transition: width .6s cubic-bezier(.4, 0, .2, 1);
+    }
+    .trait-result-val {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent3);
+      width: 32px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ── ATTACHMENT COLOR DOTS ───────────────────────── */
+    .attachment-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 768px) {
+      .quiz-content { padding: 24px 16px 120px; }
+      .comm-grid { grid-template-columns: 1fr; }
+      .results-grid { grid-template-columns: 1fr; }
+      .quiz-topbar { padding: 12px 16px; }
+      .quiz-bottom-nav { padding: 12px 16px; }
+    }
+    @media (max-width: 480px) {
+      .quiz-heading { font-size: 1.4rem; }
+      .style-card { padding: 14px 14px; }
+      .style-card-icon { font-size: 22px; width: 28px; }
+    }
+  </style>
+</head>
+<body data-page="personality-quiz">
+  <div class="amb-bg"><div class="orb3"></div></div>
+
+  <div class="quiz-shell">
+
+    <!-- ── TOP NAV BAR ────────────────────────────────── -->
+    <header class="quiz-topbar">
+      <a href="index.html" class="quiz-logo" aria-label="AURA Home">AURA</a>
+      <div class="quiz-progress-wrap">
+        <div class="quiz-progress-label" id="progress-label">Section 1 of 5 — Personality</div>
+        <div class="quiz-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Quiz progress">
+          <div class="quiz-progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+      <button class="quiz-skip-btn" id="skip-btn">Skip for now</button>
+    </header>
+
+    <!-- ── QUIZ CONTENT ───────────────────────────────── -->
+    <div class="quiz-content">
+      <div class="quiz-inner">
+
+        <!-- ═══ SECTION 1: BIG 5 OCEAN ═══════════════════ -->
+        <div class="quiz-section active" id="section-1" data-section="1">
+          <div class="quiz-section-label">🧠 Section 1 of 5</div>
+          <h1 class="quiz-heading">Discover Your Personality</h1>
+          <p class="quiz-subtitle">Answer honestly — there are no right or wrong answers. This helps AURA find truly compatible matches.</p>
+
+          <!-- Openness -->
+          <div class="trait-question" id="trait-openness">
+            <div class="trait-header">
+              <span class="trait-name">Openness</span>
+              <span class="trait-score-badge" id="score-openness">Not answered</span>
+            </div>
+            <div class="trait-q-text">"I enjoy exploring new ideas and experiences."</div>
+            <div class="trait-bar-wrap">
+              <div class="trait-bar-fill" id="bar-openness"></div>
+            </div>
+            <div class="trait-slider-row">
+              <input type="range" id="slider-openness" min="1" max="5" value="3" step="1"
+                     data-trait="openness" aria-label="Openness to experience rating">
+            </div>
+            <div class="trait-scale-labels">
+              <span class="trait-scale-label">I prefer routine</span>
+              <span class="trait-scale-label right">I crave novelty</span>
+            </div>
+          </div>
+
+          <!-- Conscientiousness -->
+          <div class="trait-question" id="trait-conscientiousness">
+            <div class="trait-header">
+              <span class="trait-name">Conscientiousness</span>
+              <span class="trait-score-badge" id="score-conscientiousness">Not answered</span>
+            </div>
+            <div class="trait-q-text">"I like to plan things and follow through reliably."</div>
+            <div class="trait-bar-wrap">
+              <div class="trait-bar-fill" id="bar-conscientiousness"></div>
+            </div>
+            <div class="trait-slider-row">
+              <input type="range" id="slider-conscientiousness" min="1" max="5" value="3" step="1"
+                     data-trait="conscientiousness" aria-label="Conscientiousness rating">
+            </div>
+            <div class="trait-scale-labels">
+              <span class="trait-scale-label">Spontaneous</span>
+              <span class="trait-scale-label right">Highly organized</span>
+            </div>
+          </div>
+
+          <!-- Extraversion -->
+          <div class="trait-question" id="trait-extraversion">
+            <div class="trait-header">
+              <span class="trait-name">Extraversion</span>
+              <span class="trait-score-badge" id="score-extraversion">Not answered</span>
+            </div>
+            <div class="trait-q-text">"I feel energized by socializing with people."</div>
+            <div class="trait-bar-wrap">
+              <div class="trait-bar-fill" id="bar-extraversion"></div>
+            </div>
+            <div class="trait-slider-row">
+              <input type="range" id="slider-extraversion" min="1" max="5" value="3" step="1"
+                     data-trait="extraversion" aria-label="Extraversion rating">
+            </div>
+            <div class="trait-scale-labels">
+              <span class="trait-scale-label">Introvert — I recharge alone</span>
+              <span class="trait-scale-label right">Extrovert — I thrive with people</span>
+            </div>
+          </div>
+
+          <!-- Agreeableness -->
+          <div class="trait-question" id="trait-agreeableness">
+            <div class="trait-header">
+              <span class="trait-name">Agreeableness</span>
+              <span class="trait-score-badge" id="score-agreeableness">Not answered</span>
+            </div>
+            <div class="trait-q-text">"I prioritize harmony and care deeply about others' feelings."</div>
+            <div class="trait-bar-wrap">
+              <div class="trait-bar-fill" id="bar-agreeableness"></div>
+            </div>
+            <div class="trait-slider-row">
+              <input type="range" id="slider-agreeableness" min="1" max="5" value="3" step="1"
+                     data-trait="agreeableness" aria-label="Agreeableness rating">
+            </div>
+            <div class="trait-scale-labels">
+              <span class="trait-scale-label">Direct &amp; assertive</span>
+              <span class="trait-scale-label right">Cooperative &amp; empathetic</span>
+            </div>
+          </div>
+
+          <!-- Neuroticism -->
+          <div class="trait-question" id="trait-neuroticism">
+            <div class="trait-header">
+              <span class="trait-name">Emotional Stability</span>
+              <span class="trait-score-badge" id="score-neuroticism">Not answered</span>
+            </div>
+            <div class="trait-q-text">"I tend to experience stress and emotional ups and downs frequently."</div>
+            <div class="trait-bar-wrap">
+              <div class="trait-bar-fill" id="bar-neuroticism"></div>
+            </div>
+            <div class="trait-slider-row">
+              <input type="range" id="slider-neuroticism" min="1" max="5" value="3" step="1"
+                     data-trait="neuroticism" aria-label="Emotional stability rating">
+            </div>
+            <div class="trait-scale-labels">
+              <span class="trait-scale-label">Very stable &amp; calm</span>
+              <span class="trait-scale-label right">Sensitive &amp; emotionally reactive</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ SECTION 2: ATTACHMENT STYLE ══════════════ -->
+        <div class="quiz-section" id="section-2" data-section="2">
+          <div class="quiz-section-label">💕 Section 2 of 5</div>
+          <h2 class="quiz-heading">How do you connect in relationships?</h2>
+          <p class="quiz-subtitle">Select the attachment style that resonates most with how you show up in relationships.</p>
+
+          <div class="style-cards" role="radiogroup" aria-label="Attachment style">
+            <label class="style-card" data-value="SECURE">
+              <input type="radio" name="attachment" value="SECURE">
+              <div class="style-card-icon">💚</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Secure</div>
+                <div class="style-card-desc">I'm comfortable with closeness and independence equally. I communicate needs openly and trust partners.</div>
+                <div class="style-card-traits">
+                  <span class="style-trait-tag">Trusts easily</span>
+                  <span class="style-trait-tag">Healthy boundaries</span>
+                  <span class="style-trait-tag">Handles conflict well</span>
+                </div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+
+            <label class="style-card" data-value="ANXIOUS">
+              <input type="radio" name="attachment" value="ANXIOUS">
+              <div class="style-card-icon">💛</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Anxious</div>
+                <div class="style-card-desc">I crave closeness but worry about being abandoned. I may overthink messages and need reassurance.</div>
+                <div class="style-card-traits">
+                  <span class="style-trait-tag">Values deep connection</span>
+                  <span class="style-trait-tag">Needs communication</span>
+                  <span class="style-trait-tag">Fears rejection</span>
+                </div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+
+            <label class="style-card" data-value="AVOIDANT">
+              <input type="radio" name="attachment" value="AVOIDANT">
+              <div class="style-card-icon">🔵</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Avoidant</div>
+                <div class="style-card-desc">I value independence and can feel overwhelmed by emotional demands. I pull back when it feels too intense.</div>
+                <div class="style-card-traits">
+                  <span class="style-trait-tag">Highly self-sufficient</span>
+                  <span class="style-trait-tag">Needs space</span>
+                  <span class="style-trait-tag">Struggles with vulnerability</span>
+                </div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+
+            <label class="style-card" data-value="DISORGANIZED">
+              <input type="radio" name="attachment" value="DISORGANIZED">
+              <div class="style-card-icon">🔴</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Disorganized</div>
+                <div class="style-card-desc">I want closeness but it also feels frightening. My patterns in relationships can feel confusing even to me.</div>
+                <div class="style-card-traits">
+                  <span class="style-trait-tag">Complex attachment</span>
+                  <span class="style-trait-tag">Working on healing</span>
+                  <span class="style-trait-tag">Self-aware &amp; growth-focused</span>
+                </div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+          </div>
+
+          <div style="margin-top:16px;padding:12px 16px;border-radius:var(--radius3);background:rgba(var(--accent-rgb),.06);border:1px solid var(--border2);font-size:12px;color:var(--muted2);line-height:1.6;">
+            🔒 This is for matching and self-awareness only. All information is private and never shown to other users.
+          </div>
+        </div>
+
+        <!-- ═══ SECTION 3: LOVE LANGUAGES ════════════════ -->
+        <div class="quiz-section" id="section-3" data-section="3">
+          <div class="quiz-section-label">💝 Section 3 of 5</div>
+          <h2 class="quiz-heading">How do you give and receive love?</h2>
+          <p class="quiz-subtitle">Select your top <strong>2 love languages</strong> — how you prefer to receive love from a partner. Your first pick is Primary, your second is Secondary.</p>
+
+          <div class="style-cards" id="ll-cards" role="group" aria-label="Love language preferences">
+            <label class="ll-card" data-value="WORDS_OF_AFFIRMATION">
+              <input type="checkbox" name="love_lang" value="WORDS_OF_AFFIRMATION">
+              <div class="ll-badge" id="ll-badge-WORDS_OF_AFFIRMATION">Primary</div>
+              <div class="style-card-icon">💬</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Words of Affirmation</div>
+                <div class="style-card-desc">Verbal expressions: compliments, "I love you", encouragement, appreciation</div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+
+            <label class="ll-card" data-value="ACTS_OF_SERVICE">
+              <input type="checkbox" name="love_lang" value="ACTS_OF_SERVICE">
+              <div class="ll-badge" id="ll-badge-ACTS_OF_SERVICE">Primary</div>
+              <div class="style-card-icon">🛠️</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Acts of Service</div>
+                <div class="style-card-desc">Helpful actions: cooking for you, helping with tasks, remembering what you need</div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+
+            <label class="ll-card" data-value="RECEIVING_GIFTS">
+              <input type="checkbox" name="love_lang" value="RECEIVING_GIFTS">
+              <div class="ll-badge" id="ll-badge-RECEIVING_GIFTS">Primary</div>
+              <div class="style-card-icon">🎁</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Receiving Gifts</div>
+                <div class="style-card-desc">Thoughtful tokens: not about value, but the thought behind the gesture</div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+
+            <label class="ll-card" data-value="QUALITY_TIME">
+              <input type="checkbox" name="love_lang" value="QUALITY_TIME">
+              <div class="ll-badge" id="ll-badge-QUALITY_TIME">Primary</div>
+              <div class="style-card-icon">⏰</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Quality Time</div>
+                <div class="style-card-desc">Undivided attention: being present, making plans, phone-free time together</div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+
+            <label class="ll-card" data-value="PHYSICAL_TOUCH">
+              <input type="checkbox" name="love_lang" value="PHYSICAL_TOUCH">
+              <div class="ll-badge" id="ll-badge-PHYSICAL_TOUCH">Primary</div>
+              <div class="style-card-icon">🤗</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Physical Touch</div>
+                <div class="style-card-desc">Affectionate contact: hugs, holding hands, physical presence and comfort</div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+          </div>
+        </div>
+
+        <!-- ═══ SECTION 4: COMMUNICATION STYLE ═══════════ -->
+        <div class="quiz-section" id="section-4" data-section="4">
+          <div class="quiz-section-label">🗣️ Section 4 of 5</div>
+          <h2 class="quiz-heading">How do you communicate?</h2>
+          <p class="quiz-subtitle">Select the style that best describes how you naturally communicate with a partner.</p>
+
+          <div class="comm-grid" role="radiogroup" aria-label="Communication style">
+            <label class="comm-card" data-value="DIRECT">
+              <input type="radio" name="comm_style" value="DIRECT">
+              <div class="comm-card-icon">🎯</div>
+              <div class="comm-card-name">Direct</div>
+              <div class="comm-card-desc">I say exactly what I mean. I value clarity over feelings-management.</div>
+            </label>
+
+            <label class="comm-card" data-value="EMPATHETIC">
+              <input type="radio" name="comm_style" value="EMPATHETIC">
+              <div class="comm-card-icon">❤️</div>
+              <div class="comm-card-name">Empathetic</div>
+              <div class="comm-card-desc">I tune into emotions first. I lead with warmth and read between the lines.</div>
+            </label>
+
+            <label class="comm-card" data-value="ANALYTICAL">
+              <input type="radio" name="comm_style" value="ANALYTICAL">
+              <div class="comm-card-icon">🔬</div>
+              <div class="comm-card-name">Analytical</div>
+              <div class="comm-card-desc">I process logically before emotionally. I need time to formulate responses.</div>
+            </label>
+
+            <label class="comm-card" data-value="EXPRESSIVE">
+              <input type="radio" name="comm_style" value="EXPRESSIVE">
+              <div class="comm-card-icon">🌟</div>
+              <div class="comm-card-name">Expressive</div>
+              <div class="comm-card-desc">I wear my heart on my sleeve. I communicate with energy and emotion.</div>
+            </label>
+          </div>
+        </div>
+
+        <!-- ═══ SECTION 5: CONFLICT RESOLUTION ═══════════ -->
+        <div class="quiz-section" id="section-5" data-section="5">
+          <div class="quiz-section-label">⚡ Section 5 of 5</div>
+          <h2 class="quiz-heading">When things get hard...</h2>
+          <p class="quiz-subtitle">How do you naturally approach conflict in close relationships?</p>
+
+          <div class="style-cards" role="radiogroup" aria-label="Conflict resolution style">
+            <label class="style-card" data-value="COLLABORATIVE">
+              <input type="radio" name="conflict_style" value="COLLABORATIVE">
+              <div class="style-card-icon">🤝</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Collaborative</div>
+                <div class="style-card-desc">I want to work through it together, both needs heard and respected.</div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+
+            <label class="style-card" data-value="COMPETITIVE">
+              <input type="radio" name="conflict_style" value="COMPETITIVE">
+              <div class="style-card-icon">💪</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Competitive</div>
+                <div class="style-card-desc">I have strong opinions and will advocate clearly for my position.</div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+
+            <label class="style-card" data-value="AVOIDING">
+              <input type="radio" name="conflict_style" value="AVOIDING">
+              <div class="style-card-icon">🌿</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Avoiding</div>
+                <div class="style-card-desc">I need space first. I come back when I've processed it.</div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+
+            <label class="style-card" data-value="ACCOMMODATING">
+              <input type="radio" name="conflict_style" value="ACCOMMODATING">
+              <div class="style-card-icon">🕊️</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Accommodating</div>
+                <div class="style-card-desc">Harmony matters most. I'll often compromise to keep the peace.</div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+
+            <label class="style-card" data-value="COMPROMISING">
+              <input type="radio" name="conflict_style" value="COMPROMISING">
+              <div class="style-card-icon">⚖️</div>
+              <div class="style-card-body">
+                <div class="style-card-name">Compromising</div>
+                <div class="style-card-desc">Meet in the middle — I value a quick resolution we both accept.</div>
+              </div>
+              <div class="style-select-check" aria-hidden="true">✓</div>
+            </label>
+          </div>
+        </div>
+
+        <!-- ═══ SECTION 6: RESULTS ════════════════════════ -->
+        <div class="quiz-section" id="section-results" data-section="results">
+          <div class="quiz-section-label">✨ Your Personality Profile</div>
+          <h2 class="quiz-heading">You're one of a kind</h2>
+          <p class="quiz-subtitle">AURA BRAIN™ will use this profile to find matches who truly resonate with who you are.</p>
+
+          <!-- OCEAN Radar -->
+          <div class="g-card" style="padding:24px;text-align:center;margin-bottom:20px;">
+            <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:16px;text-transform:uppercase;letter-spacing:.7px;">Big 5 OCEAN Profile</div>
+            <div class="ocean-radar">
+              <div class="ocean-radar-bg">
+                <div class="ocean-pentagon">
+                  <div class="ocean-pentagon-bg"></div>
+                  <div class="ocean-pentagon-grid-1"></div>
+                  <div class="ocean-pentagon-grid-2"></div>
+                  <div class="ocean-pentagon-data" id="ocean-data-shape"></div>
+                </div>
+              </div>
+              <span class="ocean-label top" id="label-O">O</span>
+              <span class="ocean-label right" id="label-C">C</span>
+              <span class="ocean-label br" id="label-E">E</span>
+              <span class="ocean-label bl" id="label-A">A</span>
+              <span class="ocean-label left" id="label-N">N</span>
+            </div>
+            <div style="max-width:380px;margin:0 auto;">
+              <div class="trait-result-row">
+                <span class="trait-result-label">Openness</span>
+                <div class="trait-result-bar-wrap"><div class="trait-result-bar-fill" id="result-bar-O"></div></div>
+                <span class="trait-result-val" id="result-val-O">—</span>
+              </div>
+              <div class="trait-result-row">
+                <span class="trait-result-label">Conscientiousness</span>
+                <div class="trait-result-bar-wrap"><div class="trait-result-bar-fill" id="result-bar-C"></div></div>
+                <span class="trait-result-val" id="result-val-C">—</span>
+              </div>
+              <div class="trait-result-row">
+                <span class="trait-result-label">Extraversion</span>
+                <div class="trait-result-bar-wrap"><div class="trait-result-bar-fill" id="result-bar-E"></div></div>
+                <span class="trait-result-val" id="result-val-E">—</span>
+              </div>
+              <div class="trait-result-row">
+                <span class="trait-result-label">Agreeableness</span>
+                <div class="trait-result-bar-wrap"><div class="trait-result-bar-fill" id="result-bar-A"></div></div>
+                <span class="trait-result-val" id="result-val-A">—</span>
+              </div>
+              <div class="trait-result-row">
+                <span class="trait-result-label">Emotional Stability</span>
+                <div class="trait-result-bar-wrap"><div class="trait-result-bar-fill" id="result-bar-N" style="background:linear-gradient(90deg,var(--pink),var(--accent2));"></div></div>
+                <span class="trait-result-val" id="result-val-N">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Style Results Grid -->
+          <div class="results-grid">
+            <div class="result-card" style="border-color:rgba(16,185,129,.2);background:rgba(16,185,129,.05);">
+              <div class="result-card-label">Attachment Style</div>
+              <div class="result-card-value" id="result-attachment">—</div>
+              <div class="result-card-sub" id="result-attachment-desc">Complete Section 2 to reveal</div>
+            </div>
+            <div class="result-card" style="border-color:rgba(var(--pink-rgb),.2);background:rgba(var(--pink-rgb),.04);">
+              <div class="result-card-label">Primary Love Language</div>
+              <div class="result-card-value" id="result-ll-primary">—</div>
+              <div class="result-card-sub" id="result-ll-secondary">Secondary: —</div>
+            </div>
+            <div class="result-card">
+              <div class="result-card-label">Communication Style</div>
+              <div class="result-card-value" id="result-comm">—</div>
+              <div class="result-card-sub" id="result-comm-desc">Complete Section 4 to reveal</div>
+            </div>
+            <div class="result-card">
+              <div class="result-card-label">Conflict Resolution</div>
+              <div class="result-card-value" id="result-conflict">—</div>
+              <div class="result-card-sub" id="result-conflict-desc">Complete Section 5 to reveal</div>
+            </div>
+          </div>
+
+          <!-- AURA note -->
+          <div style="padding:16px 20px;border-radius:var(--radius);background:rgba(var(--accent-rgb),.07);border:1px solid rgba(var(--accent-rgb),.2);margin-bottom:24px;font-size:13px;color:var(--muted2);line-height:1.6;text-align:center;">
+            🤖 Your personality profile feeds directly into <strong style="color:var(--accent3);">AURA BRAIN™</strong> to find deeply compatible matches based on psychological alignment — not just surface preferences.
+          </div>
+
+          <!-- CTA Buttons -->
+          <div style="display:flex;flex-direction:column;align-items:stretch;gap:12px;max-width:400px;margin:0 auto;">
+            <button class="btn btn-primary" style="padding:16px;font-size:16px;font-weight:700;" id="save-profile-btn">
+              ✨ Save to My Profile
+            </button>
+            <button class="btn btn-ghost" style="padding:14px;font-size:14px;" id="retake-btn">
+              ↺ Retake Quiz
+            </button>
+          </div>
+        </div>
+
+      </div><!-- end quiz-inner -->
+    </div><!-- end quiz-content -->
+
+    <!-- ── BOTTOM NAVIGATION ──────────────────────────── -->
+    <nav class="quiz-bottom-nav" aria-label="Quiz navigation">
+      <button class="quiz-back-btn" id="back-btn" disabled aria-label="Previous section">← Back</button>
+      <span class="quiz-step-count" id="step-count">1 / 5</span>
+      <button class="quiz-next-btn" id="next-btn" aria-label="Next section">Continue →</button>
+    </nav>
+
+  </div><!-- end quiz-shell -->
+
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // ── QUIZ STATE ─────────────────────────────────────
+    const TOTAL_SECTIONS = 5;
+    let currentSection = 1;
+
+    const traitValues = { openness: 3, conscientiousness: 3, extraversion: 3, agreeableness: 3, neuroticism: 3 };
+    const traitTouched = { openness: false, conscientiousness: false, extraversion: false, agreeableness: false, neuroticism: false };
+
+    const scoreLabels = ['—', 'Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'];
+
+    // ── TRAIT SLIDERS ──────────────────────────────────
+    const traits = ['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism'];
+    traits.forEach(function(trait) {
+      const slider = document.getElementById('slider-' + trait);
+      const bar    = document.getElementById('bar-' + trait);
+      const scoreEl= document.getElementById('score-' + trait);
+      const card   = document.getElementById('trait-' + trait);
+
+      function update() {
+        const val = parseInt(slider.value);
+        traitValues[trait] = val;
+        traitTouched[trait] = true;
+        const pct = ((val - 1) / 4) * 100;
+        bar.style.width = pct + '%';
+        scoreEl.textContent = scoreLabels[val];
+        card.classList.add('answered');
+        checkSection1Next();
+      }
+
+      slider.addEventListener('input', update);
+      slider.addEventListener('change', update);
+      // Initialize visual state
+      const initVal = parseInt(slider.value);
+      bar.style.width = ((initVal - 1) / 4) * 100 + '%';
+    });
+
+    function checkSection1Next() {
+      const allTouched = Object.values(traitTouched).every(Boolean);
+      if (currentSection === 1) {
+        document.getElementById('next-btn').disabled = !allTouched;
+      }
+    }
+    // Section 1 starts with next disabled until all 5 answered
+    document.getElementById('next-btn').disabled = true;
+
+    // ── ATTACHMENT STYLE CARDS ─────────────────────────
+    document.querySelectorAll('#section-2 .style-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        document.querySelectorAll('#section-2 .style-card').forEach(function(c) { c.classList.remove('selected'); });
+        this.classList.add('selected');
+        const inp = this.querySelector('input');
+        if (inp) inp.checked = true;
+        if (currentSection === 2) document.getElementById('next-btn').disabled = false;
+      });
+    });
+
+    // ── LOVE LANGUAGE CARDS (select max 2) ────────────
+    let llSelected = [];
+    const llCards = document.querySelectorAll('.ll-card');
+    llCards.forEach(function(card) {
+      card.addEventListener('click', function() {
+        const val = this.dataset.value;
+        const inp = this.querySelector('input');
+        const badge = document.getElementById('ll-badge-' + val);
+
+        if (this.classList.contains('primary-selected') || this.classList.contains('secondary-selected')) {
+          // Deselect
+          this.classList.remove('primary-selected', 'secondary-selected');
+          inp.checked = false;
+          llSelected = llSelected.filter(function(v) { return v !== val; });
+        } else {
+          if (llSelected.length >= 2) return; // max 2
+          llSelected.push(val);
+          if (llSelected.length === 1) {
+            this.classList.add('primary-selected');
+            badge.textContent = 'Primary';
+          } else {
+            this.classList.add('secondary-selected');
+            badge.textContent = 'Secondary';
+          }
+          inp.checked = true;
+        }
+        // Update badge text for remaining selection
+        if (llSelected.length === 1) {
+          llCards.forEach(function(c) {
+            if (c.classList.contains('secondary-selected')) {
+              c.classList.remove('secondary-selected');
+              c.classList.add('primary-selected');
+              document.getElementById('ll-badge-' + c.dataset.value).textContent = 'Primary';
+            }
+          });
+        }
+        if (currentSection === 3) document.getElementById('next-btn').disabled = llSelected.length < 1;
+      });
+    });
+
+    // ── COMMUNICATION STYLE CARDS ─────────────────────
+    document.querySelectorAll('#section-4 .comm-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        document.querySelectorAll('#section-4 .comm-card').forEach(function(c) { c.classList.remove('selected'); });
+        this.classList.add('selected');
+        const inp = this.querySelector('input');
+        if (inp) inp.checked = true;
+        if (currentSection === 4) document.getElementById('next-btn').disabled = false;
+      });
+    });
+
+    // ── CONFLICT STYLE CARDS ───────────────────────────
+    document.querySelectorAll('#section-5 .style-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        document.querySelectorAll('#section-5 .style-card').forEach(function(c) { c.classList.remove('selected'); });
+        this.classList.add('selected');
+        const inp = this.querySelector('input');
+        if (inp) inp.checked = true;
+        if (currentSection === 5) document.getElementById('next-btn').disabled = false;
+      });
+    });
+
+    // ── SECTION NAVIGATION ────────────────────────────
+    const progressFill  = document.getElementById('progress-fill');
+    const progressLabel = document.getElementById('progress-label');
+    const stepCount     = document.getElementById('step-count');
+    const nextBtn       = document.getElementById('next-btn');
+    const backBtn       = document.getElementById('back-btn');
+    const progressBar   = document.querySelector('.quiz-progress-bar');
+
+    const sectionLabels = [
+      'Section 1 of 5 — Personality (Big 5)',
+      'Section 2 of 5 — Attachment Style',
+      'Section 3 of 5 — Love Languages',
+      'Section 4 of 5 — Communication Style',
+      'Section 5 of 5 — Conflict Resolution',
+      'Your Complete Profile'
+    ];
+
+    function getProgress(sec) {
+      if (sec === 'results') return 100;
+      return ((sec - 1) / TOTAL_SECTIONS) * 100;
+    }
+
+    function getSectionNextState(sec) {
+      if (sec === 1) return !Object.values(traitTouched).every(Boolean);
+      if (sec === 2) return !document.querySelector('#section-2 .style-card.selected');
+      if (sec === 3) return llSelected.length < 1;
+      if (sec === 4) return !document.querySelector('#section-4 .comm-card.selected');
+      if (sec === 5) return !document.querySelector('#section-5 .style-card.selected');
+      return false;
+    }
+
+    function showSection(sec) {
+      // Hide all
+      document.querySelectorAll('.quiz-section').forEach(function(s) { s.classList.remove('active'); });
+
+      let sectionEl;
+      if (sec === 'results') {
+        sectionEl = document.getElementById('section-results');
+        buildResults();
+        nextBtn.textContent = '✅ Done';
+        nextBtn.disabled = false;
+        backBtn.disabled = false;
+        stepCount.textContent = '✓ Complete';
+        progressFill.style.width = '100%';
+        progressLabel.textContent = sectionLabels[5];
+        progressBar.setAttribute('aria-valuenow', '100');
+      } else {
+        sectionEl = document.getElementById('section-' + sec);
+        const pct = Math.round(((sec - 1) / TOTAL_SECTIONS) * 100);
+        progressFill.style.width = pct + '%';
+        progressBar.setAttribute('aria-valuenow', pct);
+        progressLabel.textContent = sectionLabels[sec - 1];
+        stepCount.textContent = sec + ' / ' + TOTAL_SECTIONS;
+        backBtn.disabled = sec === 1;
+        nextBtn.disabled = getSectionNextState(sec);
+        nextBtn.textContent = sec === TOTAL_SECTIONS ? 'See My Results →' : 'Continue →';
+      }
+
+      if (sectionEl) sectionEl.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    nextBtn.addEventListener('click', function() {
+      if (currentSection <= TOTAL_SECTIONS) {
+        if (currentSection === TOTAL_SECTIONS) {
+          currentSection = 'results';
+        } else {
+          currentSection++;
+        }
+        showSection(currentSection);
+      } else if (currentSection === 'results') {
+        window.location.href = 'discover.html';
+      }
+    });
+
+    backBtn.addEventListener('click', function() {
+      if (currentSection === 'results') {
+        currentSection = TOTAL_SECTIONS;
+      } else if (currentSection > 1) {
+        currentSection--;
+      }
+      showSection(currentSection);
+    });
+
+    document.getElementById('skip-btn').addEventListener('click', function() {
+      if (confirm('Skip the personality quiz? You can complete it later from your profile.')) {
+        window.location.href = 'discover.html';
+      }
+    });
+
+    // ── RESULTS BUILDER ────────────────────────────────
+    const attachmentMeta = {
+      SECURE:       { label: 'Secure', desc: 'Comfortable with closeness and independence equally', color: 'var(--green)' },
+      ANXIOUS:      { label: 'Anxious', desc: 'Values deep connection, needs consistent reassurance', color: 'var(--gold)' },
+      AVOIDANT:     { label: 'Avoidant', desc: 'Highly self-sufficient, values independence and space', color: 'var(--cyan)' },
+      DISORGANIZED: { label: 'Disorganized', desc: 'Complex attachment, self-aware and growth-focused', color: 'var(--red)' }
+    };
+    const llMeta = {
+      WORDS_OF_AFFIRMATION: 'Words of Affirmation',
+      ACTS_OF_SERVICE:      'Acts of Service',
+      RECEIVING_GIFTS:      'Receiving Gifts',
+      QUALITY_TIME:         'Quality Time',
+      PHYSICAL_TOUCH:       'Physical Touch'
+    };
+    const commMeta = {
+      DIRECT:     { label: 'Direct', desc: 'Values clarity and straightforward communication' },
+      EMPATHETIC: { label: 'Empathetic', desc: 'Leads with warmth, reads emotional subtext' },
+      ANALYTICAL: { label: 'Analytical', desc: 'Processes logically, takes time to formulate responses' },
+      EXPRESSIVE: { label: 'Expressive', desc: 'Communicates with energy and emotional openness' }
+    };
+    const conflictMeta = {
+      COLLABORATIVE:  { label: 'Collaborative', desc: 'Works through conflict together with mutual respect' },
+      COMPETITIVE:    { label: 'Competitive', desc: 'Advocates strongly for their position' },
+      AVOIDING:       { label: 'Avoiding', desc: 'Needs space before returning to resolve conflict' },
+      ACCOMMODATING:  { label: 'Accommodating', desc: 'Prioritizes harmony, often compromises for peace' },
+      COMPROMISING:   { label: 'Compromising', desc: 'Seeks middle ground and quick, mutual resolution' }
+    };
+
+    function buildResults() {
+      // OCEAN bars
+      const traitMap = { openness: 'O', conscientiousness: 'C', extraversion: 'E', agreeableness: 'A', neuroticism: 'N' };
+      traits.forEach(function(trait) {
+        const key  = traitMap[trait];
+        const val  = traitValues[trait];
+        const pct  = ((val - 1) / 4) * 100;
+        const barEl = document.getElementById('result-bar-' + key);
+        const valEl = document.getElementById('result-val-' + key);
+        if (barEl) setTimeout(function() { barEl.style.width = pct + '%'; }, 200);
+        if (valEl) valEl.textContent = val + '/5';
+      });
+
+      // Attachment
+      const attachSel = document.querySelector('#section-2 .style-card.selected');
+      if (attachSel) {
+        const val  = attachSel.dataset.value;
+        const meta = attachmentMeta[val] || { label: val, desc: '', color: 'var(--text)' };
+        const el   = document.getElementById('result-attachment');
+        const desc = document.getElementById('result-attachment-desc');
+        if (el)   el.textContent = meta.label;
+        if (desc) desc.textContent = meta.desc;
+        if (el)   el.style.color = meta.color;
+      }
+
+      // Love Languages
+      const llPrimary   = document.getElementById('result-ll-primary');
+      const llSecondary = document.getElementById('result-ll-secondary');
+      if (llPrimary)   llPrimary.textContent   = llSelected[0] ? llMeta[llSelected[0]] || llSelected[0] : '—';
+      if (llSecondary) llSecondary.textContent = llSelected[1] ? 'Secondary: ' + (llMeta[llSelected[1]] || llSelected[1]) : 'Secondary: —';
+
+      // Communication
+      const commSel = document.querySelector('#section-4 .comm-card.selected');
+      if (commSel) {
+        const val  = commSel.dataset.value;
+        const meta = commMeta[val] || { label: val, desc: '' };
+        const el   = document.getElementById('result-comm');
+        const desc = document.getElementById('result-comm-desc');
+        if (el)   el.textContent = meta.label;
+        if (desc) desc.textContent = meta.desc;
+      }
+
+      // Conflict
+      const conflictSel = document.querySelector('#section-5 .style-card.selected');
+      if (conflictSel) {
+        const val  = conflictSel.dataset.value;
+        const meta = conflictMeta[val] || { label: val, desc: '' };
+        const el   = document.getElementById('result-conflict');
+        const desc = document.getElementById('result-conflict-desc');
+        if (el)   el.textContent = meta.label;
+        if (desc) desc.textContent = meta.desc;
+      }
+    }
+
+    // ── SAVE / RETAKE BUTTONS ──────────────────────────
+    document.getElementById('save-profile-btn').addEventListener('click', function() {
+      this.textContent = '✅ Saved to Profile!';
+      this.disabled = true;
+      const self = this;
+      setTimeout(function() { window.location.href = 'profile.html'; }, 1200);
+    });
+
+    document.getElementById('retake-btn').addEventListener('click', function() {
+      currentSection = 1;
+      // Reset all sliders and selections
+      traits.forEach(function(trait) {
+        traitTouched[trait] = false;
+        traitValues[trait]  = 3;
+        const slider = document.getElementById('slider-' + trait);
+        if (slider) { slider.value = 3; }
+        const bar  = document.getElementById('bar-' + trait);
+        if (bar)   bar.style.width = '50%';
+        const scoreEl = document.getElementById('score-' + trait);
+        if (scoreEl) scoreEl.textContent = 'Not answered';
+        const card = document.getElementById('trait-' + trait);
+        if (card) card.classList.remove('answered');
+      });
+      document.querySelectorAll('.style-card, .comm-card, .ll-card').forEach(function(c) {
+        c.classList.remove('selected', 'primary-selected', 'secondary-selected');
+        const inp = c.querySelector('input');
+        if (inp) inp.checked = false;
+      });
+      llSelected = [];
+      document.querySelectorAll('.ll-badge').forEach(function(b) { b.textContent = 'Primary'; });
+      showSection(1);
+    });
+
+    // ── INITIAL RENDER ────────────────────────────────
+    showSection(1);
+  </script>
+</body>
+</html>

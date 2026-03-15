@@ -13,21 +13,6 @@
   <link rel="stylesheet" href="css/themes.css">
 
   <style>
-    /* Fallback vars */
-    :root {
-      --bg:#0A0A0F; --bg2:#10101A; --bg3:#16162A; --bg4:#1E1E30;
-      --card:rgba(255,255,255,.04); --card-b:rgba(255,255,255,.08); --card-c:rgba(255,255,255,.12);
-      --accent:#7C3AED; --accent2:#A855F7; --accent3:#C084FC; --accent-rgb:124,58,237;
-      --pink:#EC4899; --pink-rgb:236,72,153; --cyan:#06B6D4;
-      --green:#10B981; --red:#EF4444; --gold:#F59E0B;
-      --text:#F1F0FF; --text2:#C4C2D8;
-      --muted:#6B6B8A; --muted2:#9896B0;
-      --border:rgba(255,255,255,.07); --border2:rgba(124,58,237,.35); --border3:rgba(124,58,237,.6);
-      --glow:0 0 40px rgba(124,58,237,.25); --glow2:0 0 80px rgba(168,85,247,.15); --glow3:0 0 20px rgba(124,58,237,.4);
-      --shadow:0 8px 32px rgba(0,0,0,.4); --shadow2:0 16px 48px rgba(0,0,0,.5);
-      --radius:16px; --radius2:24px; --radius3:12px;
-    }
-
     /* ── RESET & BASE ──────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -91,7 +76,6 @@
     }
     .hero-content {
       position: relative; z-index: 2; text-align: center; max-width: 780px;
-      animation: fadeUp .8s ease both;
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 8px;
@@ -404,6 +388,18 @@
     .footer-links a:hover { color: var(--text); }
     .footer-copy { font-size: 13px; color: var(--muted); }
 
+    /* ── AMBIENT BACKGROUND ────────────────────────── */
+    .amb-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .orb3 {
+      position: absolute; width: 600px; height: 600px;
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(124,58,237,.08), transparent 70%);
+      border-radius: 50%; filter: blur(60px);
+      animation: orbFloat 12s ease-in-out infinite;
+    }
+
     /* ── THEME TOGGLE FLOAT ────────────────────────── */
     .theme-toggle-float {
       position: fixed; bottom: 28px; right: 28px; z-index: 200;
@@ -511,23 +507,23 @@
 
     <!-- Hero content -->
     <div class="hero-content">
-      <div class="hero-badge">
+      <div class="hero-badge animate-fade-up">
         <span class="hero-badge-dot"></span>
         ✦ AI-Powered Dating · 2M+ Matches Made
       </div>
-      <h1 class="hero-headline">
+      <h1 class="hero-headline animate-fade-up delay-100">
         Find Your Person<br>
         <span class="grad-text">Powered by AI</span>
       </h1>
-      <p class="hero-subtitle">
+      <p class="hero-subtitle animate-fade-up delay-200">
         AURA analyzes 47 compatibility signals to surface your most meaningful matches.
         Not just good-looking profiles — your perfect person.
       </p>
-      <div class="hero-cta-group">
+      <div class="hero-cta-group animate-fade-up delay-300">
         <a href="signup.html" class="btn-hero">Create Free Account →</a>
         <a href="#how-it-works" class="btn-hero-ghost">See How It Works ↓</a>
       </div>
-      <div class="social-proof">
+      <div class="social-proof animate-fade-up delay-400">
         <div class="proof-stars">★★★★★ 4.9 · App Store</div>
         <div class="proof-divider"></div>
         <div class="avatar-pile">
@@ -591,32 +587,32 @@
       </div>
 
       <div class="features-grid">
-        <div class="feature-card">
+        <div class="feature-card animate-fade-up">
           <span class="feature-icon">🎯</span>
           <div class="feature-title">Smart Discovery</div>
           <div class="feature-desc">Personalized card stacks based on your behavioral patterns, past interactions, and evolving preferences.</div>
         </div>
-        <div class="feature-card">
+        <div class="feature-card animate-fade-up delay-200">
           <span class="feature-icon">🧬</span>
           <div class="feature-title">Deep Compatibility</div>
           <div class="feature-desc">47 signals including values alignment, attachment styles, love languages, and long-term life goals.</div>
         </div>
-        <div class="feature-card">
+        <div class="feature-card animate-fade-up delay-400">
           <span class="feature-icon">🤝</span>
           <div class="feature-title">Conversation AI</div>
           <div class="feature-desc">Real-time coaching and icebreakers to help you put your best self forward — naturally and authentically.</div>
         </div>
-        <div class="feature-card">
+        <div class="feature-card animate-fade-up delay-200">
           <span class="feature-icon">🔒</span>
           <div class="feature-title">Privacy First</div>
           <div class="feature-desc">You control who sees you, what they see, and when. Incognito mode, block lists, and granular visibility controls.</div>
         </div>
-        <div class="feature-card">
+        <div class="feature-card animate-fade-up delay-400">
           <span class="feature-icon">⚡</span>
           <div class="feature-title">Real-time Insights</div>
           <div class="feature-desc">See exactly why someone is a great match before you swipe — compatibility breakdowns, not just photos.</div>
         </div>
-        <div class="feature-card">
+        <div class="feature-card animate-fade-up delay-600">
           <span class="feature-icon">🌍</span>
           <div class="feature-title">Global &amp; Local</div>
           <div class="feature-desc">Find your person nearby or anywhere in the world. Global mode expands your reach without losing depth.</div>
@@ -631,19 +627,19 @@
 
       <!-- Stats -->
       <div class="stats-grid">
-        <div>
+        <div class="animate-scale-in">
           <div class="stat-large">2M+</div>
           <div class="stat-lbl">Active users worldwide</div>
         </div>
-        <div>
+        <div class="animate-scale-in delay-200">
           <div class="stat-large">8.7M+</div>
           <div class="stat-lbl">Meaningful matches made</div>
         </div>
-        <div>
+        <div class="animate-scale-in delay-400">
           <div class="stat-large">94%</div>
           <div class="stat-lbl">User satisfaction rate</div>
         </div>
-        <div>
+        <div class="animate-scale-in delay-600">
           <div class="stat-large">4.9★</div>
           <div class="stat-lbl">Average App Store rating</div>
         </div>
@@ -656,7 +652,7 @@
       </div>
 
       <div class="testimonials-row">
-        <div class="testimonial-card">
+        <div class="testimonial-card animate-fade-up delay-200">
           <div class="t-stars">★★★★★</div>
           <div class="t-quote">I found my partner in 3 weeks. The AI insights were eerily spot on — it understood what I actually needed before I did.</div>
           <div class="t-author">
@@ -669,7 +665,7 @@
             </div>
           </div>
         </div>
-        <div class="testimonial-card">
+        <div class="testimonial-card animate-fade-up delay-400">
           <div class="t-stars">★★★★★</div>
           <div class="t-quote">Finally a dating app that feels grown up. The compatibility analysis is wild — it shows you exactly why someone would work for you.</div>
           <div class="t-author">
@@ -682,7 +678,7 @@
             </div>
           </div>
         </div>
-        <div class="testimonial-card">
+        <div class="testimonial-card animate-fade-up delay-600">
           <div class="t-stars">★★★★★</div>
           <div class="t-quote">Matched with my now-fiancé on AURA. The 94% compatibility score was right. AURA knew before we did — and I'm so glad it did.</div>
           <div class="t-author">
@@ -822,9 +818,9 @@
 
   <!-- ─────────────── AURA BRAIN TEASER ─────────────── -->
   <section style="padding:80px 0; text-align:center;">
-    <div style="max-width:700px; margin:0 auto; padding:0 24px;">
+    <div style="max-width:700px; margin:0 auto; padding:0 24px;" class="animate-fade-up">
       <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent3); margin-bottom:16px;">Powered by</div>
-      <h2 style="font-size:clamp(2rem,5vw,3.5rem); font-weight:800; margin-bottom:16px;" class="grad-text">AURA BRAIN™</h2>
+      <h2 style="font-size:clamp(2rem,5vw,3.5rem); font-weight:800; margin-bottom:16px;" class="grad-text"><span class="animate-float" style="display:inline-block;">AURA BRAIN™</span></h2>
       <p style="font-size:clamp(1rem,1.5vw,1.2rem); color:var(--muted2); line-height:1.7; margin-bottom:32px;">Our proprietary AI engine analyzes 47 compatibility signals across personality vectors, behavioral patterns, and communication styles to find matches that truly make sense.</p>
       <a href="ai-how-it-works.html" class="btn btn-primary btn-lg">Explore the Technology →</a>
     </div>
@@ -864,6 +860,11 @@
 
   <!-- Theme toggle float button -->
   <button class="theme-toggle-float" title="Change theme" onclick="document.getElementById('themes').scrollIntoView({behavior:'smooth'})">🎨</button>
+
+  <!-- Ambient background orbs -->
+  <div class="amb-bg" aria-hidden="true">
+    <div class="orb3"></div>
+  </div>
 
   <script src="js/theme.js"></script>
   <script src="js/app.js"></script>

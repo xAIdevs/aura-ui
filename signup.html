@@ -1145,7 +1145,7 @@
         const slot  = slots[pendingSlotIdx];
         slot.classList.add('filled');
         slot.innerHTML = `<div class="photo-filled-img">
-          <img src="${ev.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:14px;" />
+          <img src="${ev.target.result}" alt="Profile photo preview" style="width:100%;height:100%;object-fit:cover;border-radius:14px;" />
         </div>`;
       };
       reader.readAsDataURL(file);

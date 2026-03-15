@@ -2091,3 +2091,166 @@ input[type="range"]::-webkit-slider-runnable-track {
   color: var(--muted2);
   line-height: 1.5;
 }
+
+/* ── FLOATING THEME PANEL ─────────────────────────────── */
+#aura-theme-panel {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 10000;
+  font-family: 'Inter', sans-serif;
+}
+
+.aura-theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--card-b);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, border-color .2s, box-shadow .2s;
+  white-space: nowrap;
+}
+.aura-theme-toggle:hover {
+  background: var(--card-c);
+  border-color: var(--border2);
+  box-shadow: var(--glow);
+}
+.aura-theme-toggle svg {
+  color: var(--accent3);
+  flex-shrink: 0;
+}
+.aura-theme-toggle-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+}
+
+.aura-theme-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: var(--bg2);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  min-width: 230px;
+  box-shadow: var(--shadow2), 0 0 0 1px var(--border);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px) scale(.98);
+  transform-origin: top left;
+  transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+  pointer-events: none;
+}
+.aura-theme-dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.aura-theme-dropdown-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted2);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.aura-theme-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+}
+
+.theme-option-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+  text-align: left;
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 500;
+  width: 100%;
+}
+.theme-option-item:hover {
+  background: var(--card-b);
+  border-color: var(--border);
+  color: var(--text);
+}
+.theme-option-item.active {
+  background: rgba(var(--accent-rgb),.12);
+  border-color: rgba(var(--accent-rgb),.3);
+  color: var(--accent3);
+  font-weight: 600;
+}
+
+.theme-swatch-ring {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color .15s;
+}
+.theme-option-item.active .theme-swatch-ring {
+  border-color: rgba(255,255,255,.5);
+}
+
+.theme-swatch-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: block;
+  flex-shrink: 0;
+}
+
+.theme-option-name {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1;
+}
+
+/* Mobile: shift panel if sidebar bottom bar is present */
+@media (max-width: 768px) {
+  #aura-theme-panel {
+    top: auto;
+    bottom: 80px;
+    left: 12px;
+  }
+  .aura-theme-dropdown {
+    top: auto;
+    bottom: calc(100% + 8px);
+    transform-origin: bottom left;
+  }
+  .aura-theme-dropdown.open {
+    transform: translateY(0) scale(1);
+  }
+  .aura-theme-dropdown:not(.open) {
+    transform: translateY(6px) scale(.98);
+  }
+}
