@@ -547,6 +547,15 @@
     }
     .ios-toggle input:checked + .ios-slider { background: var(--accent2); border-color: var(--accent2); }
     .ios-toggle input:checked + .ios-slider::before { transform: translateX(20px); background: #fff; }
+
+    /* ── MOBILE RESPONSIVE ──────────────────────── */
+    @media (max-width: 768px) {
+      .sec-pane { height: auto; overflow: visible; }
+      .sec-body { overflow-y: visible; }
+      .sec-topbar { padding: 16px 20px; }
+      .otp-inputs { gap: 6px; }
+      .otp-input { width: 38px; height: 46px; font-size: 18px; }
+    }
   </style>
 </head>
 <body data-page="security-settings">

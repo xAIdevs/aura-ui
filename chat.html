@@ -1117,6 +1117,22 @@
       transition: all .2s;
     }
     .modal-close-btn:hover { border-color: var(--border2); color: var(--text); }
+
+    /* ── MOBILE RESPONSIVE ──────────────────────── */
+    @media (max-width: 768px) {
+      html body { height: auto; overflow: auto; }
+      /* Panel-center becomes full-screen chat view */
+      .panel-center {
+        height: auto;
+        min-height: calc(100vh - 60px);
+        display: flex;
+        flex-direction: column;
+      }
+      /* Chat messages area scrolls within the panel */
+      .chat-messages { flex: 1; }
+      /* Input stays at bottom of the panel (not viewport) */
+      .chat-input-bar { position: relative; bottom: auto; }
+    }
   </style>
 </head>
 <body data-page="chat">

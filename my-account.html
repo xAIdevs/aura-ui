@@ -515,6 +515,18 @@
       box-shadow: 0 4px 16px rgba(var(--accent-rgb),.3);
     }
     .upgrade-pill:hover { opacity: .9; }
+
+    /* ── MOBILE RESPONSIVE ──────────────────────── */
+    @media (max-width: 768px) {
+      html body { overflow-x: hidden; flex-direction: column; }
+      .app-layout { width: 100%; }
+      .tab-pane { height: auto; overflow: visible; }
+      .tab-body { overflow-y: visible; }
+      .tab-topbar { padding: 16px 20px; }
+      .photo-grid { grid-template-columns: 1fr 1fr 1fr; }
+      .facts-grid { grid-template-columns: 1fr; }
+      .plan-cards { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body data-page="account">

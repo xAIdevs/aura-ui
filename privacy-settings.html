@@ -341,6 +341,15 @@
 
     /* Sections gap */
     .priv-section { display: flex; flex-direction: column; }
+
+    /* ── MOBILE RESPONSIVE ──────────────────────── */
+    @media (max-width: 768px) {
+      .privacy-pane { height: auto; overflow: visible; }
+      .privacy-body { overflow-y: visible; }
+      .privacy-topbar { padding: 16px 20px; }
+      .option-cards { grid-template-columns: 1fr 1fr; }
+      .gdpr-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body data-page="privacy-settings">

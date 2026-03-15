@@ -19,6 +19,10 @@
     .report-match { padding:12px;cursor:pointer;border-radius:var(--radius3);transition:background .2s; }
     .report-match:hover { background:var(--card-b); }
     .report-match.active { background:rgba(var(--accent-rgb),.1);border:1px solid rgba(var(--accent-rgb),.3); }
+
+    @media (max-width: 768px) {
+      .personality-cols { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body data-page="compatibility">

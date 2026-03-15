@@ -1099,6 +1099,15 @@
     .fp-action-row { display: flex; gap: 7px; margin-top: 8px; }
     .fp-back-btn { font-size: 11px; color: var(--accent3); font-weight: 600; cursor: pointer; margin-bottom: 12px; display: inline-flex; align-items: center; gap: 4px; }
     .fp-back-btn:hover { text-decoration: underline; }
+
+    /* ── MOBILE RESPONSIVE ──────────────────────── */
+    @media (max-width: 768px) {
+      html body { overflow-y: auto; }
+      .card-stack { width: 100%; max-width: 360px; height: 420px; }
+      .center-topbar { max-width: 100%; }
+      .ai-insight-banner { max-width: 100%; }
+      .center-panel { align-items: stretch; }
+    }
   </style>
 </head>
 

@@ -391,3 +391,86 @@
 @media (max-width: 480px) {
   .panel-header .panel-title { font-size: 16px; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   HIGH-SPECIFICITY MOBILE OVERRIDES
+   Uses html-prefixed selectors to beat page-level inline CSS
+   without needing !important on every property.
+   These rules only activate at ≤768px.
+══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── Sidebar → bottom nav bar (overrides any inline .sidebar) ── */
+  html .sidebar {
+    position: fixed;
+    bottom: 0; top: auto;
+    left: 0; right: 0;
+    width: 100%; height: 60px;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 4px; gap: 0;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    z-index: 1000;
+    overflow: hidden;
+  }
+  html .sidebar .brand      { display: none; }
+  html .sidebar .nav-divider { display: none; }
+  html .sidebar .sidebar-avatar { margin-top: 0; margin-left: 0; }
+  html .sidebar .nav-item   { width: 44px; height: 44px; border-radius: 12px; font-size: 20px; }
+
+  /* ── Custom layout containers (discover + profile use .main-layout,
+        chat uses .chat-layout) — collapse to single column ── */
+  html .main-layout {
+    margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 60px;
+  }
+  html .chat-layout {
+    margin-left: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    height: auto;
+    margin-bottom: 60px;
+  }
+
+  /* Hide side panels in custom layouts */
+  html .main-layout > .left-panel,
+  html .main-layout > aside.left-panel  { display: none; }
+  html .main-layout > .right-panel      { display: none; }
+  html .chat-layout > .panel-right      { display: none; }
+
+  /* Center panels fill full width and allow scroll */
+  html .main-layout > .center-panel,
+  html .chat-layout > .panel-center {
+    width: 100%;
+    overflow-y: auto;
+    height: auto;
+    min-height: calc(100vh - 60px);
+  }
+
+  /* ── app-layout reinforcement (already in base rules above,
+        but add no-right and full-center variants) ── */
+  html .app-layout.no-right,
+  html .app-layout.full-center {
+    margin-left: 0;
+    grid-template-columns: 1fr;
+    margin-bottom: 60px;
+  }
+
+  /* ── Base app-layout (for pages that inline-override .app-layout) ── */
+  html .app-layout {
+    margin-left: 0;
+    grid-template-columns: 1fr;
+    margin-bottom: 60px;
+  }
+
+  /* Hide custom-named side panels (matches/search/discover use .left-panel/.right-panel) */
+  html .app-layout > .left-panel  { display: none; }
+  html .app-layout > .right-panel { display: none; }
+
+  /* Chat: hide conversation list on mobile — show active conversation */
+  html .chat-layout > .panel-left { display: none; }
+}

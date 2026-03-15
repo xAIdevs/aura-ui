@@ -669,6 +669,15 @@
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
+
+    /* ── MOBILE RESPONSIVE ──────────────────────── */
+    @media (max-width: 768px) {
+      .results-grid { grid-template-columns: 1fr 1fr; }
+      .center-panel { padding: 16px; height: auto; min-height: calc(100vh - 60px); }
+    }
+    @media (max-width: 400px) {
+      .results-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body data-page="search">
